@@ -3,15 +3,17 @@ package com.example.mediadiaryproject
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.mediadiaryproject.presentation.camerascreen.viewmodel.CameraViewModel
+import com.example.mediadiaryproject.presentation.mainscreen.MainScreen
 import com.example.mediadiaryproject.ui.theme.MediaDiaryProjectTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,25 +24,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val cameraViewModel: CameraViewModel by viewModels()
+
+                    val cameraState = cameraViewModel.state
+
+                    MainScreen(
+                        cameraState = cameraState.value,
+                        onPhotoCaptured = { bitmap ->
+                            cameraViewModel.storePhotoInGallery(bitmap = bitmap)
+                        }
+                    )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MediaDiaryProjectTheme {
-        Greeting("Android")
     }
 }
