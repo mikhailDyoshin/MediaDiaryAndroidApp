@@ -1,5 +1,6 @@
 package com.example.mediadiaryproject.presentation.camerascreen.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,6 +8,7 @@ import android.graphics.Matrix
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -34,6 +37,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import java.util.concurrent.Executor
 
+@SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraContent(
@@ -46,8 +50,15 @@ fun CameraContent(
     val cameraController: LifecycleCameraController =
         remember { LifecycleCameraController(context) }
 
+    cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+                 Button(onClick = { toggleCamera(cameraController = cameraController) }) {
+                     Text("Toggle camera")
+                 }
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(text = "Take photo") },
@@ -69,7 +80,10 @@ fun CameraContent(
                     .padding(paddingValues),
                 factory = { context ->
                     PreviewView(context).apply {
-                        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                        layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                        )
                         setBackgroundColor(Color.BLACK)
                         implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                         scaleType = PreviewView.ScaleType.FILL_START
@@ -120,4 +134,16 @@ fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
     }
 
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun toggleCamera(cameraController: LifecycleCameraController) {
+    if (cameraController.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
+        && cameraController.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
+    ) {
+        cameraController.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+    } else if (cameraController.cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
+        && cameraController.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)
+    ) {
+        cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    }
 }
