@@ -24,6 +24,7 @@ class ComposeSandboxRepositoryImpl @Inject constructor(
 
             val resolver: ContentResolver = context.applicationContext.contentResolver
 
+            // Find all image files on the primary external storage device.
             val imageCollection: Uri = when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> MediaStore.Images.Media.getContentUri(
                     MediaStore.VOLUME_EXTERNAL_PRIMARY
@@ -59,12 +60,18 @@ class ComposeSandboxRepositoryImpl @Inject constructor(
 
             val imageMediaStoreUri: Uri? = resolver.insert(imageCollection, imageContentValues)
 
-            // Write the image data to the new Uri.
+            // Write the image data to the new Uri in case you need to modify it later.
             val result: Result<Unit> = imageMediaStoreUri?.let { uri ->
                 kotlin.runCatching {
                     resolver.openOutputStream(uri).use { outputStream: OutputStream? ->
-                        checkNotNull(outputStream) { "Couldn't create file for gallery, MediaStore output stream is null" }
-                        capturePhotoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        checkNotNull(outputStream) {
+                            "Couldn't create file for gallery, MediaStore output stream is null"
+                        }
+                        capturePhotoBitmap.compress(
+                            Bitmap.CompressFormat.JPEG,
+                            100,
+                            outputStream
+                        )
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

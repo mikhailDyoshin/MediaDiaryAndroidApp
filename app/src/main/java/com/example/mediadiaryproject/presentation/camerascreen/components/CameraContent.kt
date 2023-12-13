@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
+import android.media.browse.MediaBrowser
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -39,6 +40,9 @@ import java.util.concurrent.Executor
 import androidx.camera.view.CameraController
 import androidx.camera.view.video.AudioConfig
 import androidx.compose.foundation.layout.Row
+import androidx.core.net.toUri
+import androidx.media3.common.MediaItem
+import com.ramcosta.composedestinations.annotation.Destination
 import java.io.File
 
 private var recording: Recording? = null
@@ -77,7 +81,12 @@ fun CameraContent(
                 Button(onClick = { capturePhoto(context, cameraController, onPhotoCaptured) }) {
                     Text("Photo")
                 }
-                Button(onClick = { recordVideo(controller = cameraController, context = context) }) {
+                Button(onClick = {
+                    recordVideo(
+                        controller = cameraController,
+                        context = context
+                    )
+                }) {
                     Text("Video")
                 }
             }
@@ -176,6 +185,18 @@ private fun recordVideo(controller: LifecycleCameraController, context: Context)
     if (recording != null) {
         recording?.stop()
         recording = null
+
+
+        val videoUri = File(
+            context.filesDir,
+            "my-recording.mp4"
+        ).toUri()
+
+        Log.d(
+            "Recorded video file",
+            MediaItem.fromUri(videoUri).toString()
+            )
+
         return
     }
 
@@ -185,8 +206,8 @@ private fun recordVideo(controller: LifecycleCameraController, context: Context)
 
     val outputFile = File(
         context.filesDir,
-            "my-recording.mp4"
-        )
+        "my-recording.mp4"
+    )
 
     recording = controller.startRecording(
         FileOutputOptions.Builder(outputFile).build(),
