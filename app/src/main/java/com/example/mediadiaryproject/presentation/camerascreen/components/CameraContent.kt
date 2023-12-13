@@ -8,22 +8,22 @@ import android.graphics.Matrix
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
+import androidx.camera.video.FileOutputOptions
+import androidx.camera.video.Recording
+import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +36,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import java.util.concurrent.Executor
+import androidx.camera.view.CameraController
+import androidx.camera.view.video.AudioConfig
+import androidx.compose.foundation.layout.Row
+import java.io.File
+
+private var recording: Recording? = null
 
 @SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,29 +54,46 @@ fun CameraContent(
     val context: Context = LocalContext.current
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val cameraController: LifecycleCameraController =
-        remember { LifecycleCameraController(context) }
+        remember {
+            LifecycleCameraController(context).apply {
+                setEnabledUseCases(
+                    CameraController.IMAGE_CAPTURE or
+                            CameraController.VIDEO_CAPTURE
+                )
+            }
+        }
 
     cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-                 Button(onClick = { toggleCamera(cameraController = cameraController) }) {
-                     Text("Toggle camera")
-                 }
+            Button(onClick = { toggleCamera(cameraController = cameraController) }) {
+                Text("Toggle camera")
+            }
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text(text = "Take photo") },
-                onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Camera capture icon"
-                    )
+        bottomBar = {
+            Row() {
+                Button(onClick = { capturePhoto(context, cameraController, onPhotoCaptured) }) {
+                    Text("Photo")
                 }
-            )
-        }
+                Button(onClick = { recordVideo(controller = cameraController, context = context) }) {
+                    Text("Video")
+                }
+            }
+        },
+//        floatingActionButton = {
+//            ExtendedFloatingActionButton(
+//                text = { Text(text = "Take photo") },
+//                onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
+//                icon = {
+//                    Icon(
+//                        imageVector = Icons.Default.PlayArrow,
+//                        contentDescription = "Camera capture icon"
+//                    )
+//                }
+//            )
+//        }
     ) { paddingValues: PaddingValues ->
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -127,7 +150,7 @@ private fun capturePhoto(
     })
 }
 
-fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
+private fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
     val matrix = Matrix().apply {
         postRotate(-rotationDegrees.toFloat())
         postScale(-1f, -1f)
@@ -136,7 +159,7 @@ fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
 
-fun toggleCamera(cameraController: LifecycleCameraController) {
+private fun toggleCamera(cameraController: LifecycleCameraController) {
     if (cameraController.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
         && cameraController.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
     ) {
@@ -147,3 +170,51 @@ fun toggleCamera(cameraController: LifecycleCameraController) {
         cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     }
 }
+
+@SuppressLint("MissingPermission")
+private fun recordVideo(controller: LifecycleCameraController, context: Context) {
+    if (recording != null) {
+        recording?.stop()
+        recording = null
+        return
+    }
+
+//    if(!hasRequiredPermissions()) {
+//        return
+//    }
+
+    val outputFile = File(
+        context.filesDir,
+            "my-recording.mp4"
+        )
+
+    recording = controller.startRecording(
+        FileOutputOptions.Builder(outputFile).build(),
+        AudioConfig.create(true),
+        ContextCompat.getMainExecutor(context),
+    ) { event ->
+        when (event) {
+            is VideoRecordEvent.Finalize -> {
+                if (event.hasError()) {
+                    recording?.close()
+                    recording = null
+
+                    Toast.makeText(
+                        context,
+                        "Video capture failed",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    Log.d("Video error", "${event.error}")
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Video capture succeeded",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+}
+

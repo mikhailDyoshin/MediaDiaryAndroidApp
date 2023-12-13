@@ -26,10 +26,15 @@ fun MainScreen(
     val cameraPermissionState: PermissionState =
         rememberPermissionState(Manifest.permission.CAMERA)
 
+    val audioRecordingPermissionState: PermissionState =
+        rememberPermissionState(Manifest.permission.RECORD_AUDIO)
+
 
     MainContent(
-        hasPermission = cameraPermissionState.status.isGranted,
-        onRequestPermission = cameraPermissionState::launchPermissionRequest,
+        hasCameraPermission = cameraPermissionState.status.isGranted,
+        hasAudioRecordPermission = audioRecordingPermissionState.status.isGranted,
+        onRequestCameraPermission = cameraPermissionState::launchPermissionRequest,
+        onRequestAudioRecordingPermission = audioRecordingPermissionState::launchPermissionRequest,
         cameraState = cameraState,
         onPhotoCaptured = onPhotoCaptured,
     )
@@ -38,38 +43,50 @@ fun MainScreen(
 
 @Composable
 fun MainContent(
-    hasPermission: Boolean,
-    onRequestPermission: () -> Unit,
+    hasCameraPermission: Boolean,
+    hasAudioRecordPermission: Boolean,
+    onRequestCameraPermission: () -> Unit,
+    onRequestAudioRecordingPermission: () -> Unit,
     cameraState: CameraScreenState,
     onPhotoCaptured: (Bitmap) -> Unit
 ) {
 
-    if (hasPermission) {
+    if (hasCameraPermission && hasAudioRecordPermission) {
         CameraScreen(cameraState = cameraState, onPhotoCaptured = onPhotoCaptured)
     } else {
-        NoPermissionScreen(onRequestPermission)
+        NoPermissionScreen(onRequestCameraPermission, onRequestAudioRecordingPermission)
     }
 
 }
 
 @Composable
-fun NoPermissionScreen(onRequestPermission: () -> Unit) {
+fun NoPermissionScreen(
+    onRequestCameraPermission: () -> Unit,
+    onRequestAudioRecordingPermission: () -> Unit
+) {
 
     NoPermissionContent(
-        onRequestPermission = onRequestPermission
+        onRequestCameraPermission = onRequestCameraPermission,
+        onRequestAudioRecordingPermission = onRequestAudioRecordingPermission,
     )
 
 }
 
 @Composable
-fun NoPermissionContent(onRequestPermission: () -> Unit) {
+fun NoPermissionContent(
+    onRequestCameraPermission: () -> Unit,
+    onRequestAudioRecordingPermission: () -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(text = "Please grant the permission to use camera")
-        Button(onClick = onRequestPermission) {
+        Button(onClick = {
+            onRequestCameraPermission()
+            onRequestAudioRecordingPermission()
+        }) {
             Text(text = "Grant permission")
         }
     }
