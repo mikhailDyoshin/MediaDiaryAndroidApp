@@ -7,10 +7,13 @@ import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScree
 
 @Composable
 fun CameraScreen(
-    cameraState: CameraScreenState, onPhotoCaptured: (Bitmap) -> Unit
+    cameraState: CameraScreenState,
+    onPhotoCaptured: (Bitmap) -> Unit,
+    navigateToVideos: () -> Unit,
 ) {
 
     CameraContent(
+        navigateToVideos = { navigateToVideos() },
         onPhotoCaptured = { bitmap -> onPhotoCaptured(bitmap) },
         lastCapturedPhoto = cameraState.capturedImage
     )

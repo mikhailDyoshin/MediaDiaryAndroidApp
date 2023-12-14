@@ -3,6 +3,18 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp' version '1.8.10-1.0.9'
+}
+
+kotlin {
+    sourceSets {
+        debug {
+            kotlin.srcDir("build/generated/ksp/debug/kotlin")
+        }
+        release {
+            kotlin.srcDir("build/generated/ksp/release/kotlin")
+        }
+    }
 }
 
 android {
@@ -97,6 +109,12 @@ dependencies {
 
     // Compose Destinations
     implementation 'io.github.raamcosta.compose-destinations:animations-core:1.8.42-beta'
+
+    // KSP
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.8.42-beta'
+
+    // Hilt navigation
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 }
 
 kapt {

@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
-import android.media.browse.MediaBrowser
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -52,6 +51,7 @@ private var recording: Recording? = null
 @Composable
 fun CameraContent(
     onPhotoCaptured: (Bitmap) -> Unit,
+    navigateToVideos: () -> Unit,
     lastCapturedPhoto: Bitmap? = null
 ) {
 
@@ -72,9 +72,15 @@ fun CameraContent(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            Button(onClick = { toggleCamera(cameraController = cameraController) }) {
-                Text("Toggle camera")
+            Row() {
+                Button(onClick = { toggleCamera(cameraController = cameraController) }) {
+                    Text("Toggle camera")
+                }
+                Button(onClick = { navigateToVideos() }) {
+                    Text("Videos")
+                }
             }
+
         },
         bottomBar = {
             Row() {

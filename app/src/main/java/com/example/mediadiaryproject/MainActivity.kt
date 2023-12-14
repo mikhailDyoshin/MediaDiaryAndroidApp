@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.mediadiaryproject.presentation.NavGraphs
 import com.example.mediadiaryproject.presentation.camerascreen.viewmodel.CameraViewModel
 import com.example.mediadiaryproject.presentation.mainscreen.MainScreen
 import com.example.mediadiaryproject.ui.theme.MediaDiaryProjectTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,16 +27,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    DestinationsNavHost(navGraph = NavGraphs.root)
+
                     val cameraViewModel: CameraViewModel by viewModels()
 
                     val cameraState = cameraViewModel.state
 
-                    MainScreen(
-                        cameraState = cameraState.value,
-                        onPhotoCaptured = { bitmap ->
-                            cameraViewModel.storePhotoInGallery(bitmap = bitmap)
-                        }
-                    )
+//                    MainScreen(
+//                        cameraState = cameraState.value,
+//                        onPhotoCaptured = { bitmap ->
+//                            cameraViewModel.storePhotoInGallery(bitmap = bitmap)
+//                        }
+//                    )
                 }
             }
         }
