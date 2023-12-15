@@ -1,11 +1,11 @@
 package com.example.mediadiaryproject.domain
 
 import android.graphics.Bitmap
-import com.example.mediadiaryproject.domain.repository.ComposeSandboxRepository
+import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import javax.inject.Inject
 
 class SavePhotoToGalleryUseCase @Inject constructor(
-    private val repository: ComposeSandboxRepository
+    private val repository: MediaDiaryRepository
 ) {
 
     suspend fun call(capturePhotoBitmap: Bitmap): Result<Unit> =

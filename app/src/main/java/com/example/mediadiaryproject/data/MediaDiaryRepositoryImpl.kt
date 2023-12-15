@@ -8,17 +8,19 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import com.example.mediadiaryproject.domain.repository.ComposeSandboxRepository
+import android.util.Log
+import com.example.mediadiaryproject.domain.models.VideoFileModel
+import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.OutputStream
 import javax.inject.Inject
 
-class ComposeSandboxRepositoryImpl @Inject constructor(
+class MediaDiaryRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) :
-    ComposeSandboxRepository {
+) : MediaDiaryRepository {
     override suspend fun savePhotoToGallery(capturePhotoBitmap: Bitmap): Result<Unit> =
         withContext(Dispatchers.IO) {
 
@@ -92,4 +94,35 @@ class ComposeSandboxRepositoryImpl @Inject constructor(
 
             return@withContext result
         }
+
+    override fun provideFileToSaveVideo(): File {
+        val nowTimestamp: Long = System.currentTimeMillis()
+
+        return File(
+            context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
+            nowTimestamp.toString()
+        )
+    }
+
+    override fun getListOfAllVideos(): List<VideoFileModel> {
+        val directory = File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM).toString())
+
+        val files: Array<out File>? = directory.listFiles()
+
+        if (files != null) {
+
+            if (files.isEmpty()) {
+                Log.d("Recorded video file","No files in the directory.")
+                return emptyList()
+            }
+
+            return files.map { file -> VideoFileModel(fileName = file.name, filePath = file.path) }
+
+        } else {
+            // The directory is empty or doesn't exist
+            Log.d("Recorded video file","The directory is empty or doesn't exist.")
+            return emptyList()
+        }
+    }
+
 }

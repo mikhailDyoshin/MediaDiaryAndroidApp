@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
+import android.os.Environment
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -39,9 +40,6 @@ import java.util.concurrent.Executor
 import androidx.camera.view.CameraController
 import androidx.camera.view.video.AudioConfig
 import androidx.compose.foundation.layout.Row
-import androidx.core.net.toUri
-import androidx.media3.common.MediaItem
-import com.ramcosta.composedestinations.annotation.Destination
 import java.io.File
 
 private var recording: Recording? = null
@@ -97,18 +95,6 @@ fun CameraContent(
                 }
             }
         },
-//        floatingActionButton = {
-//            ExtendedFloatingActionButton(
-//                text = { Text(text = "Take photo") },
-//                onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
-//                icon = {
-//                    Icon(
-//                        imageVector = Icons.Default.PlayArrow,
-//                        contentDescription = "Camera capture icon"
-//                    )
-//                }
-//            )
-//        }
     ) { paddingValues: PaddingValues ->
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -193,15 +179,9 @@ private fun recordVideo(controller: LifecycleCameraController, context: Context)
         recording = null
 
 
-        val videoUri = File(
-            context.filesDir,
-            "my-recording.mp4"
-        ).toUri()
+        val directory = File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM).toString())
 
-        Log.d(
-            "Recorded video file",
-            MediaItem.fromUri(videoUri).toString()
-            )
+        logFilesInDir(directory)
 
         return
     }
@@ -210,13 +190,10 @@ private fun recordVideo(controller: LifecycleCameraController, context: Context)
 //        return
 //    }
 
-    val outputFile = File(
-        context.filesDir,
-        "my-recording.mp4"
-    )
+    val file = provideFileToSaveVideo(context = context)
 
     recording = controller.startRecording(
-        FileOutputOptions.Builder(outputFile).build(),
+        FileOutputOptions.Builder(file).build(),
         AudioConfig.create(true),
         ContextCompat.getMainExecutor(context),
     ) { event ->
@@ -243,5 +220,41 @@ private fun recordVideo(controller: LifecycleCameraController, context: Context)
             }
         }
     }
+
 }
 
+private fun logFilesInDir(directory: File) {
+    // Get a list of files in the directory
+    val files: Array<out File>? = directory.listFiles()
+
+// Check if there are any files
+    if (files != null) {
+        // Iterate through the files and do something with each file
+
+        if (files.isEmpty()) {
+            Log.d("Recorded video file", "There are no files")
+        } else {
+            for (file in files) {
+                // Perform actions with each file
+                Log.d(
+                    "Recorded video file",
+                    "File Name: ${file.name}, Path: ${file.absolutePath}"
+                )
+            }
+        }
+
+    } else {
+        // The directory is empty or doesn't exist
+        Log.d("Recorded video file","No files found in the directory.")
+    }
+}
+
+private fun provideFileToSaveVideo(context: Context): File {
+
+    val nowTimestamp: Long = System.currentTimeMillis()
+
+    return File(
+        context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
+        nowTimestamp.toString()
+    )
+}

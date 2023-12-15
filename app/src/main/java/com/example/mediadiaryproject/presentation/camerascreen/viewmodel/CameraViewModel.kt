@@ -6,13 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.domain.SavePhotoToGalleryUseCase
+import com.example.mediadiaryproject.domain.ProvideFileToSaveVideoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(
-    private val savePhotoToGalleryUseCase: SavePhotoToGalleryUseCase
+    private val savePhotoToGalleryUseCase: SavePhotoToGalleryUseCase,
+    private val provideFileToSaveVideoUseCase: ProvideFileToSaveVideoUseCase,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(CameraScreenState())
@@ -23,6 +26,10 @@ class CameraViewModel @Inject constructor(
             savePhotoToGalleryUseCase.call(bitmap)
             updateCapturedPhotoState(bitmap)
         }
+    }
+
+    fun provideFileToSaveVideoUseCase(): File {
+        return provideFileToSaveVideoUseCase.execute()
     }
 
     private fun updateCapturedPhotoState(updatedPhoto: Bitmap?) {

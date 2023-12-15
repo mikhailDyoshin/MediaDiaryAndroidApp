@@ -1,8 +1,8 @@
 package com.example.mediadiaryproject.di
 
 import android.content.Context
-import com.example.mediadiaryproject.data.ComposeSandboxRepositoryImpl
-import com.example.mediadiaryproject.domain.repository.ComposeSandboxRepository
+import com.example.mediadiaryproject.data.MediaDiaryRepositoryImpl
+import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,8 +17,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideComposeSandboxRepository(@ApplicationContext context: Context): ComposeSandboxRepository {
-        return  ComposeSandboxRepositoryImpl(context = context)
+    fun provideComposeSandboxRepository(@ApplicationContext context: Context): MediaDiaryRepository {
+        return  MediaDiaryRepositoryImpl(context = context)
     }
 
 }
