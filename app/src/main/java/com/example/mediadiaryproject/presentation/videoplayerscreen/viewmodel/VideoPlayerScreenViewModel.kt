@@ -2,7 +2,10 @@ package com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import com.example.mediadiaryproject.domain.GetListOfAllVideosUseCase
 import com.example.mediadiaryproject.presentation.videoplayerscreen.state.VideoFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VideoPlayerScreenViewModel @Inject constructor(
-    private val getListOfAllVideosUseCase: GetListOfAllVideosUseCase
+    private val getListOfAllVideosUseCase: GetListOfAllVideosUseCase,
+    val player: Player,
 ) : ViewModel() {
 
     private val _state: MutableState<List<VideoFileState>> = mutableStateOf(listOf())
@@ -18,15 +22,24 @@ class VideoPlayerScreenViewModel @Inject constructor(
 
     init {
         getVideosList()
+        player.prepare()
     }
 
     private fun getVideosList() {
         _state.value = getListOfAllVideosUseCase.execute().map { videoFileModel ->
             VideoFileState(
                 fileName = videoFileModel.fileName,
-                filePath = videoFileModel.filePath
+                mediaItem = MediaItem.fromUri(videoFileModel.filePath.toUri())
             )
         }
+    }
+
+    fun playVideo(mediaItem: MediaItem) {
+        player.addMediaItem(mediaItem)
+
+        player.prepare()
+
+        player.play()
     }
 
 }
