@@ -1,7 +1,9 @@
 package com.example.mediadiaryproject.presentation.mainscreen
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Bitmap
+import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +49,10 @@ fun MainScreen(
         onRequestAudioRecordingPermission = audioRecordingPermissionState::launchPermissionRequest,
         cameraState = viewModel.state.value,
         onPhotoCaptured = { bitmap -> viewModel.storePhotoInGallery(bitmap) },
-        navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination()) }
+        navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination()) },
+        toggleCamera = { viewModel.toggleCamera() },
+        recordVideo = { context -> viewModel.recordVideo(context) },
+        cameraController = viewModel.cameraController.value
     )
 
 }
@@ -61,13 +66,20 @@ fun MainContent(
     cameraState: CameraScreenState,
     onPhotoCaptured: (Bitmap) -> Unit,
     navigateToVideos: () -> Unit,
+    toggleCamera: () -> Unit,
+    recordVideo: (context: Context) -> Unit,
+    cameraController: LifecycleCameraController,
 ) {
 
     if (hasCameraPermission && hasAudioRecordPermission) {
         CameraScreen(
             cameraState = cameraState,
             onPhotoCaptured = onPhotoCaptured,
-            navigateToVideos = { navigateToVideos() })
+            navigateToVideos = { navigateToVideos() },
+            toggleCamera = { toggleCamera() },
+            recordVideo = { context -> recordVideo(context) },
+            cameraController = cameraController,
+        )
     } else {
         NoPermissionScreen(onRequestCameraPermission, onRequestAudioRecordingPermission)
     }

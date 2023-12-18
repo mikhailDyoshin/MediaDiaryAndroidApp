@@ -1,6 +1,8 @@
 package com.example.mediadiaryproject.presentation.camerascreen
 
+import android.content.Context
 import android.graphics.Bitmap
+import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.Composable
 import com.example.mediadiaryproject.presentation.camerascreen.components.CameraContent
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
@@ -10,11 +12,17 @@ fun CameraScreen(
     cameraState: CameraScreenState,
     onPhotoCaptured: (Bitmap) -> Unit,
     navigateToVideos: () -> Unit,
-) {
+    toggleCamera: () -> Unit,
+    recordVideo: (context: Context) -> Unit,
+    cameraController: LifecycleCameraController,
+    ) {
 
     CameraContent(
         navigateToVideos = { navigateToVideos() },
         onPhotoCaptured = { bitmap -> onPhotoCaptured(bitmap) },
-        lastCapturedPhoto = cameraState.capturedImage
+        lastCapturedPhoto = cameraState.capturedImage,
+        toggleCamera = { toggleCamera() },
+        recordVideo = { context -> recordVideo(context) },
+        cameraController = cameraController,
     )
 }
