@@ -1,5 +1,6 @@
 package com.example.mediadiaryproject.presentation.camerascreen.viewmodel
 
+import android.content.Context
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateOf
@@ -11,9 +12,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(
+    @ApplicationContext context: Context,
     private val savePhotoToGalleryUseCase: SavePhotoToGalleryUseCase,
     private val provideFileToSaveVideoUseCase: ProvideFileToSaveVideoUseCase,
 ) : ViewModel() {
