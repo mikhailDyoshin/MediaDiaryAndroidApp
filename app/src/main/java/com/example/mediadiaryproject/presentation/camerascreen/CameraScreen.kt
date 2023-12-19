@@ -11,6 +11,7 @@ fun CameraScreen(
     cameraState: CameraScreenState,
     capturePhoto: (context: Context) -> Unit,
     navigateToVideos: () -> Unit,
+    navigateToPhotos: () -> Unit,
     toggleCamera: () -> Unit,
     recordVideo: (context: Context) -> Unit,
     cameraController: LifecycleCameraController,
@@ -18,6 +19,7 @@ fun CameraScreen(
 
     CameraContent(
         navigateToVideos = { navigateToVideos() },
+        navigateToPhotos = { navigateToPhotos() },
         capturePhoto = { context -> capturePhoto(context) },
         lastCapturedPhoto = cameraState.capturedImage,
         toggleCamera = { toggleCamera() },

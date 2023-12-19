@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.Row
 @Composable
 fun CameraContent(
     navigateToVideos: () -> Unit,
+    navigateToPhotos: () -> Unit,
     toggleCamera: () -> Unit,
     recordVideo: (context: Context) -> Unit,
     capturePhoto: (context: Context) -> Unit,
@@ -65,6 +66,9 @@ fun CameraContent(
                 }
                 Button(onClick = { recordVideo(context) }) {
                     Text("Video")
+                }
+                Button(onClick = { navigateToPhotos() }) {
+                    Text("Photos")
                 }
             }
         },

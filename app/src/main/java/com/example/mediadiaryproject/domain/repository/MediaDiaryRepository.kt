@@ -1,15 +1,16 @@
 package com.example.mediadiaryproject.domain.repository
 
 import android.graphics.Bitmap
-import com.example.mediadiaryproject.domain.models.VideoFileModel
+import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.domain.models.MediaFileModel
 import java.io.File
 
 interface MediaDiaryRepository {
 
     suspend fun savePhotoToGallery(capturePhotoBitmap: Bitmap):  Result<Unit>
 
-    fun provideFileToSaveVideo(): File
+    fun provideFileToSaveMedia(mediaType: MediaType): File
 
-    fun getListOfAllVideos(): List<VideoFileModel>
+    fun getListOfMedia(mediaType: MediaType): List<MediaFileModel>
 
 }

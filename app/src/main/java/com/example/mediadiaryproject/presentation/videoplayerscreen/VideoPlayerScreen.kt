@@ -2,10 +2,13 @@ package com.example.mediadiaryproject.presentation.videoplayerscreen
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.ui.PlayerView
@@ -27,7 +30,11 @@ fun VideoPlayerScreen(
     val listOfFiles = viewModel.state.value
 
     Column {
-        AndroidView(factory = { context -> PlayerView(context).also { it.player = viewModel.player } })
+        AndroidView(factory = { context ->
+            PlayerView(context).also {
+                it.player = viewModel.player
+            }
+        }, modifier = Modifier.height(100.dp))
         Column {
             for (file in listOfFiles) {
                 Text(file.fileName)

@@ -9,7 +9,9 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import com.example.mediadiaryproject.domain.models.VideoFileModel
+import androidx.annotation.RequiresApi
+import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.domain.models.MediaFileModel
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -95,32 +97,70 @@ class MediaDiaryRepositoryImpl @Inject constructor(
             return@withContext result
         }
 
-    override fun provideFileToSaveVideo(): File {
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun provideFileToSaveMedia(mediaType: MediaType): File {
         val nowTimestamp: Long = System.currentTimeMillis()
 
+        val type = mediaType.type
+
+        val directory = mediaType.directory
+
         return File(
-            context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
-            nowTimestamp.toString()
+            context.getExternalFilesDir(directory),
+            "${type}_$nowTimestamp"
         )
+
+//        when (mediaType) {
+//            MediaType.VIDEO -> {
+//                return File(
+//                    context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
+//                    "${type}_$nowTimestamp"
+//                )
+//            }
+//            MediaType.PHOTO -> {
+//                return File(
+//                    context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
+//                    "${type}_$nowTimestamp"
+//                )
+//            }
+//            MediaType.AUDIO -> {
+//                return File(
+//                    context.getExternalFilesDir(Environment.DIRECTORY_RECORDINGS),
+//                    "${type}_$nowTimestamp"
+//                )
+//            }
+//        }
     }
 
-    override fun getListOfAllVideos(): List<VideoFileModel> {
-        val directory = File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM).toString())
+    override fun getListOfMedia(mediaType: MediaType): List<MediaFileModel> {
+
+//        when (mediaType) {
+//            MediaType.VIDEO -> {
+//
+//            }
+//        }
+
+        val type = mediaType.type
+
+        val directoryName = mediaType.directory
+
+        val directory = File(context.getExternalFilesDir(directoryName).toString())
 
         val files: Array<out File>? = directory.listFiles()
 
         if (files != null) {
 
             if (files.isEmpty()) {
-                Log.d("Recorded video file","No files in the directory.")
+                Log.d("Recorded video file", "No files in the directory.")
                 return emptyList()
             }
 
-            return files.map { file -> VideoFileModel(fileName = file.name, filePath = file.path) }
+            return files.filter { file -> file.name.startsWith(prefix = type) }
+                .map { file -> MediaFileModel(fileName = file.name, filePath = file.path) }
 
         } else {
             // The directory is empty or doesn't exist
-            Log.d("Recorded video file","The directory is empty or doesn't exist.")
+            Log.d("Recorded video file", "The directory is empty or doesn't exist.")
             return emptyList()
         }
     }

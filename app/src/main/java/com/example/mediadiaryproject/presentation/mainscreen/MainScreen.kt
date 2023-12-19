@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.camerascreen.CameraScreen
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 import com.example.mediadiaryproject.presentation.camerascreen.viewmodel.CameraViewModel
+import com.example.mediadiaryproject.presentation.destinations.PhotosScreenDestination
 import com.example.mediadiaryproject.presentation.destinations.VideoPlayerScreenDestination
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -49,6 +50,7 @@ fun MainScreen(
         cameraState = viewModel.state.value,
         capturePhoto = { context -> viewModel.capturePhoto(context) },
         navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination()) },
+        navigateToPhotos = { navigator.navigate(PhotosScreenDestination()) },
         toggleCamera = { viewModel.toggleCamera() },
         recordVideo = { context -> viewModel.recordVideo(context) },
         cameraController = viewModel.cameraController.value
@@ -65,6 +67,7 @@ fun MainContent(
     cameraState: CameraScreenState,
     capturePhoto: (context: Context) -> Unit,
     navigateToVideos: () -> Unit,
+    navigateToPhotos: () -> Unit,
     toggleCamera: () -> Unit,
     recordVideo: (context: Context) -> Unit,
     cameraController: LifecycleCameraController,
@@ -75,6 +78,7 @@ fun MainContent(
             cameraState = cameraState,
             capturePhoto = { context -> capturePhoto(context) },
             navigateToVideos = { navigateToVideos() },
+            navigateToPhotos = { navigateToPhotos() },
             toggleCamera = { toggleCamera() },
             recordVideo = { context -> recordVideo(context) },
             cameraController = cameraController,

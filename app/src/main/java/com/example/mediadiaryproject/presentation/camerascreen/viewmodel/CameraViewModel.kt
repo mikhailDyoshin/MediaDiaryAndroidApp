@@ -22,14 +22,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.SavePhotoToGalleryUseCase
 import com.example.mediadiaryproject.domain.ProvideFileToSaveVideoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.concurrent.Executor
 
 @HiltViewModel
@@ -59,11 +60,21 @@ class CameraViewModel @Inject constructor(
         _cameraController.value.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     }
 
-    private fun storePhotoInGallery(bitmap: Bitmap) {
-        viewModelScope.launch {
-            savePhotoToGalleryUseCase.call(bitmap)
-            updateCapturedPhotoState(bitmap)
+    private fun storePhotoInInternalStorage(bitmap: Bitmap) {
+//            savePhotoToGalleryUseCase.call(bitmap)
+        val file = provideFileToSaveVideoUseCase.execute(mediaType = MediaType.PHOTO)
+
+        try {
+            // Create a FileOutputStream to write the bitmap data to the file
+            FileOutputStream(file).use { fos ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            }
+            file.absolutePath
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
+        updateCapturedPhotoState(bitmap)
+
     }
 
     private fun updateCapturedPhotoState(updatedPhoto: Bitmap?) {
@@ -97,7 +108,7 @@ class CameraViewModel @Inject constructor(
             return
         }
 
-        val file = provideFileToSaveVideoUseCase.execute()
+        val file = provideFileToSaveVideoUseCase.execute(mediaType = MediaType.VIDEO)
 
         recording = _cameraController.value.startRecording(
             FileOutputOptions.Builder(file).build(),
@@ -135,20 +146,22 @@ class CameraViewModel @Inject constructor(
     ) {
         val mainExecutor: Executor = ContextCompat.getMainExecutor(context)
 
-        _cameraController.value.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
-            override fun onCaptureSuccess(image: ImageProxy) {
-                val correctedBitmap: Bitmap = image
-                    .toBitmap()
-                    .rotateBitmap(image.imageInfo.rotationDegrees)
+        _cameraController.value.takePicture(
+            mainExecutor,
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    val correctedBitmap: Bitmap = image
+                        .toBitmap()
+                        .rotateBitmap(image.imageInfo.rotationDegrees)
 
-                storePhotoInGallery(correctedBitmap)
-                image.close()
-            }
+                    storePhotoInInternalStorage(correctedBitmap)
+                    image.close()
+                }
 
-            override fun onError(exception: ImageCaptureException) {
-                Log.e("CameraContent", "Error capturing image", exception)
-            }
-        })
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("CameraContent", "Error capturing image", exception)
+                }
+            })
     }
 
     private fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
