@@ -2,7 +2,6 @@ package com.example.mediadiaryproject.presentation.mainscreen
 
 import android.Manifest
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +47,7 @@ fun MainScreen(
         onRequestCameraPermission = cameraPermissionState::launchPermissionRequest,
         onRequestAudioRecordingPermission = audioRecordingPermissionState::launchPermissionRequest,
         cameraState = viewModel.state.value,
-        onPhotoCaptured = { bitmap -> viewModel.storePhotoInGallery(bitmap) },
+        capturePhoto = { context -> viewModel.capturePhoto(context) },
         navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination()) },
         toggleCamera = { viewModel.toggleCamera() },
         recordVideo = { context -> viewModel.recordVideo(context) },
@@ -64,7 +63,7 @@ fun MainContent(
     onRequestCameraPermission: () -> Unit,
     onRequestAudioRecordingPermission: () -> Unit,
     cameraState: CameraScreenState,
-    onPhotoCaptured: (Bitmap) -> Unit,
+    capturePhoto: (context: Context) -> Unit,
     navigateToVideos: () -> Unit,
     toggleCamera: () -> Unit,
     recordVideo: (context: Context) -> Unit,
@@ -74,7 +73,7 @@ fun MainContent(
     if (hasCameraPermission && hasAudioRecordPermission) {
         CameraScreen(
             cameraState = cameraState,
-            onPhotoCaptured = onPhotoCaptured,
+            capturePhoto = { context -> capturePhoto(context) },
             navigateToVideos = { navigateToVideos() },
             toggleCamera = { toggleCamera() },
             recordVideo = { context -> recordVideo(context) },

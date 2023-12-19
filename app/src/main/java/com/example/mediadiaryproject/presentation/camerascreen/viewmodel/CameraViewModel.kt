@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.video.FileOutputOptions
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoRecordEvent
@@ -26,6 +30,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.concurrent.Executor
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(
@@ -54,7 +59,7 @@ class CameraViewModel @Inject constructor(
         _cameraController.value.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     }
 
-    fun storePhotoInGallery(bitmap: Bitmap) {
+    private fun storePhotoInGallery(bitmap: Bitmap) {
         viewModelScope.launch {
             savePhotoToGalleryUseCase.call(bitmap)
             updateCapturedPhotoState(bitmap)
@@ -123,6 +128,36 @@ class CameraViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun capturePhoto(
+        context: Context,
+    ) {
+        val mainExecutor: Executor = ContextCompat.getMainExecutor(context)
+
+        _cameraController.value.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
+            override fun onCaptureSuccess(image: ImageProxy) {
+                val correctedBitmap: Bitmap = image
+                    .toBitmap()
+                    .rotateBitmap(image.imageInfo.rotationDegrees)
+
+                storePhotoInGallery(correctedBitmap)
+                image.close()
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                Log.e("CameraContent", "Error capturing image", exception)
+            }
+        })
+    }
+
+    private fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
+        val matrix = Matrix().apply {
+            postRotate(-rotationDegrees.toFloat())
+            postScale(-1f, -1f)
+        }
+
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 
     override fun onCleared() {

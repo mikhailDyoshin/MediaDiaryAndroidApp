@@ -4,14 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Matrix
-import android.os.Environment
-import android.util.Log
+//import android.os.Environment
+//import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
@@ -28,20 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import java.util.concurrent.Executor
 import androidx.compose.foundation.layout.Row
-import java.io.File
+//import java.io.File
 
 @SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraContent(
-    onPhotoCaptured: (Bitmap) -> Unit,
     navigateToVideos: () -> Unit,
     toggleCamera: () -> Unit,
     recordVideo: (context: Context) -> Unit,
+    capturePhoto: (context: Context) -> Unit,
     lastCapturedPhoto: Bitmap? = null,
     cameraController: LifecycleCameraController,
 ) {
@@ -66,7 +60,7 @@ fun CameraContent(
         },
         bottomBar = {
             Row() {
-                Button(onClick = { capturePhoto(context, cameraController, onPhotoCaptured) }) {
+                Button(onClick = { capturePhoto(context) }) {
                     Text("Photo")
                 }
                 Button(onClick = { recordVideo(context) }) {
@@ -107,74 +101,44 @@ fun CameraContent(
     }
 }
 
-private fun capturePhoto(
-    context: Context,
-    cameraController: LifecycleCameraController,
-    onPhotoCaptured: (Bitmap) -> Unit
-) {
-    val mainExecutor: Executor = ContextCompat.getMainExecutor(context)
-
-    cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
-        override fun onCaptureSuccess(image: ImageProxy) {
-            val correctedBitmap: Bitmap = image
-                .toBitmap()
-                .rotateBitmap(image.imageInfo.rotationDegrees)
-
-            onPhotoCaptured(correctedBitmap)
-            image.close()
-        }
-
-        override fun onError(exception: ImageCaptureException) {
-            Log.e("CameraContent", "Error capturing image", exception)
-        }
-    })
-}
-
-private fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {
-    val matrix = Matrix().apply {
-        postRotate(-rotationDegrees.toFloat())
-        postScale(-1f, -1f)
-    }
-
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-}
 
 
 
 
 
-private fun logFilesInDir(directory: File) {
-    // Get a list of files in the directory
-    val files: Array<out File>? = directory.listFiles()
 
-// Check if there are any files
-    if (files != null) {
-        // Iterate through the files and do something with each file
-
-        if (files.isEmpty()) {
-            Log.d("Recorded video file", "There are no files")
-        } else {
-            for (file in files) {
-                // Perform actions with each file
-                Log.d(
-                    "Recorded video file",
-                    "File Name: ${file.name}, Path: ${file.absolutePath}"
-                )
-            }
-        }
-
-    } else {
-        // The directory is empty or doesn't exist
-        Log.d("Recorded video file","No files found in the directory.")
-    }
-}
-
-private fun provideFileToSaveVideo(context: Context): File {
-
-    val nowTimestamp: Long = System.currentTimeMillis()
-
-    return File(
-        context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
-        nowTimestamp.toString()
-    )
-}
+//private fun logFilesInDir(directory: File) {
+//    // Get a list of files in the directory
+//    val files: Array<out File>? = directory.listFiles()
+//
+//// Check if there are any files
+//    if (files != null) {
+//        // Iterate through the files and do something with each file
+//
+//        if (files.isEmpty()) {
+//            Log.d("Recorded video file", "There are no files")
+//        } else {
+//            for (file in files) {
+//                // Perform actions with each file
+//                Log.d(
+//                    "Recorded video file",
+//                    "File Name: ${file.name}, Path: ${file.absolutePath}"
+//                )
+//            }
+//        }
+//
+//    } else {
+//        // The directory is empty or doesn't exist
+//        Log.d("Recorded video file","No files found in the directory.")
+//    }
+//}
+//
+//private fun provideFileToSaveVideo(context: Context): File {
+//
+//    val nowTimestamp: Long = System.currentTimeMillis()
+//
+//    return File(
+//        context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
+//        nowTimestamp.toString()
+//    )
+//}
