@@ -110,26 +110,6 @@ class MediaDiaryRepositoryImpl @Inject constructor(
             "${type}_$nowTimestamp"
         )
 
-//        when (mediaType) {
-//            MediaType.VIDEO -> {
-//                return File(
-//                    context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
-//                    "${type}_$nowTimestamp"
-//                )
-//            }
-//            MediaType.PHOTO -> {
-//                return File(
-//                    context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
-//                    "${type}_$nowTimestamp"
-//                )
-//            }
-//            MediaType.AUDIO -> {
-//                return File(
-//                    context.getExternalFilesDir(Environment.DIRECTORY_RECORDINGS),
-//                    "${type}_$nowTimestamp"
-//                )
-//            }
-//        }
     }
 
     override fun getListOfMedia(mediaType: MediaType): List<MediaFileModel> {

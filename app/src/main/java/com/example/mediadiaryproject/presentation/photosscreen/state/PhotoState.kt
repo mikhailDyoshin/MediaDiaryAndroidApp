@@ -1,3 +1,5 @@
 package com.example.mediadiaryproject.presentation.photosscreen.state
 
-data class PhotoState(val fileName: String)
+import android.graphics.Bitmap
+
+data class PhotoState(val fileName: String, val image: Bitmap?)
