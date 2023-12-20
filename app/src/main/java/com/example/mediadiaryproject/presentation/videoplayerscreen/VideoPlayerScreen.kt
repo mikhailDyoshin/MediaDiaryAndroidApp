@@ -1,6 +1,7 @@
 package com.example.mediadiaryproject.presentation.videoplayerscreen
 
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
@@ -34,13 +35,12 @@ fun VideoPlayerScreen(
             PlayerView(context).also {
                 it.player = viewModel.player
             }
-        }, modifier = Modifier.height(100.dp))
+        }, modifier = Modifier.height(200.dp))
         Column {
             for (file in listOfFiles) {
-                Text(file.fileName)
+                Text(file.fileName, modifier = Modifier.clickable { viewModel.playVideo(file.mediaItem) })
             }
         }
-        Text(text = "Messages screen")
         Button(
             onClick = {
                 // Navigates back to Home screen
