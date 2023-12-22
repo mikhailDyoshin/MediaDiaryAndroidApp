@@ -28,17 +28,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     DestinationsNavHost(navGraph = NavGraphs.root)
-
-                    val cameraViewModel: CameraViewModel by viewModels()
-
-                    val cameraState = cameraViewModel.state
-
-//                    MainScreen(
-//                        cameraState = cameraState.value,
-//                        onPhotoCaptured = { bitmap ->
-//                            cameraViewModel.storePhotoInGallery(bitmap = bitmap)
-//                        }
-//                    )
                 }
             }
         }
