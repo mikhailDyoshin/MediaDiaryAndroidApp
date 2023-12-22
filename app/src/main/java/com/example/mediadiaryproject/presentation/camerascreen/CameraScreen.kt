@@ -10,6 +10,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun CameraScreen(
+    navigateToPhotos: () -> Unit,
+    navigateToVideos: () -> Unit,
     cameraState: CameraScreenState,
     capturePhoto: (context: Context) -> Unit,
     toggleCamera: () -> Unit,
@@ -18,8 +20,8 @@ fun CameraScreen(
     ) {
 
     CameraContent(
-        navigateToPhotos = {  },
-        navigateToVideos = {  },
+        navigateToPhotos = { navigateToPhotos() },
+        navigateToVideos = { navigateToVideos() },
         capturePhoto = { context -> capturePhoto(context) },
         lastCapturedPhoto = cameraState.capturedImage,
         toggleCamera = { toggleCamera() },

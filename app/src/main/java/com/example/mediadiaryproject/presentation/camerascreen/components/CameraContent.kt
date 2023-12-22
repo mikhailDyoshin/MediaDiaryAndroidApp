@@ -53,6 +53,9 @@ fun CameraContent(
                 Button(onClick = { toggleCamera() }) {
                     Text("Toggle camera")
                 }
+                Button(onClick = { navigateToPhotos() }) {
+                    Text("Photos")
+                }
                 Button(onClick = { navigateToVideos() }) {
                     Text("Videos")
                 }
@@ -66,9 +69,6 @@ fun CameraContent(
                 }
                 Button(onClick = { recordVideo(context) }) {
                     Text("Video")
-                }
-                Button(onClick = { navigateToPhotos() }) {
-                    Text("Photos")
                 }
             }
         },

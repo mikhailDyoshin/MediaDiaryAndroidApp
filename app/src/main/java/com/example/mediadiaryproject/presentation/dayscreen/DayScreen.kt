@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import com.example.mediadiaryproject.presentation.destinations.AudioRecordingScreenDestination
 import com.example.mediadiaryproject.presentation.destinations.MainContentDestination
 import com.example.mediadiaryproject.presentation.destinations.TextNoteScreenDestination
-import com.example.mediadiaryproject.presentation.destinations.VideoPlayerScreenDestination
-import com.example.mediadiaryproject.presentation.mainscreen.MAIN_SCREEN_ROUTE
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
+const val MAIN_SCREEN_ROUTE = "main"
 
 @MediaDiaryNavGraph(start = true)
 @Destination(route = MAIN_SCREEN_ROUTE)
@@ -20,7 +20,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun DayScreen(
     navigator: DestinationsNavigator,
 ) {
-
 
     Column {
         Button(onClick = { navigator.navigate(TextNoteScreenDestination()) }) {
