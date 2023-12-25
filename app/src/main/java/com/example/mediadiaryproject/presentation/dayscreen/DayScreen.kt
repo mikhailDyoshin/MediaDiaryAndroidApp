@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.example.mediadiaryproject.presentation.destinations.AudioRecordingScreenDestination
+import com.example.mediadiaryproject.presentation.destinations.AudioRecorderWrapperDestination
 import com.example.mediadiaryproject.presentation.destinations.MainContentDestination
 import com.example.mediadiaryproject.presentation.destinations.TextNoteScreenDestination
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
@@ -25,7 +25,7 @@ fun DayScreen(
         Button(onClick = { navigator.navigate(TextNoteScreenDestination()) }) {
             Text(text = "Add text note")
         }
-        Button(onClick = { navigator.navigate(AudioRecordingScreenDestination()) }) {
+        Button(onClick = { navigator.navigate(AudioRecorderWrapperDestination()) }) {
             Text(text = "Add audio note")
         }
         Button(onClick = { navigator.navigate(MainContentDestination()) }) {

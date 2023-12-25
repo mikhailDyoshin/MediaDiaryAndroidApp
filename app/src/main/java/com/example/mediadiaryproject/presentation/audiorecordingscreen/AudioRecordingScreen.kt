@@ -15,7 +15,6 @@ import java.io.File
 @Destination
 @Composable
 fun AudioRecordingScreen(
-    navigator: DestinationsNavigator,
 ) {
     val context: Context = LocalContext.current
 
