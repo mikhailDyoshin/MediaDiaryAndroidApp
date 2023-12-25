@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.SavePhotoToGalleryUseCase
-import com.example.mediadiaryproject.domain.ProvideFileToSaveVideoUseCase
+import com.example.mediadiaryproject.domain.ProvideFileToSaveMediaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import javax.inject.Inject
@@ -37,7 +37,7 @@ import java.util.concurrent.Executor
 class CameraViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val savePhotoToGalleryUseCase: SavePhotoToGalleryUseCase,
-    private val provideFileToSaveVideoUseCase: ProvideFileToSaveVideoUseCase,
+    private val provideFileToSaveMediaUseCase: ProvideFileToSaveMediaUseCase,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(CameraScreenState())
@@ -62,7 +62,7 @@ class CameraViewModel @Inject constructor(
 
     private fun storePhotoInInternalStorage(bitmap: Bitmap) {
 //            savePhotoToGalleryUseCase.call(bitmap)
-        val file = provideFileToSaveVideoUseCase.execute(mediaType = MediaType.PHOTO)
+        val file = provideFileToSaveMediaUseCase.execute(mediaType = MediaType.PHOTO)
 
         try {
             // Create a FileOutputStream to write the bitmap data to the file
@@ -108,7 +108,7 @@ class CameraViewModel @Inject constructor(
             return
         }
 
-        val file = provideFileToSaveVideoUseCase.execute(mediaType = MediaType.VIDEO)
+        val file = provideFileToSaveMediaUseCase.execute(mediaType = MediaType.VIDEO)
 
         recording = _cameraController.value.startRecording(
             FileOutputOptions.Builder(file).build(),

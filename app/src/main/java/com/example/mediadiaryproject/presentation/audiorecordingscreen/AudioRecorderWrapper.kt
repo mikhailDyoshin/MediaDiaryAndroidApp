@@ -9,11 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.mediadiaryproject.presentation.camerascreen.CameraScreen
-import com.example.mediadiaryproject.presentation.destinations.Destination
-import com.example.mediadiaryproject.presentation.destinations.PhotosScreenDestination
-import com.example.mediadiaryproject.presentation.destinations.VideoPlayerScreenDestination
-import com.example.mediadiaryproject.presentation.mainscreen.NoPermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted

@@ -3,7 +3,7 @@ package com.example.mediadiaryproject.di
 import android.content.Context
 import com.example.mediadiaryproject.data.MediaDiaryRepositoryImpl
 import com.example.mediadiaryproject.domain.GetListOfMediaUseCase
-import com.example.mediadiaryproject.domain.ProvideFileToSaveVideoUseCase
+import com.example.mediadiaryproject.domain.ProvideFileToSaveMediaUseCase
 import com.example.mediadiaryproject.domain.SavePhotoToGalleryUseCase
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.Module
@@ -34,8 +34,8 @@ object AppModule {
     @Provides
     fun provideProvideFileToSaveVideoUseCase(
         repository: MediaDiaryRepository
-    ): ProvideFileToSaveVideoUseCase {
-        return ProvideFileToSaveVideoUseCase(repository = repository)
+    ): ProvideFileToSaveMediaUseCase {
+        return ProvideFileToSaveMediaUseCase(repository = repository)
     }
 
     @Provides

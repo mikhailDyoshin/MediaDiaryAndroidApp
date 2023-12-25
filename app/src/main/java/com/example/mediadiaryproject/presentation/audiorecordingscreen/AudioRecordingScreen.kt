@@ -22,14 +22,11 @@ fun AudioRecordingScreen(
         MediaDiaryAudioRecorder(context)
     }
 
-    var audioFile: File? = null
-
     Column {
         Text(text = "Audio recording screen")
         Button(onClick = {
             File(context.filesDir, "my_recording.mp3").also {
                 recorder.start(it)
-                audioFile = it
 
             }
         }) {
