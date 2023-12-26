@@ -1,6 +1,8 @@
 package com.example.mediadiaryproject.presentation.audiorecordingscreen
 
 import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,16 +11,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mediadiaryproject.presentation.audiorecordingscreen.viewmodel.AudioRecorderViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalPermissionsApi::class)
 @com.ramcosta.composedestinations.annotation.Destination
 @Composable
-fun AudioRecorderWrapper (navigator: DestinationsNavigator) {
+fun AudioRecorderWrapper(
+    navigator: DestinationsNavigator,
+    viewModel: AudioRecorderViewModel = hiltViewModel()
+) {
 
     val audioRecordingPermissionState: PermissionState =
         rememberPermissionState(Manifest.permission.RECORD_AUDIO)
@@ -26,7 +34,12 @@ fun AudioRecorderWrapper (navigator: DestinationsNavigator) {
     val hasAudioRecordPermission = audioRecordingPermissionState.status.isGranted
 
     if (hasAudioRecordPermission) {
-        AudioRecordingScreen()
+        AudioRecordingScreen(
+            recording = viewModel.state.value.recording,
+            recordingSaved = viewModel.state.value.recordingSaved,
+            startRecording = { viewModel.startRecording() },
+            stopRecording = { viewModel.stopRecording() }
+        )
     } else {
         NoRecordingAudioPermissionScreen(
             onRequestAudioRecordingPermission = audioRecordingPermissionState::launchPermissionRequest
