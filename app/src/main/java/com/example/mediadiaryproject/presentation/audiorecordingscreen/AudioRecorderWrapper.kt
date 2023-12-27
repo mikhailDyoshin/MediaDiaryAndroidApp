@@ -37,8 +37,9 @@ fun AudioRecorderWrapper(
         AudioRecordingScreen(
             recording = viewModel.state.value.recording,
             recordingSaved = viewModel.state.value.recordingSaved,
+            amplitude = viewModel.amplitudeState.value,
             startRecording = { viewModel.startRecording() },
-            stopRecording = { viewModel.stopRecording() }
+            stopRecording = { viewModel.stopRecording() },
         )
     } else {
         NoRecordingAudioPermissionScreen(

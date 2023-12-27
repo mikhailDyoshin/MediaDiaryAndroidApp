@@ -10,6 +10,8 @@ class MediaDiaryAudioRecorder(private val context: Context): AudioRecorder {
 
     private var recorder: MediaRecorder? = null
 
+    private var showAmplitude = false
+
     private fun createRecorder(): MediaRecorder {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             MediaRecorder(context)
@@ -28,6 +30,8 @@ class MediaDiaryAudioRecorder(private val context: Context): AudioRecorder {
             start()
 
             recorder = this
+
+            showAmplitude = true
         }
     }
 
@@ -35,5 +39,11 @@ class MediaDiaryAudioRecorder(private val context: Context): AudioRecorder {
         recorder?.stop()
         recorder?.reset()
         recorder = null
+
+        showAmplitude = false
+    }
+
+    fun getMaxAmpValue(): Int? {
+        return recorder?.maxAmplitude
     }
 }

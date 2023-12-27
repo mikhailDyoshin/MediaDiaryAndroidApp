@@ -8,19 +8,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.example.mediadiaryproject.presentation.audiorecordingscreen.audiorecorder.MediaDiaryAudioRecorder
-import com.example.mediadiaryproject.presentation.audiorecordingscreen.state.AudioRecorderScreenState
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.io.File
 
 @Destination
 @Composable
 fun AudioRecordingScreen(
     recording: Boolean,
     recordingSaved: Boolean,
+    amplitude: Int,
     startRecording: () -> Unit,
-    stopRecording: () -> Unit
+    stopRecording: () -> Unit,
 ) {
     val context: Context = LocalContext.current
 
@@ -49,5 +46,6 @@ fun AudioRecordingScreen(
         }) {
             Text(text = "Stop")
         }
+        Text(text = "$amplitude")
     }
 }
