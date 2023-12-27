@@ -1,9 +1,11 @@
 package com.example.mediadiaryproject.presentation.audiorecordingscreen.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,15 +28,28 @@ class AudioRecorderViewModel @Inject constructor(
 //    private val recorder: MediaDiaryAudioRecorder,
 ) : ViewModel() {
 
+    // States
     private val _state = mutableStateOf(AudioRecorderScreenState())
     val state: State<AudioRecorderScreenState> = _state
 
     private val _amplitudeState = mutableIntStateOf(0)
     val amplitudeState: State<Int> = _amplitudeState
 
+    private var _amplitudesList = MutableList(25) { 0 }
+
+    @SuppressLint("MutableCollectionMutableState")
+    private val _amplitudesListState: MutableState<MutableList<Int>> =
+        mutableStateOf(mutableListOf())
+
+    val amplitudesListState = _amplitudesListState
+
+    // Recorder
     private val recorder = MediaDiaryAudioRecorder(context)
 
-    private var countDownTimer: CountDownTimer? = null
+    // Timers
+    private var countDownTimerFast: CountDownTimer? = null
+
+    private var countDownTimerSlow: CountDownTimer? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
     fun startRecording() {
@@ -44,7 +59,7 @@ class AudioRecorderViewModel @Inject constructor(
 
         recorder.start(file)
 
-        getMaxAmpValue()
+        assignListOfMaxAmpValue()
     }
 
     fun stopRecording() {
@@ -52,23 +67,46 @@ class AudioRecorderViewModel @Inject constructor(
 
         _state.value = AudioRecorderScreenState(recording = false, recordingSaved = true)
 
-        countDownTimer?.cancel()
+        countDownTimerFast?.cancel()
+        countDownTimerSlow?.cancel()
 
     }
 
-    private fun getMaxAmpValue() = viewModelScope.launch {
+    private fun getListOfMaxAmpValue() = viewModelScope.launch {
 
-        countDownTimer = object : CountDownTimer(
+        var intervalIndexCounter = 0
+
+        countDownTimerFast = object : CountDownTimer(
+            100,
+            4
+        ) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                _amplitudesList[intervalIndexCounter] = recorder.getMaxAmpValue() ?: 0
+                intervalIndexCounter++
+            }
+
+            override fun onFinish() {
+                _amplitudesListState.value = _amplitudesList
+                intervalIndexCounter = 0
+                _amplitudesList = MutableList(25) { 0 }
+            }
+        }.start()
+
+    }
+
+    private fun assignListOfMaxAmpValue() = viewModelScope.launch {
+
+        countDownTimerSlow = object : CountDownTimer(
             Constants.maxAudioLengthInMillis,
             Constants.audioAmplitudeDisplayIntervalInMillis
         ) {
 
             override fun onTick(millisUntilFinished: Long) {
-                _amplitudeState.intValue = recorder.getMaxAmpValue() ?: 0
+                getListOfMaxAmpValue()
             }
 
             override fun onFinish() {
-                _amplitudeState.intValue = 0
                 stopRecording()
             }
         }.start()
