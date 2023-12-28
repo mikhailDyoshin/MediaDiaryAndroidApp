@@ -26,6 +26,11 @@ class VideoPlayerScreenViewModel @Inject constructor(
         player.prepare()
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        player.release()
+    }
+
     private fun getVideosList() {
         _state.value = getListOfAllVideosUseCase.execute(mediaType = MediaType.VIDEO).map { videoFileModel ->
             VideoFileState(
