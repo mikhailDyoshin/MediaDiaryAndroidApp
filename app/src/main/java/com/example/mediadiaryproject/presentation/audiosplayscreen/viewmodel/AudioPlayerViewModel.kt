@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AudioPlayerViewModel @Inject constructor(
     private val getListOfAllAudiosUseCase: GetListOfMediaUseCase,
-    val player: Player,
+    private val player: Player,
 ) : ViewModel() {
 
     private val _state: MutableState<List<AudioFileState>> = mutableStateOf(listOf())
@@ -53,6 +53,12 @@ class AudioPlayerViewModel @Inject constructor(
         player.prepare()
 
         player.play()
+
+        player.currentPosition
+    }
+
+    fun seekTo(position: Long) {
+        player.seekTo(position)
     }
 
 }
