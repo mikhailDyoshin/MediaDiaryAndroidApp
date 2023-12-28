@@ -45,10 +45,12 @@ class AudioPlayerViewModel @Inject constructor(
             }
     }
 
-    fun playAudio(mediaItem: MediaItem) {
+    fun playAudio(audioItem: AudioFileState) {
         player.stop()
 
-        player.setMediaItem(mediaItem)
+        changeAudioPlayingStatus(audioItem.fileName)
+
+        player.setMediaItem(audioItem.mediaItem)
 
         player.prepare()
 
@@ -59,6 +61,15 @@ class AudioPlayerViewModel @Inject constructor(
 
     fun seekTo(position: Long) {
         player.seekTo(position)
+    }
+
+    private fun changeAudioPlayingStatus(audioName: String) {
+        val newList = _state.value.map { audioItem ->
+            audioItem.copy(isPlaying = audioItem.fileName == audioName)
+
+        }
+
+        _state.value = newList
     }
 
 }

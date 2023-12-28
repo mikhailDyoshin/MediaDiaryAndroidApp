@@ -16,16 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
 import com.example.mediadiaryproject.presentation.audiosplayscreen.viewmodel.AudioPlayerViewModel
@@ -48,25 +45,31 @@ fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel()) {
 @Composable
 private fun AudiosColumn(
     listOfAudios: List<AudioFileState>,
-    playAudio: (audio: MediaItem) -> Unit
+    playAudio: (audio: AudioFileState) -> Unit
 ) {
     Column() {
         for (audio in listOfAudios) {
-            AudioRow(audio, playAudio = { audioItem -> playAudio(audioItem) })
+            AudioRow(
+                audio,
+                playAudio = { audioItem -> playAudio(audioItem) },
+                isPlaying = audio.isPlaying
+            )
         }
     }
 }
 
 @Composable
-private fun AudioRow(audio: AudioFileState, playAudio: (audio: MediaItem) -> Unit) {
+private fun AudioRow(
+    audio: AudioFileState,
+    playAudio: (audio: AudioFileState) -> Unit,
+    isPlaying: Boolean
+) {
 
-    var playing by remember { mutableStateOf(false) }
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Button(onClick = {
-                playAudio(audio.mediaItem)
-                playing = true
+                playAudio(audio)
 
             }) {
                 Text(text = "Play")
@@ -78,7 +81,7 @@ private fun AudioRow(audio: AudioFileState, playAudio: (audio: MediaItem) -> Uni
         }
 
 
-        if (playing) {
+        if (isPlaying) {
             SliderMinimalExample()
         }
 
