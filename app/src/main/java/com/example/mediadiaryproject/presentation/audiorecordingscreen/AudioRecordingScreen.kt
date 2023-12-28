@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -24,7 +25,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun AudioRecordingScreen(
     recording: Boolean,
     recordingSaved: Boolean,
-    amplitudeList: List<Int>,
+    amplitudeList: List<Double>,
     startRecording: () -> Unit,
     stopRecording: () -> Unit,
 ) {
@@ -59,21 +60,35 @@ fun AudioRecordingScreen(
         }
 //        Text(text = "$amplitude")
         androidx.compose.foundation.Canvas(
-            modifier = Modifier.fillMaxWidth().height(300.dp).background(color = Color.Gray),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .background(color = Color.Gray)
+                .padding(vertical = 10.dp),
             onDraw = {
                 val canvasWidth = size.width
                 val canvasHeight = size.height
-                val spaceBetween = 5
+                val spaceBetween = 15
+                val rectWidth = 20F
+                val listSize = amplitudeList.size
+                val horizontalMargin =
+                    (canvasWidth - listSize * rectWidth - (listSize - 1) * spaceBetween) / 2
+
+                drawLine(
+                    color = Color.White,
+                    start = Offset(x = 0F, y = canvasHeight / 2),
+                    end = Offset(x = canvasWidth, y = canvasHeight / 2)
+                )
 
                 for (height in amplitudeList.withIndex()) {
-                    val xOffset = spaceBetween + height.index * (10 + spaceBetween)
+                    val xOffset = horizontalMargin + height.index * (spaceBetween + rectWidth)
                     val rectHeight = (height.value.toFloat() * 0.1).toFloat()
-                    val yOffset = canvasHeight/2 - rectHeight/2
+                    val yOffset = canvasHeight / 2 - rectHeight / 2
 
                     drawRect(
                         color = Color.White,
-                        topLeft = Offset(x = xOffset.toFloat(), y = yOffset),
-                        size = Size(width = 20F, height = rectHeight)
+                        topLeft = Offset(x = xOffset, y = yOffset),
+                        size = Size(width = rectWidth, height = rectHeight)
                     )
                 }
 
