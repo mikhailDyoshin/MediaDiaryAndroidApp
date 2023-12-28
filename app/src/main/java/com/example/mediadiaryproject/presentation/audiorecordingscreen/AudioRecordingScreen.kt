@@ -28,6 +28,7 @@ fun AudioRecordingScreen(
     amplitudeList: List<Double>,
     startRecording: () -> Unit,
     stopRecording: () -> Unit,
+    navigateToAudios: () -> Unit,
 ) {
     val context: Context = LocalContext.current
 
@@ -58,41 +59,51 @@ fun AudioRecordingScreen(
         }) {
             Text(text = "Stop")
         }
-//        Text(text = "$amplitude")
-        androidx.compose.foundation.Canvas(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(400.dp)
-                .background(color = Color.Gray)
-                .padding(vertical = 10.dp),
-            onDraw = {
-                val canvasWidth = size.width
-                val canvasHeight = size.height
-                val spaceBetween = 15
-                val rectWidth = 20F
-                val listSize = amplitudeList.size
-                val horizontalMargin =
-                    (canvasWidth - listSize * rectWidth - (listSize - 1) * spaceBetween) / 2
 
-                drawLine(
-                    color = Color.White,
-                    start = Offset(x = 0F, y = canvasHeight / 2),
-                    end = Offset(x = canvasWidth, y = canvasHeight / 2)
-                )
+        AudioSignalForm(signal = amplitudeList)
 
-                for (height in amplitudeList.withIndex()) {
-                    val xOffset = horizontalMargin + height.index * (spaceBetween + rectWidth)
-                    val rectHeight = (height.value.toFloat() * 0.1).toFloat()
-                    val yOffset = canvasHeight / 2 - rectHeight / 2
-
-                    drawRect(
-                        color = Color.White,
-                        topLeft = Offset(x = xOffset, y = yOffset),
-                        size = Size(width = rectWidth, height = rectHeight)
-                    )
-                }
-
-            }
-        )
+        Button(onClick = {
+            navigateToAudios()
+        }) {
+            Text(text = "Audios")
+        }
     }
+}
+@Composable
+private fun AudioSignalForm(signal: List<Double>) {
+    androidx.compose.foundation.Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .background(color = Color.Gray)
+            .padding(vertical = 10.dp),
+        onDraw = {
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+            val spaceBetween = 15
+            val rectWidth = 20F
+            val listSize = signal.size
+            val horizontalMargin =
+                (canvasWidth - listSize * rectWidth - (listSize - 1) * spaceBetween) / 2
+
+            drawLine(
+                color = Color.White,
+                start = Offset(x = 0F, y = canvasHeight / 2),
+                end = Offset(x = canvasWidth, y = canvasHeight / 2)
+            )
+
+            for (height in signal.withIndex()) {
+                val xOffset = horizontalMargin + height.index * (spaceBetween + rectWidth)
+                val rectHeight = (height.value.toFloat() * 0.1).toFloat()
+                val yOffset = canvasHeight / 2 - rectHeight / 2
+
+                drawRect(
+                    color = Color.White,
+                    topLeft = Offset(x = xOffset, y = yOffset),
+                    size = Size(width = rectWidth, height = rectHeight)
+                )
+            }
+
+        }
+    )
 }

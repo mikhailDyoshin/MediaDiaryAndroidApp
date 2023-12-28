@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.audiorecordingscreen.viewmodel.AudioRecorderViewModel
+import com.example.mediadiaryproject.presentation.destinations.AudiosPlayScreenDestination
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -40,6 +41,7 @@ fun AudioRecorderWrapper(
             amplitudeList = viewModel.amplitudesListState.value,
             startRecording = { viewModel.startRecording() },
             stopRecording = { viewModel.stopRecording() },
+            navigateToAudios = { navigator.navigate(AudiosPlayScreenDestination()) }
         )
     } else {
         NoRecordingAudioPermissionScreen(
