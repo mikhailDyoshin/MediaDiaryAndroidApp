@@ -38,21 +38,27 @@ fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel()) {
 
     Column {
         Text(text = "Audios screen")
-        AudiosColumn(listOfAudios, playAudio = { audio -> viewModel.playAudio(audio) })
+        AudiosColumn(
+            listOfAudios,
+            playAudio = { audio -> viewModel.playAudio(audio) },
+            currentPosition = viewModel.currentAudioPositionState.floatValue
+        )
     }
 }
 
 @Composable
 private fun AudiosColumn(
     listOfAudios: List<AudioFileState>,
-    playAudio: (audio: AudioFileState) -> Unit
+    playAudio: (audio: AudioFileState) -> Unit,
+    currentPosition: Float,
 ) {
-    Column() {
+    Column {
         for (audio in listOfAudios) {
             AudioRow(
                 audio,
                 playAudio = { audioItem -> playAudio(audioItem) },
-                isPlaying = audio.isPlaying
+                isPlaying = audio.isPlaying,
+                currentPosition = currentPosition,
             )
         }
     }
@@ -62,7 +68,8 @@ private fun AudiosColumn(
 private fun AudioRow(
     audio: AudioFileState,
     playAudio: (audio: AudioFileState) -> Unit,
-    isPlaying: Boolean
+    isPlaying: Boolean,
+    currentPosition: Float,
 ) {
 
 
@@ -82,7 +89,7 @@ private fun AudioRow(
 
 
         if (isPlaying) {
-            SliderMinimalExample()
+            SliderMinimalExample(currentPosition)
         }
 
         Spacer(
@@ -97,13 +104,13 @@ private fun AudioRow(
 }
 
 @Composable
-private fun SliderMinimalExample() {
+private fun SliderMinimalExample(currentPosition: Float) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Column {
         Slider(
-            value = sliderPosition,
-            onValueChange = { sliderPosition = it }
+            value = currentPosition,
+            onValueChange = { sliderPosition = it },
         )
-        Text(text = sliderPosition.toString())
+        Text(text = currentPosition.toString())
     }
 }
