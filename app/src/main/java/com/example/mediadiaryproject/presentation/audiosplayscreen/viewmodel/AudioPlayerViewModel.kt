@@ -1,14 +1,13 @@
 package com.example.mediadiaryproject.presentation.audiosplayscreen.viewmodel
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
@@ -41,6 +40,28 @@ class AudioPlayerViewModel @Inject constructor(
     init {
         getVideosList()
         player.prepare()
+
+        player.addListener(
+            object : Player.Listener {
+
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    super.onIsPlayingChanged(isPlaying)
+
+                    if (isPlaying) {
+                        val duration = player.duration
+
+                        val currentPosition = player.currentPosition
+
+                        val timeRemained = duration - currentPosition
+
+                        getCurrentAudioPosition(timeRemained)
+                    } else {
+                        countDownTimer?.cancel()
+                    }
+                }
+
+            }
+        )
     }
 
     override fun onCleared() {
@@ -63,7 +84,7 @@ class AudioPlayerViewModel @Inject constructor(
     fun playAudio(audioItem: AudioFileState) {
         player.stop()
 
-//        countDownTimer?.cancel()
+        countDownTimer?.cancel()
 
         changeAudioPlayingStatus(audioItem.fileName)
 
@@ -71,33 +92,26 @@ class AudioPlayerViewModel @Inject constructor(
 
         player.prepare()
 
-        player.addListener(
-            object: Player.Listener {
-
-                override fun onEvents(player: Player, events: Player.Events) {
-                    super.onEvents(player, events)
-                    if (events.contains(Player.EVENT_IS_LOADING_CHANGED)) {
-                        val duration = player.duration
-
-                        getCurrentAudioPosition(duration)
-                    }
-
-//                    if (events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED)) {
-//                        countDownTimer?.cancel()
-//                    }
-                }
-
-
-
-            }
-        )
-
         player.play()
 
     }
 
-    fun seekTo(position: Long) {
-        player.seekTo(position)
+    fun seekTo(position: Float) {
+
+        countDownTimer?.cancel()
+
+        val duration = player.duration
+
+
+        val currentSliderPosition = (position * duration).toLong()
+
+        Log.d(
+            "Slider Position",
+            "$position; Current: $currentSliderPosition ms; Total: $duration; Remain: ${duration - currentSliderPosition}"
+        )
+
+        player.seekTo(currentSliderPosition)
+
     }
 
     private fun changeAudioPlayingStatus(audioName: String) {
@@ -109,24 +123,28 @@ class AudioPlayerViewModel @Inject constructor(
         _state.value = newList
     }
 
-    private fun getCurrentAudioPosition(duration: Long) = viewModelScope.launch {
+    private fun getCurrentAudioPosition(timeRemained: Long) = viewModelScope.launch {
 
+        if (timeRemained >= 0) {
+            var counter = 0
 
+            countDownTimer = object : CountDownTimer(
+                timeRemained + 200L,
+                50L
+            ) {
 
-        countDownTimer = object : CountDownTimer(
-            duration+100,
-            1
-        ) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val currentRatio = (player.currentPosition.toFloat() / player.duration.toFloat())
+                    _currentAudioPositionRatioState.floatValue = currentRatio
+                    Log.d("Ticking", "$counter")
+                    counter++
+                }
 
-            override fun onTick(millisUntilFinished: Long) {
-                val currentRatio = (player.currentPosition.toFloat() / duration.toFloat())
-                _currentAudioPositionRatioState.floatValue = currentRatio
-            }
-
-            override fun onFinish() {
-                _currentAudioPositionRatioState.floatValue = 0f
-            }
-        }.start()
+                override fun onFinish() {
+                    _currentAudioPositionRatioState.floatValue = 0f
+                }
+            }.start()
+        }
 
     }
 

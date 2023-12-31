@@ -41,7 +41,8 @@ fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel()) {
         AudiosColumn(
             listOfAudios,
             playAudio = { audio -> viewModel.playAudio(audio) },
-            currentPosition = viewModel.currentAudioPositionState.floatValue
+            currentPosition = viewModel.currentAudioPositionState.floatValue,
+            seekTo = { position -> viewModel.seekTo(position) }
         )
     }
 }
@@ -51,6 +52,7 @@ private fun AudiosColumn(
     listOfAudios: List<AudioFileState>,
     playAudio: (audio: AudioFileState) -> Unit,
     currentPosition: Float,
+    seekTo: (position: Float) -> Unit
 ) {
     Column {
         for (audio in listOfAudios) {
@@ -59,6 +61,7 @@ private fun AudiosColumn(
                 playAudio = { audioItem -> playAudio(audioItem) },
                 isPlaying = audio.isPlaying,
                 currentPosition = currentPosition,
+                seekTo = { position -> seekTo(position) }
             )
         }
     }
@@ -70,6 +73,7 @@ private fun AudioRow(
     playAudio: (audio: AudioFileState) -> Unit,
     isPlaying: Boolean,
     currentPosition: Float,
+    seekTo: (position: Float) -> Unit
 ) {
 
 
@@ -89,7 +93,7 @@ private fun AudioRow(
 
 
         if (isPlaying) {
-            SliderMinimalExample(currentPosition)
+            Slider(currentPosition, seekTo = { position -> seekTo(position) })
         }
 
         Spacer(
@@ -104,12 +108,13 @@ private fun AudioRow(
 }
 
 @Composable
-private fun SliderMinimalExample(currentPosition: Float) {
+private fun Slider(currentPosition: Float, seekTo: (position: Float) -> Unit) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Column {
         Slider(
             value = currentPosition,
             onValueChange = { sliderPosition = it },
+            onValueChangeFinished = { seekTo(sliderPosition) }
         )
         Text(text = currentPosition.toString())
     }
