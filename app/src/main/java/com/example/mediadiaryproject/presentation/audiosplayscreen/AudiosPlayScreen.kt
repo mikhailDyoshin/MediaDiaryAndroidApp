@@ -41,6 +41,7 @@ fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel()) {
         AudiosColumn(
             listOfAudios,
             playAudio = { audio -> viewModel.playAudio(audio) },
+            pauseAudio = { viewModel.pauseAudio() },
             currentPosition = viewModel.currentAudioPositionState.floatValue,
             seekTo = { position -> viewModel.seekTo(position) }
         )
@@ -51,6 +52,7 @@ fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel()) {
 private fun AudiosColumn(
     listOfAudios: List<AudioFileState>,
     playAudio: (audio: AudioFileState) -> Unit,
+    pauseAudio: () -> Unit,
     currentPosition: Float,
     seekTo: (position: Float) -> Unit
 ) {
@@ -59,7 +61,8 @@ private fun AudiosColumn(
             AudioRow(
                 audio,
                 playAudio = { audioItem -> playAudio(audioItem) },
-                isPlaying = audio.isPlaying,
+                pauseAudio = { pauseAudio() },
+                isPlaying = audio.underFocus,
                 currentPosition = currentPosition,
                 seekTo = { position -> seekTo(position) }
             )
@@ -71,6 +74,7 @@ private fun AudiosColumn(
 private fun AudioRow(
     audio: AudioFileState,
     playAudio: (audio: AudioFileState) -> Unit,
+    pauseAudio: () -> Unit,
     isPlaying: Boolean,
     currentPosition: Float,
     seekTo: (position: Float) -> Unit
@@ -79,12 +83,10 @@ private fun AudioRow(
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = {
-                playAudio(audio)
-
-            }) {
-                Text(text = "Play")
-            }
+            PlayPauseButton(
+                audio = audio,
+                play = { audio -> playAudio(audio) },
+                pause = { pauseAudio() })
             Text(
                 audio.fileName,
                 modifier = Modifier.padding(start = 10.dp)
@@ -105,6 +107,32 @@ private fun AudioRow(
 
     }
 
+}
+
+@Composable
+private fun PlayPauseButton(
+    audio: AudioFileState,
+    play: (audio: AudioFileState) -> Unit,
+    pause: (audio: AudioFileState) -> Unit
+) {
+
+    val isPlaying = audio.isPlaying
+
+    val buttonText = if (isPlaying) {
+        "Pause"
+    } else {
+        "Play"
+    }
+
+    Button(onClick = {
+        if (isPlaying) {
+            pause(audio)
+        } else {
+            play(audio)
+        }
+    }) {
+        Text(text = buttonText)
+    }
 }
 
 @Composable

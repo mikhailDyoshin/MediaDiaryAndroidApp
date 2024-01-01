@@ -1,6 +1,5 @@
 package com.example.mediadiaryproject.presentation.audiosplayscreen.viewmodel
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.CountDownTimer
 import android.util.Log
@@ -37,6 +36,13 @@ class AudioPlayerViewModel @Inject constructor(
 
     private var countDownTimer: CountDownTimer? = null
 
+    private var savedCurrentPosition: Long = 0L
+
+    private var currentAudioPlayed: MutableState<AudioFileState> = mutableStateOf(
+        AudioFileState(fileName = "", mediaItem = MediaItem.EMPTY)
+    )
+
+
     init {
         getVideosList()
         player.prepare()
@@ -55,8 +61,6 @@ class AudioPlayerViewModel @Inject constructor(
                         val timeRemained = duration - currentPosition
 
                         getCurrentAudioPosition(timeRemained)
-                    } else {
-                        countDownTimer?.cancel()
                     }
                 }
 
@@ -86,13 +90,39 @@ class AudioPlayerViewModel @Inject constructor(
 
         countDownTimer?.cancel()
 
-        changeAudioPlayingStatus(audioItem.fileName)
+        // If new audio is played reset the saved current position
+        if (audioItem != currentAudioPlayed.value) {
+            savedCurrentPosition = 0L
+            _currentAudioPositionRatioState.floatValue = 0f
+        }
 
-        player.setMediaItem(audioItem.mediaItem)
+        currentAudioPlayed.value = audioItem
+
+        changeAudioUnderFocusStatus(currentAudioPlayed.value.fileName)
+
+        player.setMediaItem(currentAudioPlayed.value.mediaItem)
 
         player.prepare()
 
         player.play()
+
+        changeAudioPlayingStatus(
+            audioName = currentAudioPlayed.value.fileName,
+            isPlaying = true
+        )
+
+        player.seekTo(savedCurrentPosition)
+
+    }
+
+    fun pauseAudio() {
+        player.pause()
+
+        changeAudioPlayingStatus(currentAudioPlayed.value.fileName, false)
+
+        savedCurrentPosition = player.currentPosition
+
+        countDownTimer?.cancel()
 
     }
 
@@ -102,21 +132,32 @@ class AudioPlayerViewModel @Inject constructor(
 
         val duration = player.duration
 
-
         val currentSliderPosition = (position * duration).toLong()
 
-        Log.d(
-            "Slider Position",
-            "$position; Current: $currentSliderPosition ms; Total: $duration; Remain: ${duration - currentSliderPosition}"
-        )
-
+        _currentAudioPositionRatioState.floatValue = position
+        savedCurrentPosition = currentSliderPosition
         player.seekTo(currentSliderPosition)
+        player.play()
+
+        changeAudioPlayingStatus(
+            audioName = currentAudioPlayed.value.fileName,
+            isPlaying = true
+        )
 
     }
 
-    private fun changeAudioPlayingStatus(audioName: String) {
+    private fun changeAudioUnderFocusStatus(audioName: String) {
         val newList = _state.value.map { audioItem ->
-            audioItem.copy(isPlaying = audioItem.fileName == audioName)
+            audioItem.copy(underFocus = audioItem.fileName == audioName)
+
+        }
+
+        _state.value = newList
+    }
+
+    private fun changeAudioPlayingStatus(audioName: String, isPlaying: Boolean) {
+        val newList = _state.value.map { audioItem ->
+            audioItem.copy(isPlaying = audioItem.fileName == audioName && isPlaying)
 
         }
 
@@ -128,20 +169,30 @@ class AudioPlayerViewModel @Inject constructor(
         if (timeRemained >= 0) {
             var counter = 0
 
+            Log.d("Ticking", "Countdown is started ")
+
             countDownTimer = object : CountDownTimer(
                 timeRemained + 200L,
-                50L
+                25L
             ) {
 
                 override fun onTick(millisUntilFinished: Long) {
-                    val currentRatio = (player.currentPosition.toFloat() / player.duration.toFloat())
+                    savedCurrentPosition = player.currentPosition
+                    val currentRatio =
+                        (player.currentPosition.toFloat() / player.duration.toFloat())
                     _currentAudioPositionRatioState.floatValue = currentRatio
-                    Log.d("Ticking", "$counter")
+                    Log.d("Ticking", "Tick: $counter, Ratio: $currentRatio")
                     counter++
                 }
 
                 override fun onFinish() {
                     _currentAudioPositionRatioState.floatValue = 0f
+                    savedCurrentPosition = 0L
+                    changeAudioPlayingStatus(
+                        audioName = currentAudioPlayed.value.fileName,
+                        isPlaying = false
+                    )
+                    Log.d("Ticking", "Tick: $counter, Finished")
                 }
             }.start()
         }
