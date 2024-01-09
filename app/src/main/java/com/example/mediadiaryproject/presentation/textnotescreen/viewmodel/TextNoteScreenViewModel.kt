@@ -2,7 +2,9 @@ package com.example.mediadiaryproject.presentation.textnotescreen.viewmodel
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,9 +14,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TextNoteScreenViewModel @Inject constructor() : ViewModel() {
-    private val _state: MutableState<TextNoteScreenState> = mutableStateOf(TextNoteScreenState())
-    val state = _state
+    var date by mutableStateOf("")
+        private set
 
+    var title by mutableStateOf("")
+        private set
+
+    var text by mutableStateOf("")
+        private set
 
     init {
         getDateAndTime()
@@ -26,9 +33,15 @@ class TextNoteScreenViewModel @Inject constructor() : ViewModel() {
         @SuppressLint("SimpleDateFormat")
         val formatter = SimpleDateFormat("yyyy-MM-dd")
 
-        val date = formatter.format(time)
+        date = formatter.format(time)
+    }
 
-        _state.value = TextNoteScreenState(date = date)
+    fun updateTitle(input: String) {
+        title = input
+    }
+
+    fun updateText(input: String) {
+        text = input
     }
 
 }
