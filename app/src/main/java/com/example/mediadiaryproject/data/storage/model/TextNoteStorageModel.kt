@@ -4,7 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "textNote")
-data class TextNoteStorageModel(val title: String, val text: String) {
+data class TextNoteStorageModel(
     @PrimaryKey(autoGenerate = true)
-    var id:Int=0
-}
+    var id: Int = 0,
+    var date: String,
+    val title: String,
+    val text: String
+)
