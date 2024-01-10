@@ -149,8 +149,15 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         textNoteDao.insert(textNote = textNoteForStorage)
     }
 
-    override fun getTextNotesWithDate(date: String) {
-        textNoteDao.getTextNotesWithDate(date = date)
+    override fun getTextNotesWithDate(date: String): List<TextNoteModel> {
+        return textNoteDao.getTextNotesWithDate(date = date).map { textNote ->
+            TextNoteModel(
+                id = textNote.id,
+                date = textNote.date,
+                title = textNote.title,
+                text = textNote.text
+            )
+        }
     }
 
     override fun deleteTextNote(textNote: TextNoteModel) {
