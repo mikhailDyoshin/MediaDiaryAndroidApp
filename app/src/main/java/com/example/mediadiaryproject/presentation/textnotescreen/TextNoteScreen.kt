@@ -19,9 +19,6 @@ fun TextNoteScreen(
     viewModel: TextNoteScreenViewModel = hiltViewModel()
 ) {
 
-
-
-
     Column {
         Text(text = "Text note screen")
         Text(text = viewModel.date)
@@ -31,9 +28,9 @@ fun TextNoteScreen(
         )
         TextField(
             value = viewModel.text,
-            onValueChange = { text -> viewModel.updateText(text) }
+            onValueChange = { text -> viewModel.updateText(text) },
+            maxLines = 5
         )
     }
-
 
 }

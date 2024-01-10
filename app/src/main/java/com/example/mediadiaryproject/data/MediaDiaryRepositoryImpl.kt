@@ -11,7 +11,10 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
+import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
 import com.example.mediadiaryproject.domain.models.MediaFileModel
+import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +24,8 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 class MediaDiaryRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val textNoteDao: TextNoteDao,
 ) : MediaDiaryRepository {
     override suspend fun savePhotoToGallery(capturePhotoBitmap: Bitmap): Result<Unit> =
         withContext(Dispatchers.IO) {
@@ -114,12 +118,6 @@ class MediaDiaryRepositoryImpl @Inject constructor(
 
     override fun getListOfMedia(mediaType: MediaType): List<MediaFileModel> {
 
-//        when (mediaType) {
-//            MediaType.VIDEO -> {
-//
-//            }
-//        }
-
         val type = mediaType.type
 
         val directoryName = mediaType.directory
@@ -145,4 +143,35 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveTextNote(textNote: TextNoteModel) {
+        val textNoteForStorage =
+            TextNoteStorageModel(date = textNote.date, title = textNote.title, text = textNote.text)
+        textNoteDao.insert(textNote = textNoteForStorage)
+    }
+
+    override fun getTextNotesWithDate(date: String) {
+        textNoteDao.getTextNotesWithDate(date = date)
+    }
+
+    override fun deleteTextNote(textNote: TextNoteModel) {
+        val textNoteForStorage =
+            TextNoteStorageModel(
+                id = textNote.id,
+                date = textNote.date,
+                title = textNote.title,
+                text = textNote.text
+            )
+        textNoteDao.delete(note = textNoteForStorage)
+    }
+
+    override fun updateTextNote(textNote: TextNoteModel) {
+        val textNoteForStorage =
+            TextNoteStorageModel(
+                id = textNote.id,
+                date = textNote.date,
+                title = textNote.title,
+                text = textNote.text
+            )
+        textNoteDao.update(note = textNoteForStorage)
+    }
 }
