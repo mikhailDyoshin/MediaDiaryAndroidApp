@@ -160,6 +160,16 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getTextNoteById(id: Int): TextNoteModel {
+        val textNoteFromStorage = textNoteDao.getTextNoteWithId(id = id)
+        return TextNoteModel(
+            id = textNoteFromStorage.id,
+            date = textNoteFromStorage.date,
+            title = textNoteFromStorage.title,
+            text = textNoteFromStorage.text
+        )
+    }
+
     override fun deleteTextNote(textNote: TextNoteModel) {
         val textNoteForStorage =
             TextNoteStorageModel(

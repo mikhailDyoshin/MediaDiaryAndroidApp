@@ -18,6 +18,8 @@ interface MediaDiaryRepository {
 
     fun getTextNotesWithDate(date: String): List<TextNoteModel>
 
+    fun getTextNoteById(id: Int): TextNoteModel
+
     fun deleteTextNote(textNote: TextNoteModel)
 
     fun updateTextNote(textNote: TextNoteModel)

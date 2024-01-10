@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.destinations.TextNotesScreenDestination
 import com.example.mediadiaryproject.presentation.textnoteeditscreen.viewmodel.TextNoteEditScreenViewModel
@@ -17,9 +18,17 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun TextNoteEditScreen(
+    textNoteToEditId: Int = -1,
     navigator: DestinationsNavigator,
     viewModel: TextNoteEditScreenViewModel = hiltViewModel()
 ) {
+
+    if (textNoteToEditId != -1) {
+        LaunchedEffect(true) {
+            viewModel.setNoteData(textNoteToEditId)
+        }
+
+    }
 
     Column {
         Text(text = "Text note screen")
@@ -34,8 +43,16 @@ fun TextNoteEditScreen(
             maxLines = 5
         )
         Row() {
-            Button(onClick = { viewModel.saveNote() }) {
-                Text(text = "Save")
+            if (textNoteToEditId != -1) {
+                Button(onClick = {
+//                    viewModel.updateNote(textNoteToEditId)
+                }) {
+                    Text(text = "Edit")
+                }
+            } else {
+                Button(onClick = { viewModel.saveNote() }) {
+                    Text(text = "Save")
+                }
             }
             Button(onClick = { navigator.navigate(TextNotesScreenDestination()) }) {
                 Text(text = "Today's notes")

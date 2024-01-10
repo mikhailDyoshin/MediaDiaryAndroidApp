@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.domain.models.TextNoteModel
+import com.example.mediadiaryproject.domain.usecase.GetTextNoteByIdUseCase
 import com.example.mediadiaryproject.domain.usecase.SaveTextNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TextNoteEditScreenViewModel @Inject constructor(
-    private val saveTextNoteUseCase: SaveTextNoteUseCase
+    private val saveTextNoteUseCase: SaveTextNoteUseCase,
+    private val getTextNoteByIdUseCase: GetTextNoteByIdUseCase,
 ) : ViewModel() {
     var date by mutableStateOf("")
         private set
@@ -58,6 +60,14 @@ class TextNoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val textNoteToSave = TextNoteModel(date = date, title = title, text = text)
             saveTextNoteUseCase.execute(textNote = textNoteToSave)
+        }
+    }
+
+    fun setNoteData(textNoteToEditId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val note = getTextNoteByIdUseCase.execute(id = textNoteToEditId)
+            updateTitle(input = note.title)
+            updateText(input = note.text)
         }
     }
 
