@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.usecase.GetTextNoteByIdUseCase
 import com.example.mediadiaryproject.domain.usecase.SaveTextNoteUseCase
+import com.example.mediadiaryproject.domain.usecase.UpdateTextNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class TextNoteEditScreenViewModel @Inject constructor(
     private val saveTextNoteUseCase: SaveTextNoteUseCase,
     private val getTextNoteByIdUseCase: GetTextNoteByIdUseCase,
+    private val updateTextNoteUseCase: UpdateTextNoteUseCase,
 ) : ViewModel() {
     var date by mutableStateOf("")
         private set
@@ -29,6 +31,8 @@ class TextNoteEditScreenViewModel @Inject constructor(
 
     var text by mutableStateOf("")
         private set
+
+    private var editedTextNoteDate = ""
 
     init {
         getDateAndTime()
@@ -66,8 +70,22 @@ class TextNoteEditScreenViewModel @Inject constructor(
     fun setNoteData(textNoteToEditId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val note = getTextNoteByIdUseCase.execute(id = textNoteToEditId)
+            editedTextNoteDate = note.date
             updateTitle(input = note.title)
             updateText(input = note.text)
+        }
+    }
+
+    fun updateNote(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val noteToUpdate =
+                TextNoteModel(
+                    id = id,
+                    date = editedTextNoteDate,
+                    title = title,
+                    text = text
+                )
+            updateTextNoteUseCase.execute(textNote = noteToUpdate)
         }
     }
 

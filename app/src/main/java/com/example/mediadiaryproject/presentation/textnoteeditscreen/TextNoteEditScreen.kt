@@ -45,7 +45,7 @@ fun TextNoteEditScreen(
         Row() {
             if (textNoteToEditId != -1) {
                 Button(onClick = {
-//                    viewModel.updateNote(textNoteToEditId)
+                    viewModel.updateNote(textNoteToEditId)
                 }) {
                     Text(text = "Edit")
                 }
