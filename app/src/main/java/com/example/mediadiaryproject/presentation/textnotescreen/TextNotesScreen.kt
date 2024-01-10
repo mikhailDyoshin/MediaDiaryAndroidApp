@@ -2,6 +2,8 @@ package com.example.mediadiaryproject.presentation.textnotescreen
 
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +13,6 @@ import com.example.mediadiaryproject.presentation.textnotescreen.viewmodel.TextN
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun TextNotesScreen(
@@ -23,17 +24,30 @@ fun TextNotesScreen(
 
     Column {
         for (note in notes) {
-            TextNote(note = note)
+            TextNote(
+                note = note,
+                deleteNote = { noteToDelete -> viewModel.deleteNote(noteToDelete) })
         }
     }
 
 }
 
 @Composable
-private fun TextNote(note: TextNoteState) {
-    Column {
-        Text(text = note.date)
-        Text(text = note.title)
-        Text(text = note.text)
+private fun TextNote(note: TextNoteState, deleteNote: (noteToDelete: TextNoteState) -> Unit) {
+    Row {
+        Column {
+            Text(text = note.date)
+            Text(text = note.title)
+            Text(text = note.text)
+        }
+        Row {
+            Button(onClick = { }) {
+                Text(text = "Edit")
+            }
+            Button(onClick = { deleteNote(note) }) {
+                Text(text = "Delete")
+            }
+        }
     }
+
 }
