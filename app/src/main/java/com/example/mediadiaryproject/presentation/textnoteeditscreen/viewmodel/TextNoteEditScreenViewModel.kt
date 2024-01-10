@@ -1,19 +1,24 @@
-package com.example.mediadiaryproject.presentation.textnotescreen.viewmodel
+package com.example.mediadiaryproject.presentation.textnoteeditscreen.viewmodel
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteScreenState
+import androidx.lifecycle.viewModelScope
+import com.example.mediadiaryproject.domain.models.TextNoteModel
+import com.example.mediadiaryproject.domain.usecase.SaveTextNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class TextNoteScreenViewModel @Inject constructor() : ViewModel() {
+class TextNoteEditScreenViewModel @Inject constructor(
+    private val saveTextNoteUseCase: SaveTextNoteUseCase
+) : ViewModel() {
     var date by mutableStateOf("")
         private set
 
@@ -26,6 +31,11 @@ class TextNoteScreenViewModel @Inject constructor() : ViewModel() {
     init {
         getDateAndTime()
     }
+
+//    override fun onCleared() {
+//        super.onCleared()
+//
+//    }
 
     private fun getDateAndTime() {
         val time = Calendar.getInstance().time
@@ -42,6 +52,13 @@ class TextNoteScreenViewModel @Inject constructor() : ViewModel() {
 
     fun updateText(input: String) {
         text = input
+    }
+
+    fun saveNote() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val textNoteToSave = TextNoteModel(date = date, title = title, text = text)
+            saveTextNoteUseCase.execute(textNote = textNoteToSave)
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
 import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
 import com.example.mediadiaryproject.domain.usecase.SavePhotoToGalleryUseCase
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
+import com.example.mediadiaryproject.domain.usecase.SaveTextNoteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +45,13 @@ object AppModule {
         repository: MediaDiaryRepository
     ): GetListOfMediaUseCase {
         return GetListOfMediaUseCase(repository = repository)
+    }
+
+    @Provides
+    fun provideSaveTextNoteUseCase(
+        repository: MediaDiaryRepository
+    ): SaveTextNoteUseCase {
+        return SaveTextNoteUseCase(repository = repository)
     }
 
 }

@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.mediadiaryproject.presentation.destinations.AudioRecorderWrapperDestination
 import com.example.mediadiaryproject.presentation.destinations.MainContentDestination
-import com.example.mediadiaryproject.presentation.destinations.TextNoteScreenDestination
+import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenDestination
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -22,7 +22,7 @@ fun DayScreen(
 ) {
 
     Column {
-        Button(onClick = { navigator.navigate(TextNoteScreenDestination()) }) {
+        Button(onClick = { navigator.navigate(TextNoteEditScreenDestination()) }) {
             Text(text = "Add text note")
         }
         Button(onClick = { navigator.navigate(AudioRecorderWrapperDestination()) }) {

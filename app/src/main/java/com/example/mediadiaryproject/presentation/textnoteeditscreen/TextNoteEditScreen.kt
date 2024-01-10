@@ -1,22 +1,24 @@
-package com.example.mediadiaryproject.presentation.textnotescreen
-
+package com.example.mediadiaryproject.presentation.textnoteeditscreen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mediadiaryproject.presentation.textnotescreen.viewmodel.TextNoteScreenViewModel
+import com.example.mediadiaryproject.presentation.destinations.TextNotesScreenDestination
+import com.example.mediadiaryproject.presentation.textnoteeditscreen.viewmodel.TextNoteEditScreenViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun TextNoteScreen(
+fun TextNoteEditScreen(
     navigator: DestinationsNavigator,
-    viewModel: TextNoteScreenViewModel = hiltViewModel()
+    viewModel: TextNoteEditScreenViewModel = hiltViewModel()
 ) {
 
     Column {
@@ -31,6 +33,15 @@ fun TextNoteScreen(
             onValueChange = { text -> viewModel.updateText(text) },
             maxLines = 5
         )
+        Row() {
+            Button(onClick = { viewModel.saveNote() }) {
+                Text(text = "Save")
+            }
+            Button(onClick = { navigator.navigate(TextNotesScreenDestination()) }) {
+                Text(text = "Today's notes")
+            }
+        }
+
     }
 
 }
