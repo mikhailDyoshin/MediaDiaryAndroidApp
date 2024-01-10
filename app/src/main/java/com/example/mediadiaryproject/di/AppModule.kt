@@ -3,9 +3,9 @@ package com.example.mediadiaryproject.di
 import android.content.Context
 import com.example.mediadiaryproject.data.MediaDiaryRepositoryImpl
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
-import com.example.mediadiaryproject.domain.GetListOfMediaUseCase
-import com.example.mediadiaryproject.domain.ProvideFileToSaveMediaUseCase
-import com.example.mediadiaryproject.domain.SavePhotoToGalleryUseCase
+import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.SavePhotoToGalleryUseCase
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.Module
 import dagger.Provides

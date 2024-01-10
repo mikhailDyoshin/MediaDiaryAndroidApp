@@ -23,8 +23,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.SavePhotoToGalleryUseCase
-import com.example.mediadiaryproject.domain.ProvideFileToSaveMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.SavePhotoToGalleryUseCase
+import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import javax.inject.Inject

@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.common.Constants
 import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.ProvideFileToSaveMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
 import com.example.mediadiaryproject.presentation.audiorecordingscreen.audiorecorder.MediaDiaryAudioRecorder
 import com.example.mediadiaryproject.presentation.audiorecordingscreen.state.AudioRecorderScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.domain
+package com.example.mediadiaryproject.domain.usecase
 
 import android.graphics.Bitmap
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository

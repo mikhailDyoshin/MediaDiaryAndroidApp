@@ -14,7 +14,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.GetListOfMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
 import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

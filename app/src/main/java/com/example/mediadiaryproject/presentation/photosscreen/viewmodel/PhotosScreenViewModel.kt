@@ -8,7 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.GetListOfMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
 import com.example.mediadiaryproject.presentation.photosscreen.state.PhotoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class PhotosScreenViewModel @Inject constructor(
-     @ApplicationContext private val context: Context,
+    @ApplicationContext private val context: Context,
     private val getListOfAllPhotos: GetListOfMediaUseCase,
 ) : ViewModel() {
 
