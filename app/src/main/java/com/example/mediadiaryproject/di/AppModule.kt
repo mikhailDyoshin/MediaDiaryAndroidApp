@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.di
 
 import android.content.Context
 import com.example.mediadiaryproject.data.MediaDiaryRepositoryImpl
+import com.example.mediadiaryproject.data.storage.dao.DayDao
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
 import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
 import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
@@ -22,8 +23,16 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideComposeSandboxRepository(@ApplicationContext context: Context, textNoteDao: TextNoteDao): MediaDiaryRepository {
-        return MediaDiaryRepositoryImpl(context = context, textNoteDao = textNoteDao)
+    fun provideComposeSandboxRepository(
+        @ApplicationContext context: Context,
+        textNoteDao: TextNoteDao,
+        dayDao: DayDao
+    ): MediaDiaryRepository {
+        return MediaDiaryRepositoryImpl(
+            context = context,
+            textNoteDao = textNoteDao,
+            dayDao = dayDao
+        )
     }
 
     @Provides

@@ -15,14 +15,14 @@ interface DayDao {
     suspend fun insert(day: DayStorageModel)
 
     @Query("SELECT * FROM days WHERE id = :collectionId")
-    fun getDaysByCollection(collectionId: String): List<DayStorageModel>
+    fun getDaysByCollection(collectionId: Int): List<DayStorageModel>
 
     @Query("SELECT * FROM days WHERE id = :id")
     fun getDayById(id: Int): DayStorageModel
 
     @Delete
-    fun delete(note: DayStorageModel)
+    fun delete(day: DayStorageModel)
 
     @Update
-    fun update(note: DayStorageModel)
+    fun update(day: DayStorageModel)
 }

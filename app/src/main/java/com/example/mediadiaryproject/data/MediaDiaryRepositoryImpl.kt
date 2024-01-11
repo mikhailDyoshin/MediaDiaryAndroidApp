@@ -11,8 +11,11 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.data.storage.dao.DayDao
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
+import com.example.mediadiaryproject.data.storage.model.DayStorageModel
 import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
+import com.example.mediadiaryproject.domain.models.DayModel
 import com.example.mediadiaryproject.domain.models.MediaFileModel
 import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
@@ -26,6 +29,7 @@ import javax.inject.Inject
 class MediaDiaryRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val textNoteDao: TextNoteDao,
+    private val dayDao: DayDao,
 ) : MediaDiaryRepository {
     override suspend fun savePhotoToGallery(capturePhotoBitmap: Bitmap): Result<Unit> =
         withContext(Dispatchers.IO) {
@@ -190,5 +194,36 @@ class MediaDiaryRepositoryImpl @Inject constructor(
                 text = textNote.text
             )
         textNoteDao.update(note = textNoteForStorage)
+    }
+    override suspend fun saveDay(day: DayModel) {
+        val dayToStore =
+            DayStorageModel(date = day.date)
+        dayDao.insert(day = dayToStore)
+    }
+
+    override fun getDaysByCollection(collectionId: Int): List<DayModel> {
+        return dayDao.getDaysByCollection(collectionId = collectionId).map { day ->
+            DayModel(
+                id = day.id,
+                date = day.date,
+            )
+        }
+    }
+
+    override fun getDayById(dayId: Int): DayModel {
+        val dayFromStorage = dayDao.getDayById(id = dayId)
+        return DayModel(
+            id = dayFromStorage.id,
+            date = dayFromStorage.date,
+        )
+    }
+
+    override fun deleteDay(day: DayModel) {
+        val dayToDelete =
+            DayStorageModel(
+                id = day.id,
+                date = day.date,
+            )
+        dayDao.delete(day = dayToDelete)
     }
 }
