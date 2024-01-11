@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.mediadiaryproject.data.storage.dao.DayDao
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
 import com.example.mediadiaryproject.data.storage.database.MediaDiaryDatabase
 import dagger.Module
@@ -26,5 +27,8 @@ object DatabaseModule {
 
     @Provides
     fun provideTextNoteDao(userDatabase: MediaDiaryDatabase):TextNoteDao = userDatabase.textNoteDao()
+
+    @Provides
+    fun provideDayDao(userDatabase: MediaDiaryDatabase):DayDao = userDatabase.dayDao()
 
 }
