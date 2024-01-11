@@ -3,12 +3,9 @@ package com.example.mediadiaryproject.data.storage.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "textNote")
-data class TextNoteStorageModel(
+@Entity(tableName = "days")
+data class DayStorageModel(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    var collectionId: Int = 0,
     var date: String,
-    val title: String,
-    val text: String
 )
