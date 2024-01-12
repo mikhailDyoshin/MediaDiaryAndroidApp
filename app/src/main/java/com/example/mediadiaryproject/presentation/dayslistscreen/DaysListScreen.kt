@@ -6,9 +6,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.dayslistscreen.viewmodel.DaysListScreenViewModel
+import com.example.mediadiaryproject.presentation.destinations.CalendarDestination
+import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@MediaDiaryNavGraph(start = true)
 @Destination
 @Composable
 fun DaysListScreen(
@@ -20,8 +23,8 @@ fun DaysListScreen(
         Column {
             
         }
-        Button(onClick = { /*TODO*/ }) {
-            
+        Button(onClick = { navigator.navigate(CalendarDestination()) }) {
+            Text(text = "Add")
         }
     }
     

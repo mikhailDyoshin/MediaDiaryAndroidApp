@@ -14,8 +14,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 const val MAIN_SCREEN_ROUTE = "main"
 
-@MediaDiaryNavGraph(start = true)
-@Destination(route = MAIN_SCREEN_ROUTE)
+
+@Destination
 @Composable
 fun DayScreen(
     navigator: DestinationsNavigator,
