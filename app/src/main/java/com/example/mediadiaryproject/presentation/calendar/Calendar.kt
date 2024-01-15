@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.presentation.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -115,6 +117,14 @@ fun Content(data: CalendarState, onDateClickListener: (CalendarState.Date) -> Un
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentItem(date: CalendarState.Date, onClickListener: (CalendarState.Date) -> Unit) {
+
+    var buttonBackgroundColor = Color.Blue
+
+    if (date.isSelected) {
+        buttonBackgroundColor = Color.Gray
+    }
+
+
     Card(
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 4.dp)
@@ -122,7 +132,7 @@ fun ContentItem(date: CalendarState.Date, onClickListener: (CalendarState.Date) 
                 onClickListener(date)
             },
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = buttonBackgroundColor
         ),
     ) {
         Column(
