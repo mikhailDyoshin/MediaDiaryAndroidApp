@@ -28,6 +28,8 @@ interface MediaDiaryRepository {
 
     suspend fun saveDay(day: DayModel, collection: CollectionModel)
 
+    suspend fun getDayByCollectionAndDate(date: String, collection: CollectionModel): DayModel
+
     fun getDaysByCollection(collectionId: Int): List<DayModel>
 
     fun getDayById(dayId: Int): DayModel

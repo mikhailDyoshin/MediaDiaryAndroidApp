@@ -196,10 +196,29 @@ class MediaDiaryRepositoryImpl @Inject constructor(
             )
         textNoteDao.update(note = textNoteForStorage)
     }
+
     override suspend fun saveDay(day: DayModel, collection: CollectionModel) {
         val dayToStore =
             DayStorageModel(date = day.date, collectionId = collection.id)
         dayDao.insert(day = dayToStore)
+    }
+
+    override suspend fun getDayByCollectionAndDate(
+        date: String,
+        collection: CollectionModel
+    ): DayModel {
+        val day = dayDao.getDayByCollectionAndDate(collectionId = collection.id, date = date)
+
+        if (day != null) {
+            return DayModel(id = day.id, date = day.date)
+        }
+
+        val createdDayId =
+            dayDao.insert(day = DayStorageModel(date = date, collectionId = collection.id))
+
+        val createdDay = dayDao.getDayById(id = createdDayId)
+
+        return DayModel(id = createdDay.id, date = createdDay.date)
     }
 
     override fun getDaysByCollection(collectionId: Int): List<DayModel> {

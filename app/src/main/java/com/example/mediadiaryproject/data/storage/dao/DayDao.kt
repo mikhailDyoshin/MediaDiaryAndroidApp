@@ -12,13 +12,16 @@ import com.example.mediadiaryproject.data.storage.model.DayStorageModel
 interface DayDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(day: DayStorageModel)
+    suspend fun insert(day: DayStorageModel): Int
 
     @Query("SELECT * FROM days WHERE id = :collectionId")
     fun getDaysByCollection(collectionId: Int): List<DayStorageModel>
 
     @Query("SELECT * FROM days WHERE id = :id")
     fun getDayById(id: Int): DayStorageModel
+
+    @Query("SELECT * FROM days WHERE collectionId = :collectionId and date = :date")
+    fun getDayByCollectionAndDate(collectionId: Int, date: String): DayStorageModel?
 
     @Delete
     fun delete(day: DayStorageModel)
