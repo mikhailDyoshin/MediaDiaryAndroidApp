@@ -8,4 +8,5 @@ data class DayStorageModel(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var date: String,
+    var collectionId: Int,
 )
