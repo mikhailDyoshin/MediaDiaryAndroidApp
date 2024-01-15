@@ -8,20 +8,19 @@ import androidx.compose.runtime.Composable
 import com.example.mediadiaryproject.presentation.destinations.AudioRecorderWrapperDestination
 import com.example.mediadiaryproject.presentation.destinations.MainContentDestination
 import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenDestination
-import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-
-const val MAIN_SCREEN_ROUTE = "main"
 
 
 @Destination
 @Composable
 fun DayScreen(
     navigator: DestinationsNavigator,
+    dayId: Int,
 ) {
 
     Column {
+        Text(text = "Id = $dayId")
         Button(onClick = { navigator.navigate(TextNoteEditScreenDestination()) }) {
             Text(text = "Add text note")
         }

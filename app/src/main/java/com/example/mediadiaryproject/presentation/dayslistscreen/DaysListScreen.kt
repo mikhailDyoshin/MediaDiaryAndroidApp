@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.calendar.Calendar
 import com.example.mediadiaryproject.presentation.dayslistscreen.state.CollectionState
 import com.example.mediadiaryproject.presentation.dayslistscreen.viewmodel.DaysListScreenViewModel
+import com.example.mediadiaryproject.presentation.destinations.DayScreenDestination
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -39,7 +40,8 @@ fun DaysListScreen(
                         id = collectionId,
                         title = "My Test Collection",
                         activityId = 0
-                    )
+                    ),
+                    transferId = { id -> navigator.navigate(DayScreenDestination(dayId = id)) }
                 )
             }
         }

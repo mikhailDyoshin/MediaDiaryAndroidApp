@@ -15,6 +15,7 @@ import com.example.mediadiaryproject.presentation.calendar.state.CalendarState
 import com.example.mediadiaryproject.presentation.dayslistscreen.state.CollectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -84,8 +85,8 @@ class CalendarViewModel @Inject constructor(private val getCreatedDayUseCase: Ge
             })
     }
 
-    fun getCreatedDay(collection: CollectionState) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun getCreatedDay(collection: CollectionState): Job {
+        return viewModelScope.launch(Dispatchers.IO) {
             val day = getCreatedDayUseCase.execute(
                 date = state.selectedDate.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
                 collection = CollectionModel(
@@ -96,7 +97,7 @@ class CalendarViewModel @Inject constructor(private val getCreatedDayUseCase: Ge
             )
 
             createdDayId = day.id
-            Log.d("Object Id","Id: ${day.id}")
+            Log.d("Object Id", "Id: $createdDayId")
         }
 
     }

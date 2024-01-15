@@ -2,7 +2,6 @@ package com.example.mediadiaryproject.presentation.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -21,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,10 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.calendar.state.CalendarState
 import com.example.mediadiaryproject.presentation.calendar.viewmodel.CalendarViewModel
-import com.example.mediadiaryproject.presentation.dayscreen.MAIN_SCREEN_ROUTE
 import com.example.mediadiaryproject.presentation.dayslistscreen.state.CollectionState
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -42,8 +39,11 @@ import java.time.format.FormatStyle
 @Composable
 fun Calendar(
     collection: CollectionState,
-    viewModel: CalendarViewModel = hiltViewModel()
+    viewModel: CalendarViewModel = hiltViewModel(),
+    transferId: (id: Int) -> Unit,
 ) {
+
+    val scope = rememberCoroutineScope()
 
     val data = viewModel.state
 
@@ -62,7 +62,15 @@ fun Calendar(
             })
         Content(data, onDateClickListener = {
             date -> viewModel.selectDate(date)
-            viewModel.getCreatedDay(collection = collection)
+            scope.launch {
+                val job = viewModel.getCreatedDay(collection = collection)
+
+                job.join()
+
+                val createdDayId = viewModel.createdDayId
+                transferId(createdDayId)
+            }
+
         })
     }
 }
