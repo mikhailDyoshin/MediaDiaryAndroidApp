@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.domain.repository
 
 import android.graphics.Bitmap
 import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.domain.models.CollectionModel
 import com.example.mediadiaryproject.domain.models.DayModel
 import com.example.mediadiaryproject.domain.models.MediaFileModel
 import com.example.mediadiaryproject.domain.models.TextNoteModel
@@ -25,13 +26,13 @@ interface MediaDiaryRepository {
 
     fun updateTextNote(textNote: TextNoteModel)
 
-    suspend fun saveDay(day: DayModel)
+    suspend fun saveDay(day: DayModel, collection: CollectionModel)
 
     fun getDaysByCollection(collectionId: Int): List<DayModel>
 
     fun getDayById(dayId: Int): DayModel
 
-    fun deleteDay(day: DayModel)
+    fun deleteDay(day: DayModel, collection: CollectionModel)
 
 //    fun updateDay(day: DayModel)
 

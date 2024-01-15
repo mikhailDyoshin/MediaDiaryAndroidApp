@@ -15,6 +15,7 @@ import com.example.mediadiaryproject.data.storage.dao.DayDao
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
 import com.example.mediadiaryproject.data.storage.model.DayStorageModel
 import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
+import com.example.mediadiaryproject.domain.models.CollectionModel
 import com.example.mediadiaryproject.domain.models.DayModel
 import com.example.mediadiaryproject.domain.models.MediaFileModel
 import com.example.mediadiaryproject.domain.models.TextNoteModel
@@ -195,9 +196,9 @@ class MediaDiaryRepositoryImpl @Inject constructor(
             )
         textNoteDao.update(note = textNoteForStorage)
     }
-    override suspend fun saveDay(day: DayModel) {
+    override suspend fun saveDay(day: DayModel, collection: CollectionModel) {
         val dayToStore =
-            DayStorageModel(date = day.date)
+            DayStorageModel(date = day.date, collectionId = collection.id)
         dayDao.insert(day = dayToStore)
     }
 
@@ -218,11 +219,12 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun deleteDay(day: DayModel) {
+    override fun deleteDay(day: DayModel, collection: CollectionModel) {
         val dayToDelete =
             DayStorageModel(
                 id = day.id,
                 date = day.date,
+                collectionId = collection.id
             )
         dayDao.delete(day = dayToDelete)
     }
