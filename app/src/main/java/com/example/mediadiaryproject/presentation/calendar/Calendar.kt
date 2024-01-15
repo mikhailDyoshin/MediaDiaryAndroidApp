@@ -38,10 +38,8 @@ import java.time.format.FormatStyle
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Destination(route = MAIN_SCREEN_ROUTE)
 @Composable
 fun Calendar(
-    navigator: DestinationsNavigator,
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
 

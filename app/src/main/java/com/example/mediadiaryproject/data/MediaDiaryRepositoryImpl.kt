@@ -214,7 +214,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         }
 
         val createdDayId =
-            dayDao.insert(day = DayStorageModel(date = date, collectionId = collection.id))
+            dayDao.insert(day = DayStorageModel(date = date, collectionId = collection.id)).toInt()
 
         val createdDay = dayDao.getDayById(id = createdDayId)
 
