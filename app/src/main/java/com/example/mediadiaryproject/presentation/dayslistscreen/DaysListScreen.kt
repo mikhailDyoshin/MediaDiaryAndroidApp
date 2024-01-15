@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.calendar.Calendar
+import com.example.mediadiaryproject.presentation.dayslistscreen.state.CollectionState
 import com.example.mediadiaryproject.presentation.dayslistscreen.viewmodel.DaysListScreenViewModel
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
@@ -26,19 +27,25 @@ fun DaysListScreen(
 
     Column {
         Column {
-            
+
         }
         Button(onClick = { viewModel.toggleCalendar() }) {
             Text(text = "Add")
         }
         Column {
             if (viewModel.showCalendarState) {
-                Calendar()
+                Calendar(
+                    collection = CollectionState(
+                        id = collectionId,
+                        title = "My Test Collection",
+                        activityId = 0
+                    )
+                )
             }
         }
 
     }
-    
+
 
 }
 

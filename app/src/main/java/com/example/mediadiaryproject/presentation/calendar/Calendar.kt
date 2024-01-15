@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.calendar.state.CalendarState
 import com.example.mediadiaryproject.presentation.calendar.viewmodel.CalendarViewModel
 import com.example.mediadiaryproject.presentation.dayscreen.MAIN_SCREEN_ROUTE
+import com.example.mediadiaryproject.presentation.dayslistscreen.state.CollectionState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.LocalDate
@@ -40,6 +41,7 @@ import java.time.format.FormatStyle
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Calendar(
+    collection: CollectionState,
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
 
@@ -58,7 +60,10 @@ fun Calendar(
                     endDate.plusDays(2)
                 viewModel.getData(finalStartDate, viewModel.state.selectedDate.date)
             })
-        Content(data, onDateClickListener = { date -> viewModel.selectDate(date) })
+        Content(data, onDateClickListener = {
+            date -> viewModel.selectDate(date)
+            viewModel.getCreatedDay(collection = collection)
+        })
     }
 }
 
