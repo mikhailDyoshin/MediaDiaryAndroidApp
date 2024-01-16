@@ -13,8 +13,8 @@ interface TextNoteDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(textNote: TextNoteStorageModel)
 
-    @Query("SELECT * FROM textNote WHERE date = :date")
-    fun getTextNotesWithDate(date: String): List<TextNoteStorageModel>
+    @Query("SELECT * FROM textNote WHERE dayId = :dayId")
+    fun getTextNotesByDay(dayId: Int): List<TextNoteStorageModel>
 
     @Query("SELECT * FROM textNote WHERE id = :id")
     fun getTextNoteWithId(id: Int): TextNoteStorageModel

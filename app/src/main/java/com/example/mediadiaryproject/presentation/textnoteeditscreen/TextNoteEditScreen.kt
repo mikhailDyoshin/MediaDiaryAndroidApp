@@ -20,19 +20,21 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun TextNoteEditScreen(
     textNoteToEditId: Int = -1,
     navigator: DestinationsNavigator,
-    viewModel: TextNoteEditScreenViewModel = hiltViewModel()
+    viewModel: TextNoteEditScreenViewModel = hiltViewModel(),
+    dayId: Int,
 ) {
 
     if (textNoteToEditId != -1) {
         LaunchedEffect(true) {
             viewModel.setNoteData(textNoteToEditId)
         }
-
+    } else {
+        viewModel.updateDayId(dayId)
     }
 
     Column {
         Text(text = "Text note screen")
-        Text(text = viewModel.date)
+        Text(text = viewModel.editedTextNoteDate)
         TextField(
             value = viewModel.title,
             onValueChange = { title -> viewModel.updateTitle(title) }
@@ -54,7 +56,7 @@ fun TextNoteEditScreen(
                     Text(text = "Save")
                 }
             }
-            Button(onClick = { navigator.navigate(TextNotesScreenDestination()) }) {
+            Button(onClick = { navigator.navigate(TextNotesScreenDestination(dayId = dayId)) }) {
                 Text(text = "Today's notes")
             }
         }

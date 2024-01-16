@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class TextNoteStorageModel(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    var dayId: Int = 0,
+    var dayId: Int,
     var date: String,
     val title: String,
     val text: String

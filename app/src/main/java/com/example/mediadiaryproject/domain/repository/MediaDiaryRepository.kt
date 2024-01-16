@@ -18,7 +18,7 @@ interface MediaDiaryRepository {
 
     suspend fun saveTextNote(textNote: TextNoteModel)
 
-    fun getTextNotesWithDate(date: String): List<TextNoteModel>
+    fun getTextNotesByDay(dayId: Int): List<TextNoteModel>
 
     fun getTextNoteById(id: Int): TextNoteModel
 

@@ -21,7 +21,7 @@ fun DayScreen(
 
     Column {
         Text(text = "Id = $dayId")
-        Button(onClick = { navigator.navigate(TextNoteEditScreenDestination()) }) {
+        Button(onClick = { navigator.navigate(TextNoteEditScreenDestination(dayId = dayId)) }) {
             Text(text = "Add text note")
         }
         Button(onClick = { navigator.navigate(AudioRecorderWrapperDestination()) }) {

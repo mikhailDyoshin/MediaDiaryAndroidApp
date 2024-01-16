@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenDestination
 import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteState
@@ -17,20 +18,31 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun TextNotesScreen(
     navigator: DestinationsNavigator,
-    viewModel: TextNotesScreenViewModel = hiltViewModel()
+    viewModel: TextNotesScreenViewModel = hiltViewModel(),
+    dayId: Int,
 ) {
 
     val notes = viewModel.state.value
+
+    LaunchedEffect(true) {
+        viewModel.getNotesByDay(dayId)
+    }
 
     Column {
         for (note in notes) {
             TextNote(
                 note = note,
-                deleteNote = { noteToDelete -> viewModel.deleteNote(noteToDelete) },
+                deleteNote = { noteToDelete ->
+                    viewModel.deleteNote(
+                        note = noteToDelete,
+                        dayId = dayId
+                    )
+                },
                 navigateToEditScreen = { id ->
                     navigator.navigate(
                         TextNoteEditScreenDestination(
-                            textNoteToEditId = id
+                            textNoteToEditId = id,
+                            dayId = dayId
                         )
                     )
                 }

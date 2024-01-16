@@ -4,10 +4,10 @@ import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import javax.inject.Inject
 
-class GetTextNotesByDateUseCase @Inject constructor(
+class GetTextNotesByDayUseCase @Inject constructor(
     private val repository: MediaDiaryRepository
 ) {
-    fun execute(date: String): List<TextNoteModel> {
-        return repository.getTextNotesWithDate(date)
+    fun execute(dayId: Int): List<TextNoteModel> {
+        return repository.getTextNotesByDay(dayId)
     }
 }

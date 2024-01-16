@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.usecase.DeleteTextNoteUseCase
-import com.example.mediadiaryproject.domain.usecase.GetTextNotesByDateUseCase
+import com.example.mediadiaryproject.domain.usecase.GetTextNotesByDayUseCase
 import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,20 +18,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TextNotesScreenViewModel @Inject constructor(
-    private val getTextNotesByDateUseCase: GetTextNotesByDateUseCase,
+    private val getTextNotesByDayUseCase: GetTextNotesByDayUseCase,
     private val deleteTextNoteUseCase: DeleteTextNoteUseCase,
 ) : ViewModel() {
 
     var state: MutableState<List<TextNoteState>> = mutableStateOf(listOf())
         private set
 
-    init {
-        getNotesByDate()
-    }
+//    init {
+//        getNotesByDate()
+//    }
 
-    private fun getNotesByDate() {
+    fun getNotesByDay(dayId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val notesList = getTextNotesByDateUseCase.execute(date = getDateAndTime()).map { note ->
+            val notesList = getTextNotesByDayUseCase.execute(dayId = dayId).map { note ->
                 TextNoteState(
                     id = note.id,
                     date = note.date,
@@ -53,13 +53,19 @@ class TextNotesScreenViewModel @Inject constructor(
         return formatter.format(time)
     }
 
-    fun deleteNote(note: TextNoteState) {
+    fun deleteNote(note: TextNoteState, dayId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val noteToDelete =
-                TextNoteModel(id = note.id, date = note.date, title = note.title, text = note.text)
+                TextNoteModel(
+                    id = note.id,
+                    dayId = dayId,
+                    date = note.date,
+                    title = note.title,
+                    text = note.text
+                )
             deleteTextNoteUseCase.execute(textNote = noteToDelete)
         }
-        getNotesByDate()
+        getNotesByDay(dayId)
     }
 
 }

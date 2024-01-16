@@ -150,14 +150,20 @@ class MediaDiaryRepositoryImpl @Inject constructor(
 
     override suspend fun saveTextNote(textNote: TextNoteModel) {
         val textNoteForStorage =
-            TextNoteStorageModel(date = textNote.date, title = textNote.title, text = textNote.text)
+            TextNoteStorageModel(
+                dayId = textNote.dayId,
+                date = textNote.date,
+                title = textNote.title,
+                text = textNote.text
+            )
         textNoteDao.insert(textNote = textNoteForStorage)
     }
 
-    override fun getTextNotesWithDate(date: String): List<TextNoteModel> {
-        return textNoteDao.getTextNotesWithDate(date = date).map { textNote ->
+    override fun getTextNotesByDay(dayId: Int): List<TextNoteModel> {
+        return textNoteDao.getTextNotesByDay(dayId = dayId).map { textNote ->
             TextNoteModel(
                 id = textNote.id,
+                dayId = textNote.dayId,
                 date = textNote.date,
                 title = textNote.title,
                 text = textNote.text
@@ -169,6 +175,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         val textNoteFromStorage = textNoteDao.getTextNoteWithId(id = id)
         return TextNoteModel(
             id = textNoteFromStorage.id,
+            dayId = textNoteFromStorage.dayId,
             date = textNoteFromStorage.date,
             title = textNoteFromStorage.title,
             text = textNoteFromStorage.text
@@ -179,6 +186,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         val textNoteForStorage =
             TextNoteStorageModel(
                 id = textNote.id,
+                dayId = textNote.dayId,
                 date = textNote.date,
                 title = textNote.title,
                 text = textNote.text
@@ -190,6 +198,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         val textNoteForStorage =
             TextNoteStorageModel(
                 id = textNote.id,
+                dayId = textNote.dayId,
                 date = textNote.date,
                 title = textNote.title,
                 text = textNote.text
