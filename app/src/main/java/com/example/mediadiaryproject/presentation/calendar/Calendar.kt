@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.presentation.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -40,39 +42,47 @@ import java.time.format.FormatStyle
 fun Calendar(
     collection: CollectionState,
     viewModel: CalendarViewModel = hiltViewModel(),
-    transferId: (id: Int) -> Unit,
+    navigateToDay: (id: Int) -> Unit,
+    modifier: Modifier
 ) {
 
     val scope = rememberCoroutineScope()
 
     val data = viewModel.state
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier) {
+        Column(modifier = Modifier
+            .wrapContentSize()
+            .background(color = Color.White)
+            .padding(10.dp)) {
 
-        Header(
-            data,
-            onPrevClickListener = { startDate ->
-                val finalStartDate = startDate.minusDays(1)
-                viewModel.getData(finalStartDate, viewModel.state.selectedDate.date)
-            },
-            onNextClickListener = { endDate ->
-                val finalStartDate =
-                    endDate.plusDays(2)
-                viewModel.getData(finalStartDate, viewModel.state.selectedDate.date)
+            Header(
+                data,
+                onPrevClickListener = { startDate ->
+                    val finalStartDate = startDate.minusDays(1)
+                    viewModel.getData(finalStartDate, viewModel.state.selectedDate.date)
+                },
+                onNextClickListener = { endDate ->
+                    val finalStartDate =
+                        endDate.plusDays(2)
+                    viewModel.getData(finalStartDate, viewModel.state.selectedDate.date)
+                })
+            Content(data, onDateClickListener = { date ->
+                viewModel.selectDate(date)
+                scope.launch {
+                    val job = viewModel.getCreatedDay(collection = collection)
+
+                    job.join()
+
+                    val createdDayId = viewModel.createdDayId
+                    navigateToDay(createdDayId)
+                }
+
             })
-        Content(data, onDateClickListener = {
-            date -> viewModel.selectDate(date)
-            scope.launch {
-                val job = viewModel.getCreatedDay(collection = collection)
-
-                job.join()
-
-                val createdDayId = viewModel.createdDayId
-                transferId(createdDayId)
-            }
-
-        })
+        }
     }
+
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

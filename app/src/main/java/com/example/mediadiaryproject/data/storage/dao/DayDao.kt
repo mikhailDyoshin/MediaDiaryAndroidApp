@@ -14,7 +14,7 @@ interface DayDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(day: DayStorageModel): Long
 
-    @Query("SELECT * FROM days WHERE id = :collectionId")
+    @Query("SELECT * FROM days WHERE collectionId = :collectionId")
     fun getDaysByCollection(collectionId: Int): List<DayStorageModel>
 
     @Query("SELECT * FROM days WHERE id = :id")
