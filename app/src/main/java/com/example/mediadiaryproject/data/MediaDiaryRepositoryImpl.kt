@@ -110,20 +110,26 @@ class MediaDiaryRepositoryImpl @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.S)
     override suspend fun provideFileToSaveMedia(media: MediaModel): File {
+
+        val newMedia = MediaStorageModel(
+            dayId = media.dayId,
+            mediaType = media.mediaType,
+            date = media.date,
+            time = media.time,
+            title = media.title,
+            description = media.description,
+            pathTofile = ""
+        )
         // save a media's info to the database
         val createdMediaId = mediaDao.insert(
-            media = MediaStorageModel(
-                dayId = media.dayId,
-                mediaType = media.mediaType,
-                date = media.date,
-                time = media.time,
-                title = media.title,
-                description = media.description,
-            )
+            media = newMedia
         ).toInt()
 
-        // provide a file where to save a media
-        return provideFileForMedia(mediaType = media.mediaType, mediaId = createdMediaId)
+        val providedFile = provideFileForMedia(mediaType = media.mediaType, mediaId = createdMediaId)
+
+        newMedia.pathTofile = providedFile.path
+
+        return providedFile
 
     }
 
@@ -139,6 +145,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
                 time = mediaLink.time,
                 title = mediaLink.title,
                 description = mediaLink.description,
+                pathToFile = mediaLink.pathTofile,
             )
         }
     }

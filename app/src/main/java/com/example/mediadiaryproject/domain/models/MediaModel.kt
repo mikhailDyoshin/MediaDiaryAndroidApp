@@ -9,5 +9,6 @@ data class MediaModel(
     var date: String,
     var time: String,
     val title: String,
-    val description: String
+    val description: String,
+    val pathToFile: String,
 )

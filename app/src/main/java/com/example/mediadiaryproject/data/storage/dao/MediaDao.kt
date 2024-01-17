@@ -4,8 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.data.storage.model.MediaStorageModel
+import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
 
 @Dao
 interface MediaDao {
@@ -18,5 +20,8 @@ interface MediaDao {
 
     @Query("SELECT * FROM media WHERE dayId = :dayId and mediaType = :type")
     fun getMediaByDayAndType(dayId: Int, type: MediaType): List<MediaStorageModel>
+
+    @Update
+    fun update(note: MediaStorageModel)
 
 }

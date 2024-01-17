@@ -13,5 +13,6 @@ data class MediaStorageModel(
     var date: String,
     var time: String,
     val title: String,
-    val description: String
+    val description: String,
+    var pathTofile: String
 )
