@@ -14,7 +14,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.S)
 @HiltViewModel
 class AudioPlayerViewModel @Inject constructor(
-    private val getListOfAllAudiosUseCase: GetListOfMediaUseCase,
+    private val getListOfAllAudiosUseCase: GetListOfMediaByDayAndTypeUseCase,
     private val player: Player,
 ) : ViewModel() {
 

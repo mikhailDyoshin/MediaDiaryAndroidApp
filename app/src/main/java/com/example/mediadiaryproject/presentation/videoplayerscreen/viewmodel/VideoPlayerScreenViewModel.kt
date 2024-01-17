@@ -7,14 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.presentation.videoplayerscreen.state.VideoFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class VideoPlayerScreenViewModel @Inject constructor(
-    private val getListOfAllVideosUseCase: GetListOfMediaUseCase,
+    private val getListOfAllVideosUseCase: GetListOfMediaByDayAndTypeUseCase,
     val player: Player,
 ) : ViewModel() {
 

@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.models.CollectionModel
 import com.example.mediadiaryproject.domain.models.DayModel
-import com.example.mediadiaryproject.domain.models.MediaFileModel
+import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.models.TextNoteModel
 import java.io.File
 
@@ -16,9 +16,9 @@ interface MediaDiaryRepository {
 
 //    fun getListOfMedia(mediaType: MediaType): List<MediaFileModel>
 
-    suspend fun provideFileToSaveMedia(media: MediaFileModel): File
+    suspend fun provideFileToSaveMedia(media: MediaModel): File
 
-    fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaFileModel>
+    fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaModel>
 
     suspend fun saveTextNote(textNote: TextNoteModel)
 

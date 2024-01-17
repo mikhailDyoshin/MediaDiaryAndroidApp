@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.data.storage.dao.DayDao
@@ -19,7 +18,7 @@ import com.example.mediadiaryproject.data.storage.model.MediaStorageModel
 import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
 import com.example.mediadiaryproject.domain.models.CollectionModel
 import com.example.mediadiaryproject.domain.models.DayModel
-import com.example.mediadiaryproject.domain.models.MediaFileModel
+import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -110,7 +109,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    override suspend fun provideFileToSaveMedia(media: MediaFileModel): File {
+    override suspend fun provideFileToSaveMedia(media: MediaModel): File {
         // save a media's info to the database
         val createdMediaId = mediaDao.insert(
             media = MediaStorageModel(
@@ -128,11 +127,11 @@ class MediaDiaryRepositoryImpl @Inject constructor(
 
     }
 
-    override fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaFileModel> {
+    override fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaModel> {
         val listOfMediaLinks = mediaDao.getMediaByDayAndType(dayId = dayId, type = mediaType)
 
         return listOfMediaLinks.map { mediaLink ->
-            MediaFileModel(
+            MediaModel(
                 id = mediaLink.id,
                 dayId = mediaLink.id,
                 mediaType = mediaLink.mediaType,

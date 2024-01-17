@@ -5,7 +5,7 @@ import com.example.mediadiaryproject.data.MediaDiaryRepositoryImpl
 import com.example.mediadiaryproject.data.storage.dao.DayDao
 import com.example.mediadiaryproject.data.storage.dao.MediaDao
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
-import com.example.mediadiaryproject.domain.usecase.GetListOfMediaUseCase
+import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
 import com.example.mediadiaryproject.domain.usecase.SavePhotoToGalleryUseCase
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
@@ -55,8 +55,8 @@ object AppModule {
     @Provides
     fun provideGetListOfMediaUseCase(
         repository: MediaDiaryRepository
-    ): GetListOfMediaUseCase {
-        return GetListOfMediaUseCase(repository = repository)
+    ): GetListOfMediaByDayAndTypeUseCase {
+        return GetListOfMediaByDayAndTypeUseCase(repository = repository)
     }
 
     @Provides
