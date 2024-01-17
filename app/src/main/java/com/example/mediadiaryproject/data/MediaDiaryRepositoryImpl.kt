@@ -12,8 +12,10 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.data.storage.dao.DayDao
+import com.example.mediadiaryproject.data.storage.dao.MediaDao
 import com.example.mediadiaryproject.data.storage.dao.TextNoteDao
 import com.example.mediadiaryproject.data.storage.model.DayStorageModel
+import com.example.mediadiaryproject.data.storage.model.MediaStorageModel
 import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
 import com.example.mediadiaryproject.domain.models.CollectionModel
 import com.example.mediadiaryproject.domain.models.DayModel
@@ -31,6 +33,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val textNoteDao: TextNoteDao,
     private val dayDao: DayDao,
+    private val mediaDao: MediaDao,
 ) : MediaDiaryRepository {
     override suspend fun savePhotoToGallery(capturePhotoBitmap: Bitmap): Result<Unit> =
         withContext(Dispatchers.IO) {
@@ -107,46 +110,78 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    override fun provideFileToSaveMedia(mediaType: MediaType): File {
-        val nowTimestamp: Long = System.currentTimeMillis()
+    override suspend fun provideFileToSaveMedia(media: MediaFileModel): File {
+        // save a media's info to the database
+        val createdMediaId = mediaDao.insert(
+            media = MediaStorageModel(
+                dayId = media.dayId,
+                mediaType = media.mediaType,
+                date = media.date,
+                time = media.time,
+                title = media.title,
+                description = media.description,
+            )
+        ).toInt()
 
-        val type = mediaType.type
+        // provide a file where to save a media
+        return provideFileForMedia(mediaType = media.mediaType, mediaId = createdMediaId)
+
+    }
+
+    override fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaFileModel> {
+        val listOfMediaLinks = mediaDao.getMediaByDayAndType(dayId = dayId, type = mediaType)
+
+        return listOfMediaLinks.map { mediaLink ->
+            MediaFileModel(
+                id = mediaLink.id,
+                dayId = mediaLink.id,
+                mediaType = mediaLink.mediaType,
+                date = mediaLink.date,
+                time = mediaLink.time,
+                title = mediaLink.title,
+                description = mediaLink.description,
+            )
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun provideFileForMedia(mediaType: MediaType, mediaId: Int): File {
 
         val directory = mediaType.directory
 
         return File(
             context.getExternalFilesDir(directory),
-            "${type}_$nowTimestamp"
+            "$mediaId"
         )
 
     }
 
-    override fun getListOfMedia(mediaType: MediaType): List<MediaFileModel> {
-
-        val type = mediaType.type
-
-        val directoryName = mediaType.directory
-
-        val directory = File(context.getExternalFilesDir(directoryName).toString())
-
-        val files: Array<out File>? = directory.listFiles()
-
-        if (files != null) {
-
-            if (files.isEmpty()) {
-                Log.d("Recorded video file", "No files in the directory.")
-                return emptyList()
-            }
-
-            return files.filter { file -> file.name.startsWith(prefix = type) }
-                .map { file -> MediaFileModel(fileName = file.name, filePath = file.path) }
-
-        } else {
-            // The directory is empty or doesn't exist
-            Log.d("Recorded video file", "The directory is empty or doesn't exist.")
-            return emptyList()
-        }
-    }
+//    private fun getListOfMedia(mediaType: MediaType): List<MediaFileModel> {
+//
+//        val type = mediaType.type
+//
+//        val directoryName = mediaType.directory
+//
+//        val directory = File(context.getExternalFilesDir(directoryName).toString())
+//
+//        val files: Array<out File>? = directory.listFiles()
+//
+//        if (files != null) {
+//
+//            if (files.isEmpty()) {
+//                Log.d("Recorded media file", "No files in the directory.")
+//                return emptyList()
+//            }
+//
+//            return files.filter { file -> file.name.startsWith(prefix = type) }
+//                .map { file -> MediaFileModel(fileName = file.name, filePath = file.path) }
+//
+//        } else {
+//            // The directory is empty or doesn't exist
+//            Log.d("Recorded media file", "The directory is empty or doesn't exist.")
+//            return emptyList()
+//        }
+//    }
 
     override suspend fun saveTextNote(textNote: TextNoteModel) {
         val textNoteForStorage =

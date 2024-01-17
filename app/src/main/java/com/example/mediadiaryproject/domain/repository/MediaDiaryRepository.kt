@@ -12,9 +12,13 @@ interface MediaDiaryRepository {
 
     suspend fun savePhotoToGallery(capturePhotoBitmap: Bitmap):  Result<Unit>
 
-    fun provideFileToSaveMedia(mediaType: MediaType): File
+//    fun provideFileToSaveMedia(mediaType: MediaType): File
 
-    fun getListOfMedia(mediaType: MediaType): List<MediaFileModel>
+//    fun getListOfMedia(mediaType: MediaType): List<MediaFileModel>
+
+    suspend fun provideFileToSaveMedia(media: MediaFileModel): File
+
+    fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaFileModel>
 
     suspend fun saveTextNote(textNote: TextNoteModel)
 

@@ -1,3 +1,13 @@
 package com.example.mediadiaryproject.domain.models
 
-data class MediaFileModel(val fileName: String, val filePath: String)
+import com.example.mediadiaryproject.common.MediaType
+
+data class MediaFileModel(
+    var id: Int = 0,
+    var dayId: Int,
+    val mediaType: MediaType,
+    var date: String,
+    var time: String,
+    val title: String,
+    val description: String
+)

@@ -11,7 +11,7 @@ import com.example.mediadiaryproject.data.storage.model.MediaStorageModel
 interface MediaDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(day: MediaStorageModel): Long
+    suspend fun insert(media: MediaStorageModel): Long
 
     @Query("SELECT * FROM media WHERE id = :id")
     fun getMediaById(id: Int): MediaStorageModel
