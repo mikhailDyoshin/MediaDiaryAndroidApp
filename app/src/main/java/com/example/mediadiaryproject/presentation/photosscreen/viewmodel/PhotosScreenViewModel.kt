@@ -7,13 +7,17 @@ import android.graphics.BitmapFactory
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.presentation.photosscreen.state.PhotoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class PhotosScreenViewModel @Inject constructor(
@@ -25,24 +29,31 @@ class PhotosScreenViewModel @Inject constructor(
     private val _state: MutableState<List<PhotoState>> = mutableStateOf(listOf())
     val state = _state
 
-    init {
-        getPhotosList()
-    }
+//    init {
+//        getPhotosList()
+//    }
 
-    private fun getPhotosList() {
-        _state.value = getListOfAllPhotos.execute(mediaType = MediaType.PHOTO).map { videoFileModel ->
-            PhotoState(
-                fileName = videoFileModel.fileName,
-                image = loadImageFromInternalStorage(imageFileName = videoFileModel.fileName)
-                )
+    fun getPhotosList(dayId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value = getListOfAllPhotos.execute(mediaType = MediaType.PHOTO, dayId = dayId)
+                .map { photoFileModel ->
+                    PhotoState(
+                        fileName = photoFileModel.title,
+                        image = loadImageFromInternalStorage(
+                            pathToFile = photoFileModel.id.toString(),
+                            mediaType = MediaType.PHOTO
+                        )
+                    )
+                }
         }
+
     }
 
-    private fun loadImageFromInternalStorage(imageFileName: String): Bitmap? {
+    private fun loadImageFromInternalStorage(pathToFile: String, mediaType: MediaType): Bitmap? {
 
-        val directory = MediaType.PHOTO.directory
+        val directory = mediaType.directory
 
-        val file = File(context.getExternalFilesDir(directory), imageFileName)
+        val file = File(context.getExternalFilesDir(directory), pathToFile)
 
         return if (file.exists()) {
             BitmapFactory.decodeFile(file.absolutePath)

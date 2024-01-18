@@ -26,7 +26,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun AudioRecorderWrapper(
     navigator: DestinationsNavigator,
-    viewModel: AudioRecorderViewModel = hiltViewModel()
+    viewModel: AudioRecorderViewModel = hiltViewModel(),
+    dayId: Int,
 ) {
 
     val audioRecordingPermissionState: PermissionState =
@@ -36,12 +37,13 @@ fun AudioRecorderWrapper(
 
     if (hasAudioRecordPermission) {
         AudioRecordingScreen(
+            dayId = dayId,
             recording = viewModel.state.value.recording,
             recordingSaved = viewModel.state.value.recordingSaved,
             amplitudeList = viewModel.amplitudesListState.value,
-            startRecording = { viewModel.startRecording() },
+            startRecording = { viewModel.startRecording(dayId) },
             stopRecording = { viewModel.stopRecording() },
-            navigateToAudios = { navigator.navigate(AudiosPlayScreenDestination()) }
+            navigateToAudios = { navigator.navigate(AudiosPlayScreenDestination(dayId)) }
         )
     } else {
         NoRecordingAudioPermissionScreen(

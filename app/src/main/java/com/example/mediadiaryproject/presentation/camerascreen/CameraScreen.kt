@@ -3,6 +3,7 @@ package com.example.mediadiaryproject.presentation.camerascreen
 import android.content.Context
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import com.example.mediadiaryproject.presentation.camerascreen.components.CameraContent
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 import com.ramcosta.composedestinations.annotation.Destination

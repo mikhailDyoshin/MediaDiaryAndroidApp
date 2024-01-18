@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -20,8 +21,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun VideoPlayerScreen(
     navigator: DestinationsNavigator,
-    viewModel: VideoPlayerScreenViewModel = hiltViewModel()
+    viewModel: VideoPlayerScreenViewModel = hiltViewModel(),
+    dayId: Int,
 ) {
+
+    LaunchedEffect(true) {
+        viewModel.getVideosList(dayId = dayId)
+    }
 
     val listOfFiles = viewModel.state.value
 

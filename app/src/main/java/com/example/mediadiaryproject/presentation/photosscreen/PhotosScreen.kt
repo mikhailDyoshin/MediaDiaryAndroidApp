@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -23,10 +24,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun PhotosScreen(
     navigator: DestinationsNavigator,
-    viewModel: PhotosScreenViewModel = hiltViewModel()
+    viewModel: PhotosScreenViewModel = hiltViewModel(),
+    dayId: Int,
 ) {
 
-    val context: Context = LocalContext.current
+//    val context: Context = LocalContext.current
+
+    LaunchedEffect(true) {
+        viewModel.getPhotosList(dayId = dayId)
+    }
 
     val listOfPhotos = viewModel.state.value
 
@@ -39,7 +45,9 @@ fun PhotosScreen(
                         Image(
                             bitmap = bitmap.asImageBitmap(),
                             contentDescription = null,
-                            modifier = Modifier.height(100.dp).width(100.dp)
+                            modifier = Modifier
+                                .height(100.dp)
+                                .width(100.dp)
                         )
                     }
                     Text(file.fileName)

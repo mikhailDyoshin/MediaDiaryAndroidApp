@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +33,12 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @OptIn(UnstableApi::class)
 @Composable
-fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel()) {
+fun AudiosPlayScreen(viewModel: AudioPlayerViewModel = hiltViewModel(), dayId: Int) {
+
+
+    LaunchedEffect(true) {
+        viewModel.getListOfAudios(dayId)
+    }
 
     val listOfAudios = viewModel.state.value
 

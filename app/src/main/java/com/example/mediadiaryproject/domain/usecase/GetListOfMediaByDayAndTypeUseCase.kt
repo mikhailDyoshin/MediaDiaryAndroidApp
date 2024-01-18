@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetListOfMediaByDayAndTypeUseCase @Inject constructor(
     private val repository: MediaDiaryRepository
 ) {
-    fun execute(dayId: Int, mediaType: MediaType): List<MediaModel> =
+    suspend fun execute(dayId: Int, mediaType: MediaType): List<MediaModel> =
         repository.getMediaByDayAndType(dayId = dayId, mediaType = mediaType)
 }

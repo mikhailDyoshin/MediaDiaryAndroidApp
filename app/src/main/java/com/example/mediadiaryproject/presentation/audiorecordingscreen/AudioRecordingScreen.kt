@@ -23,6 +23,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun AudioRecordingScreen(
+    dayId: Int,
     recording: Boolean,
     recordingSaved: Boolean,
     amplitudeList: List<Double>,
@@ -43,7 +44,7 @@ fun AudioRecordingScreen(
     val rectList = listOf(100, 200, 300)
 
     Column {
-        Text(text = "Audio recording screen")
+        Text(text = "Audio recording screen: $dayId")
         if (recording) {
             Text(text = "Recording...")
         } else {

@@ -11,11 +11,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.common.Constants
 import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
 import com.example.mediadiaryproject.presentation.audiorecordingscreen.audiorecorder.MediaDiaryAudioRecorder
 import com.example.mediadiaryproject.presentation.audiorecordingscreen.state.AudioRecorderScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.pow
@@ -46,14 +48,28 @@ class AudioRecorderViewModel @Inject constructor(
     private var countDownTimerSlow: CountDownTimer? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
-    fun startRecording() {
-        val file = provideFileToSaveMediaUseCase.execute(mediaType = MediaType.AUDIO)
+    fun startRecording(dayId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
 
-        _state.value = AudioRecorderScreenState(recording = true)
+            val file = provideFileToSaveMediaUseCase.execute(
+                media = MediaModel(
+                    dayId = dayId,
+                    mediaType = MediaType.AUDIO,
+                    date = "",
+                    time = "",
+                    title = "Audio",
+                    description = "",
+                    pathToFile = ""
+                )
+            )
 
-        recorder.start(file)
+            _state.value = AudioRecorderScreenState(recording = true)
 
-        assignListOfMaxAmpValues()
+            recorder.start(file)
+
+            assignListOfMaxAmpValues()
+        }
+
     }
 
     fun stopRecording() {
@@ -107,7 +123,7 @@ class AudioRecorderViewModel @Inject constructor(
         val powerDenominator = 50
         val power = -powerNumerator / powerDenominator
 
-        return (amplitude * 5 /sqrt(2 * Constants.PI)) * Constants.EXP.toFloat().pow(power)
+        return (amplitude * 5 / sqrt(2 * Constants.PI)) * Constants.EXP.toFloat().pow(power)
     }
 
 }

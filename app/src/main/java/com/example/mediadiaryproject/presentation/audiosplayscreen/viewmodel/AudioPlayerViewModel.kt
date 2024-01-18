@@ -17,13 +17,14 @@ import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.S)
 @HiltViewModel
 class AudioPlayerViewModel @Inject constructor(
-    private val getListOfAllAudiosUseCase: GetListOfMediaByDayAndTypeUseCase,
+    private val getListOfAudiosUseCase: GetListOfMediaByDayAndTypeUseCase,
     private val player: Player,
 ) : ViewModel() {
 
@@ -44,7 +45,6 @@ class AudioPlayerViewModel @Inject constructor(
 
 
     init {
-        getVideosList()
         player.prepare()
 
         player.addListener(
@@ -75,14 +75,17 @@ class AudioPlayerViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun getVideosList() {
-        _state.value =
-            getListOfAllAudiosUseCase.execute(mediaType = MediaType.AUDIO).map { videoFileModel ->
-                AudioFileState(
-                    fileName = videoFileModel.fileName,
-                    mediaItem = MediaItem.fromUri(videoFileModel.filePath.toUri())
-                )
-            }
+    fun getListOfAudios(dayId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value =
+                getListOfAudiosUseCase.execute(dayId = dayId, mediaType = MediaType.AUDIO)
+                    .map { audioFileModel ->
+                        AudioFileState(
+                            fileName = audioFileModel.title + audioFileModel.id + " ${audioFileModel.pathToFile} ${audioFileModel.dayId}=$dayId",
+                            mediaItem = MediaItem.fromUri(audioFileModel.pathToFile.toUri())
+                        )
+                    }
+        }
     }
 
     fun playAudio(audioItem: AudioFileState) {
@@ -98,7 +101,7 @@ class AudioPlayerViewModel @Inject constructor(
 
         currentAudioPlayed.value = audioItem
 
-        changeAudioUnderFocusStatus(currentAudioPlayed.value.fileName)
+        changeAudioUnderFocusStatus(currentAudioPlayed.value.mediaItem)
 
         player.setMediaItem(currentAudioPlayed.value.mediaItem)
 
@@ -107,7 +110,7 @@ class AudioPlayerViewModel @Inject constructor(
         player.play()
 
         changeAudioPlayingStatus(
-            audioName = currentAudioPlayed.value.fileName,
+            mediaItem = currentAudioPlayed.value.mediaItem,
             isPlaying = true
         )
 
@@ -118,7 +121,7 @@ class AudioPlayerViewModel @Inject constructor(
     fun pauseAudio() {
         player.pause()
 
-        changeAudioPlayingStatus(currentAudioPlayed.value.fileName, false)
+        changeAudioPlayingStatus(currentAudioPlayed.value.mediaItem, false)
 
         savedCurrentPosition = player.currentPosition
 
@@ -140,24 +143,24 @@ class AudioPlayerViewModel @Inject constructor(
         player.play()
 
         changeAudioPlayingStatus(
-            audioName = currentAudioPlayed.value.fileName,
+            mediaItem = currentAudioPlayed.value.mediaItem,
             isPlaying = true
         )
 
     }
 
-    private fun changeAudioUnderFocusStatus(audioName: String) {
+    private fun changeAudioUnderFocusStatus(mediaItem: MediaItem) {
         val newList = _state.value.map { audioItem ->
-            audioItem.copy(underFocus = audioItem.fileName == audioName)
+            audioItem.copy(underFocus = audioItem.mediaItem == mediaItem)
 
         }
 
         _state.value = newList
     }
 
-    private fun changeAudioPlayingStatus(audioName: String, isPlaying: Boolean) {
+    private fun changeAudioPlayingStatus(mediaItem: MediaItem, isPlaying: Boolean) {
         val newList = _state.value.map { audioItem ->
-            audioItem.copy(isPlaying = audioItem.fileName == audioName && isPlaying)
+            audioItem.copy(isPlaying = audioItem.mediaItem == mediaItem && isPlaying)
 
         }
 
@@ -189,7 +192,7 @@ class AudioPlayerViewModel @Inject constructor(
                     _currentAudioPositionRatioState.floatValue = 0f
                     savedCurrentPosition = 0L
                     changeAudioPlayingStatus(
-                        audioName = currentAudioPlayed.value.fileName,
+                        mediaItem = currentAudioPlayed.value.mediaItem,
                         isPlaying = false
                     )
                     Log.d("Ticking", "Tick: $counter, Finished")

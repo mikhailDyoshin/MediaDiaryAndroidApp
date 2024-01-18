@@ -22,6 +22,6 @@ interface MediaDao {
     fun getMediaByDayAndType(dayId: Int, type: MediaType): List<MediaStorageModel>
 
     @Update
-    fun update(note: MediaStorageModel)
+    fun update(media: MediaStorageModel)
 
 }

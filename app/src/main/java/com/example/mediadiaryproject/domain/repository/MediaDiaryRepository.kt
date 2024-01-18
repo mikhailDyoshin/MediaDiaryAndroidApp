@@ -18,7 +18,7 @@ interface MediaDiaryRepository {
 
     suspend fun provideFileToSaveMedia(media: MediaModel): File
 
-    fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaModel>
+    suspend fun getMediaByDayAndType(dayId: Int, mediaType: MediaType): List<MediaModel>
 
     suspend fun saveTextNote(textNote: TextNoteModel)
 
