@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
@@ -28,7 +25,7 @@ import com.example.mediadiaryproject.presentation.calendar.Calendar
 import com.example.mediadiaryproject.presentation.dayslistscreen.state.CollectionState
 import com.example.mediadiaryproject.presentation.dayslistscreen.state.DayState
 import com.example.mediadiaryproject.presentation.dayslistscreen.viewmodel.DaysListScreenViewModel
-import com.example.mediadiaryproject.presentation.destinations.DayScreenDestination
+import com.example.mediadiaryproject.presentation.destinations.DayScreenWrapperDestination
 import com.example.mediadiaryproject.presentation.navgraph.MediaDiaryNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -78,7 +75,7 @@ fun DaysListScreen(
                             activityId = 0
                         ),
                         navigateToDay = { id ->
-                            navigator.navigate(DayScreenDestination(dayId = id))
+                            navigator.navigate(DayScreenWrapperDestination(dayId = id))
                             viewModel.hideCalendar()
                         },
                         modifier = Modifier.align(Alignment.BottomCenter)
