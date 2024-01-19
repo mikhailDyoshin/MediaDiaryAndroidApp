@@ -19,14 +19,18 @@ fun DayScreenWrapper(
 
     Column {
         Text(text = "Id = $dayId")
-        Button(onClick = { navigator.navigate(TextNoteEditScreenDestination(dayId = dayId)) }) {
-            Text(text = "Add text note")
-        }
-        Button(onClick = { navigator.navigate(AudioRecorderWrapperDestination(dayId = dayId)) }) {
-            Text(text = "Add audio note")
-        }
-        Button(onClick = { navigator.navigate(CameraWrapperDestination(dayId = dayId)) }) {
-            Text(text = "Add photo/video note")
-        }
+        DayScreen(
+            date = DateState(day = "19", month = "Jan"),
+            navigateToTextEditScreen = {
+                navigator.navigate(TextNoteEditScreenDestination(dayId = dayId))
+            },
+            navigateToAudioRecordScreen = {
+                navigator.navigate(AudioRecorderWrapperDestination(dayId = dayId))
+            },
+            navigateToCameraScreen = {
+                navigator.navigate(CameraWrapperDestination(dayId = dayId))
+            },
+            navigateToDayContent = {}
+            )
     }
 }
