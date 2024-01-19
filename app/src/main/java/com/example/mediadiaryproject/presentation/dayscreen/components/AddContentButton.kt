@@ -8,18 +8,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mediadiaryproject.R
 
 @Composable
-fun AddContentButton(onClick: () -> Unit, modifier: Modifier) {
+fun AddContentButton(onClick: () -> Unit, modifier: Modifier, iconId: Int) {
 
     Column(modifier = modifier) {
         Box(
@@ -34,7 +34,8 @@ fun AddContentButton(onClick: () -> Unit, modifier: Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceAround,
             ) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "Add-content-button's icon")
+                Icon(painter = painterResource(id = iconId), contentDescription = "Add-content-button's icon")
+//                Icon(imageVector = Icons.Default.Edit, contentDescription = "Add-content-button's icon")
             }
 
         }
@@ -45,6 +46,19 @@ fun AddContentButton(onClick: () -> Unit, modifier: Modifier) {
 
 @Preview
 @Composable
-fun AddContentButtonPreview() {
-    AddContentButton(onClick = {}, modifier = Modifier)
+fun AddPhotoVideoPreview() {
+    AddContentButton(onClick = {}, modifier = Modifier, iconId = R.drawable.camera_icon)
 }
+
+@Preview
+@Composable
+fun AddAudioPreview() {
+    AddContentButton(onClick = {}, modifier = Modifier, iconId = R.drawable.microphone_icon)
+}
+
+@Preview
+@Composable
+fun AddTextNotePreview() {
+    AddContentButton(onClick = {}, modifier = Modifier, iconId = R.drawable.notes_icon)
+}
+

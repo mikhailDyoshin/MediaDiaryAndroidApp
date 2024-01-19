@@ -40,13 +40,13 @@ fun DayButton(date: DateState, navigateToDayContent: () -> Unit, modifier: Modif
                     text = date.month,
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    fontSize = 45.sp
+                    fontSize = 65.sp
                 )
                 Text(
                     text = date.day,
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    fontSize = 55.sp
+                    fontSize = 65.sp
                 )
             }
 
@@ -59,5 +59,5 @@ fun DayButton(date: DateState, navigateToDayContent: () -> Unit, modifier: Modif
 @Preview(showBackground = true)
 @Composable
 fun DayButtonPreview() {
-    DayButton(date = DateState(day = "18", month = "September"), navigateToDayContent = {}, modifier = Modifier)
+    DayButton(date = DateState(day = "18", month = "Sep"), navigateToDayContent = {}, modifier = Modifier)
 }
