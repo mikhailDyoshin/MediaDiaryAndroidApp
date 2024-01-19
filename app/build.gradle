@@ -131,6 +131,9 @@ dependencies {
     // To use Coroutine features
     //noinspection GradleDependency
     implementation "androidx.room:room-ktx:$room_version"
+
+    // Constraint layout
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 }
 
 kapt {

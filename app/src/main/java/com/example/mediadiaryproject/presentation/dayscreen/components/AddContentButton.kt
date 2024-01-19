@@ -19,29 +19,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddContentButton(createContent: () -> Unit) {
+fun AddContentButton(onClick: () -> Unit, modifier: Modifier) {
 
-    Box(
-        modifier = Modifier
-            .size(90.dp)
-            .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
-            .clickable(onClick = createContent)
-            .padding(10.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
+    Column(modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .size(90.dp)
+                .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
+                .clickable(onClick = onClick)
+                .padding(10.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Icon(imageVector = Icons.Default.Edit, contentDescription = "Add-content-button's icon")
-        }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceAround,
+            ) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "Add-content-button's icon")
+            }
 
+        }
     }
+
 
 }
 
 @Preview
 @Composable
 fun AddContentButtonPreview() {
-    AddContentButton(createContent = {})
+    AddContentButton(onClick = {}, modifier = Modifier)
 }

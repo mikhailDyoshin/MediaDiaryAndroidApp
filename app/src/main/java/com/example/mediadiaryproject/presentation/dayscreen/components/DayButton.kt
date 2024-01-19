@@ -21,40 +21,43 @@ import androidx.compose.ui.unit.sp
 import com.example.mediadiaryproject.presentation.dayscreen.DateState
 
 @Composable
-fun DayButton(date: DateState, navigateToDayContent: () -> Unit) {
+fun DayButton(date: DateState, navigateToDayContent: () -> Unit, modifier: Modifier) {
 
-    Box(
-        modifier = Modifier
-            .size(90.dp)
-            .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
-            .clickable(onClick = navigateToDayContent)
-            .padding(10.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
+    Column(modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .size(250.dp)
+                .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
+                .clickable(onClick = { navigateToDayContent() })
+                .padding(10.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = date.day,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-            Text(
-                text = date.month,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-        }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = date.month,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 45.sp
+                )
+                Text(
+                    text = date.day,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 55.sp
+                )
+            }
 
+        }
     }
+
 
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DayButtonPreview() {
-    DayButton(date = DateState(day = "18", month = "Dec"), navigateToDayContent = {})
+    DayButton(date = DateState(day = "18", month = "September"), navigateToDayContent = {}, modifier = Modifier)
 }
