@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.destinations.TextNotesScreenDestination
+import com.example.mediadiaryproject.presentation.textnoteeditscreen.components.NoteTextField
 import com.example.mediadiaryproject.presentation.textnoteeditscreen.components.TitleTextField
 import com.example.mediadiaryproject.presentation.textnoteeditscreen.viewmodel.TextNoteEditScreenViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -40,12 +41,18 @@ fun TextNoteEditScreen(
         Text(text = viewModel.editedTextNoteDate)
         TitleTextField(
             title = viewModel.title,
-            updateTitle = { title -> viewModel.updateTitle(title) })
-        TextField(
-            value = viewModel.text,
-            modifier = Modifier.fillMaxHeight(),
-            onValueChange = { text -> viewModel.updateText(text) },
-            maxLines = 5
+            updateTitle = { title -> viewModel.updateTitle(title) }
+        )
+//        TextField(
+//            value = viewModel.text,
+////            modifier = Modifier.fillMaxHeight(),
+//            onValueChange = { text -> viewModel.updateText(text) },
+//            maxLines = 5
+//        )
+        NoteTextField(
+            note = viewModel.text,
+            updateNote = { value -> viewModel.updateText(value) },
+            modifier = Modifier
         )
         Row() {
             if (textNoteToEditId != -1) {
