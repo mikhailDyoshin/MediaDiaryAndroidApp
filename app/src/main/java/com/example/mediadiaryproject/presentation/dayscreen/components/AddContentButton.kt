@@ -35,12 +35,10 @@ fun AddContentButton(onClick: () -> Unit, modifier: Modifier, iconId: Int) {
                 verticalArrangement = Arrangement.SpaceAround,
             ) {
                 Icon(painter = painterResource(id = iconId), contentDescription = "Add-content-button's icon")
-//                Icon(imageVector = Icons.Default.Edit, contentDescription = "Add-content-button's icon")
             }
 
         }
     }
-
 
 }
 
@@ -61,4 +59,3 @@ fun AddAudioPreview() {
 fun AddTextNotePreview() {
     AddContentButton(onClick = {}, modifier = Modifier, iconId = R.drawable.notes_icon)
 }
-
