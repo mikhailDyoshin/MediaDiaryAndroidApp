@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenWrapperDestination
+import com.example.mediadiaryproject.presentation.textnotescreen.components.TextNoteItem
 import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteState
 import com.example.mediadiaryproject.presentation.textnotescreen.viewmodel.TextNotesScreenViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -30,7 +31,7 @@ fun TextNotesScreen(
 
     Column {
         for (note in notes) {
-            TextNote(
+            TextNoteItem(
                 note = note,
                 deleteNote = { noteToDelete ->
                     viewModel.deleteNote(
@@ -48,30 +49,6 @@ fun TextNotesScreen(
                 }
             )
 
-        }
-    }
-
-}
-
-@Composable
-private fun TextNote(
-    note: TextNoteState,
-    deleteNote: (noteToDelete: TextNoteState) -> Unit,
-    navigateToEditScreen: (noteId: Int) -> Unit
-) {
-    Row {
-        Column {
-            Text(text = note.date)
-            Text(text = note.title)
-            Text(text = note.text)
-        }
-        Row {
-            Button(onClick = { navigateToEditScreen(note.id) }) {
-                Text(text = "Edit")
-            }
-            Button(onClick = { deleteNote(note) }) {
-                Text(text = "Delete")
-            }
         }
     }
 

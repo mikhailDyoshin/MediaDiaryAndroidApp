@@ -12,3 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val BlueText = Color(0xff76a9ff)
 val ContainerColor = Color(0xffd8e6ff)
+
+val EditButtonColor = Color(0xFFB6B8BE)
+val DeleteButtonColor = Color(0xFF8D0A00)
