@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenDestination
+import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenWrapperDestination
 import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteState
 import com.example.mediadiaryproject.presentation.textnotescreen.viewmodel.TextNotesScreenViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -40,7 +40,7 @@ fun TextNotesScreen(
                 },
                 navigateToEditScreen = { id ->
                     navigator.navigate(
-                        TextNoteEditScreenDestination(
+                        TextNoteEditScreenWrapperDestination(
                             textNoteToEditId = id,
                             dayId = dayId
                         )

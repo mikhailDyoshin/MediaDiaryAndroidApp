@@ -29,7 +29,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun TextNoteEditScreen(
     noteTitle: String,
     noteText: String,
-    textNoteToEditId: Int = -1,
+    textNoteToEditId: Int,
     dayId: Int,
     setNoteData: (noteId: Int) -> Unit,
     updateDayId: (dayId: Int) -> Unit,
