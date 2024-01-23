@@ -7,23 +7,16 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mediadiaryproject.presentation.destinations.TextNotesScreenDestination
 import com.example.mediadiaryproject.presentation.textnoteeditscreen.components.NoteTextField
+import com.example.mediadiaryproject.presentation.textnoteeditscreen.components.TextNoteScreenButton
 import com.example.mediadiaryproject.presentation.textnoteeditscreen.components.TitleTextField
-import com.example.mediadiaryproject.presentation.textnoteeditscreen.viewmodel.TextNoteEditScreenViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
 
 @Composable
 fun TextNoteEditScreen(
@@ -68,17 +61,26 @@ fun TextNoteEditScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = {
-                if (textNoteToEditId != -1) {
-                    updateNote(textNoteToEditId)
-                } else saveNote()
-            }) {
-                Text(text = "Save")
-            }
-
-            Button(onClick = { navigateToNotes(dayId) }) {
-                Text(text = "Notes")
-            }
+            TextNoteScreenButton(
+                text = "Save",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 5.dp),
+                onClick = {
+                    if (textNoteToEditId != -1) {
+                        updateNote(textNoteToEditId)
+                    } else saveNote()
+                })
+            TextNoteScreenButton(
+                text = "Notes",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 5.dp),
+                onClick = {
+                    navigateToNotes(dayId)
+                })
         }
 
     }

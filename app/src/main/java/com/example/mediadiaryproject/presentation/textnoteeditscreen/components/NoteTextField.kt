@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mediadiaryproject.ui.theme.BlueText
+import com.example.mediadiaryproject.ui.theme.ContainerColor
 import com.example.mediadiaryproject.ui.theme.meriendaFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +34,7 @@ fun NoteTextField(note: String, updateNote: (note: String) -> Unit, modifier: Mo
 
     var offset by remember { mutableFloatStateOf(0f) }
 
-    val blue = Color(0xff76a9ff)
+    val blue = BlueText
 
     Column(modifier = modifier) {
 
@@ -61,14 +63,14 @@ fun NoteTextField(note: String, updateNote: (note: String) -> Unit, modifier: Mo
                 }
             ),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color(0xffd8e6ff),
+                containerColor = ContainerColor,
                 cursorColor = Color.Black,
-                disabledLabelColor = Color(0xffd8e6ff),
+                disabledLabelColor = ContainerColor,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
             textStyle = TextStyle(fontSize = 22.sp, fontFamily = meriendaFontFamily),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(20.dp),
             singleLine = false,
         )
     }

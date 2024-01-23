@@ -20,6 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mediadiaryproject.ui.theme.BlueText
+import com.example.mediadiaryproject.ui.theme.ContainerColor
 import com.example.mediadiaryproject.ui.theme.meriendaFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +30,7 @@ fun TitleTextField(title: String, updateTitle: (title: String) -> Unit) {
 
     val maxLength = 50
 
-    val blue = Color(0xff76a9ff)
+    val blue = BlueText
 
     Column {
 
@@ -46,14 +48,14 @@ fun TitleTextField(title: String, updateTitle: (title: String) -> Unit) {
             onValueChange = { value -> if (value.length <= maxLength) updateTitle(value) },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color(0xffd8e6ff),
+                containerColor = ContainerColor,
                 cursorColor = Color.Black,
-                disabledLabelColor = Color(0xffd8e6ff),
+                disabledLabelColor = ContainerColor,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
             textStyle = TextStyle(fontSize = 22.sp, fontFamily = meriendaFontFamily),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(20.dp),
             singleLine = true,
             trailingIcon = {
                 if (title.isNotEmpty()) {
