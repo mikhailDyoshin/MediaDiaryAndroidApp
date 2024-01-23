@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,80 +36,84 @@ fun TextNoteItem(
 
     val cornerSize = 20.dp
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.White, shape = RoundedCornerShape(cornerSize))
-    ) {
-        Text(
-            text = note.date,
-            fontSize = 16.sp,
+    Column(modifier = Modifier.shadow(4.dp, shape = RoundedCornerShape(cornerSize), clip = true)) {
+
+
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(topStart = cornerSize, topEnd = cornerSize)
-                )
-                .padding(vertical = 4.dp),
-            textAlign = TextAlign.Center,
-        )
-        Row(verticalAlignment = Alignment.Top) {
-            Column {
-                Text(
-                    text = note.title,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .padding(start = 8.dp, top = 4.dp, bottom = 4.dp)
-                        .fillMaxWidth(0.8f),
-                    textAlign = TextAlign.Start
-                )
-                Text(
-                    text = note.text,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .padding(start = 8.dp, top = 0.dp, bottom = 4.dp)
-                        .fillMaxWidth(0.8f),
-                    textAlign = TextAlign.Start
-                )
-            }
-            Column(
+                .background(color = Color.White, shape = RoundedCornerShape(cornerSize))
+        ) {
+            Text(
+                text = note.date,
+                fontSize = 16.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp).height(80.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                IconButton(
-                    onClick = { navigateToEditScreen(note.id) },
-                    modifier = Modifier
-                        .background(
-                            color = EditButtonColor, shape = RoundedCornerShape(8.dp)
-                        )
-                        .size(35.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.edit_icon),
-                        contentDescription = "Edit icon"
+                    .background(
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(topStart = cornerSize, topEnd = cornerSize)
+                    )
+                    .padding(vertical = 4.dp),
+                textAlign = TextAlign.Center,
+            )
+            Row(verticalAlignment = Alignment.Top) {
+                Column {
+                    Text(
+                        text = note.title,
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .padding(start = 8.dp, top = 4.dp, bottom = 4.dp)
+                            .fillMaxWidth(0.7f),
+                        textAlign = TextAlign.Start
+                    )
+                    Text(
+                        text = note.text,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .padding(start = 8.dp, top = 0.dp, bottom = 4.dp)
+                            .fillMaxWidth(0.7f),
+                        textAlign = TextAlign.Start
                     )
                 }
-                IconButton(
-                    onClick = { deleteNote(note) },
+                Row(
                     modifier = Modifier
-                        .background(
-                            color = DeleteButtonColor, shape = RoundedCornerShape(8.dp)
-                        )
-                        .size(35.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                        .height(80.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.delete_icon),
-                        contentDescription = "Delete icon",
-                        modifier = Modifier.size(16.dp)
-                    )
+                    IconButton(
+                        onClick = { navigateToEditScreen(note.id) },
+                        modifier = Modifier
+                            .background(
+                                color = EditButtonColor, shape = RoundedCornerShape(8.dp)
+                            )
+                            .size(40.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.edit_icon),
+                            contentDescription = "Edit icon"
+                        )
+                    }
+                    IconButton(
+                        onClick = { deleteNote(note) },
+                        modifier = Modifier
+                            .background(
+                                color = DeleteButtonColor, shape = RoundedCornerShape(8.dp)
+                            )
+                            .size(40.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.delete_icon),
+                            contentDescription = "Delete icon",
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
             }
         }
     }
-
 
 }
 

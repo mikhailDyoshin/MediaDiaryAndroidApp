@@ -2,7 +2,7 @@ package com.example.mediadiaryproject.presentation.textnoteeditscreen
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mediadiaryproject.presentation.destinations.TextNotesScreenDestination
+import com.example.mediadiaryproject.presentation.destinations.TextNotesScreenWrapperDestination
 import com.example.mediadiaryproject.presentation.textnoteeditscreen.viewmodel.TextNoteEditScreenViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -27,7 +27,7 @@ fun TextNoteEditScreenWrapper(
         updateNoteText = { text -> viewModel.updateText(text) },
         updateNote = { id -> viewModel.updateNote(id) },
         saveNote = { viewModel.saveNote() },
-        navigateToNotes = { navigator.navigate(TextNotesScreenDestination(dayId = dayId)) }
+        navigateToNotes = { navigator.navigate(TextNotesScreenWrapperDestination(dayId = dayId)) }
     )
 
 }
