@@ -32,6 +32,13 @@ fun TextNotesScreenWrapper(
                     textNoteToEditId = noteId
                 )
             )
+        },
+        addNewNote = {
+            navigator.navigate(
+                TextNoteEditScreenWrapperDestination(
+                    dayId = dayId,
+                )
+            )
         }
     )
 }
