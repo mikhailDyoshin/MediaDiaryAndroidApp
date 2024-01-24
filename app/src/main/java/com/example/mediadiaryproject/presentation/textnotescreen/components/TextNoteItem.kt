@@ -45,18 +45,16 @@ fun TextNoteItem(
                 .fillMaxWidth()
                 .background(color = Color.White, shape = RoundedCornerShape(cornerSize))
         ) {
-            Text(
-                text = note.date,
-                fontSize = 16.sp,
+            Column(
                 modifier = Modifier
+                    .height(20.dp)
                     .fillMaxWidth()
                     .background(
                         color = Color.Gray,
                         shape = RoundedCornerShape(topStart = cornerSize, topEnd = cornerSize)
                     )
                     .padding(vertical = 4.dp),
-                textAlign = TextAlign.Center,
-            )
+            ) {}
             Row(verticalAlignment = Alignment.Top) {
                 Column(modifier = Modifier.padding(bottom = 4.dp)) {
                     Text(
@@ -125,7 +123,7 @@ fun TextNoteItemPreview() {
     TextNoteItem(
         note = TextNoteState(
             id = 0,
-            date = "12 Jan, 2024",
+            date = "",
             title = "My note",
             text = "Preview preview preview preview preview preview preview preview preview ..."
         ),
