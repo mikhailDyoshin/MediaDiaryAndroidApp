@@ -56,21 +56,21 @@ fun TextNotesScreenPreview() {
         id = 0,
         date = "12 Jan, 2024",
         title = "My note 1",
-        text = "Preview preview preview preview preview preview preview preview preview preview"
+        text = "Preview preview preview preview preview preview preview preview preview preview ..."
     )
 
     val note2 = TextNoteState(
         id = 1,
         date = "14 Jan, 2024",
         title = "My note 2",
-        text = "Preview preview preview preview preview preview preview preview preview preview"
+        text = "Preview preview preview preview preview preview preview preview preview preview ..."
     )
 
     val note3 = TextNoteState(
         id = 2,
         date = "17 Jan, 2024",
         title = "My note 3",
-        text = "Preview preview preview preview preview preview preview preview preview preview"
+        text = "Preview preview preview preview preview preview preview preview preview preview ..."
     )
 
     TextNotesScreen(notes = listOf(note1, note2, note3), deleteNote = {}, editNote = {})

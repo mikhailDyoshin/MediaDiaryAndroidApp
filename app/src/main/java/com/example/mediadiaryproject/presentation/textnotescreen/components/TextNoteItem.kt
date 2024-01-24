@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,18 +58,19 @@ fun TextNoteItem(
                 textAlign = TextAlign.Center,
             )
             Row(verticalAlignment = Alignment.Top) {
-                Column {
+                Column(modifier = Modifier.padding(bottom = 4.dp)) {
                     Text(
                         text = note.title,
                         fontSize = 20.sp,
                         modifier = Modifier
-                            .padding(start = 8.dp, top = 4.dp, bottom = 4.dp)
+                            .padding(start = 8.dp, top = 4.dp, bottom = 0.dp)
                             .fillMaxWidth(0.7f),
-                        textAlign = TextAlign.Start
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = note.text,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         modifier = Modifier
                             .padding(start = 8.dp, top = 0.dp, bottom = 4.dp)
                             .fillMaxWidth(0.7f),
