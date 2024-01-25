@@ -64,8 +64,9 @@ class TextNotesScreenViewModel @Inject constructor(
                     text = note.text
                 )
             deleteTextNoteUseCase.execute(textNote = noteToDelete)
+            getNotesByDay(dayId)
         }
-        getNotesByDay(dayId)
+
     }
 
 }

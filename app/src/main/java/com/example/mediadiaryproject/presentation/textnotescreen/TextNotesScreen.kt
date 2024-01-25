@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -37,8 +39,7 @@ fun TextNotesScreen(
                     .fillMaxHeight()
                     .weight(6f)
                     .padding(horizontal = 10.dp, vertical = 10.dp)
-//            .background(color = Color.White)
-            ) {
+                    .verticalScroll(rememberScrollState())) {
                 notes.forEach { note ->
                     TextNoteItem(
                         note = note,
@@ -51,16 +52,9 @@ fun TextNotesScreen(
                     )
 
                 }
-
-
             }
-
-
         }
-
     }
-
-
 }
 
 @Preview(showSystemUi = true)
@@ -88,8 +82,29 @@ fun TextNotesScreenPreview() {
         text = "Preview preview preview preview preview preview preview preview preview preview ..."
     )
 
+    val note4 = TextNoteState(
+        id = 2,
+        date = "",
+        title = "My note 3",
+        text = "Preview preview preview preview preview preview preview preview preview preview ..."
+    )
+
+    val note5 = TextNoteState(
+        id = 2,
+        date = "",
+        title = "My note 3",
+        text = "Preview preview preview preview preview preview preview preview preview preview ..."
+    )
+
+    val note6 = TextNoteState(
+        id = 2,
+        date = "",
+        title = "My note 3",
+        text = "Preview preview preview preview preview preview preview preview preview preview ..."
+    )
+
     TextNotesScreen(
-        notes = listOf(note1, note2, note3),
+        notes = listOf(note1, note2, note3, note4, note5, note6),
         deleteNote = {},
         editNote = {},
         addNewNote = {})
