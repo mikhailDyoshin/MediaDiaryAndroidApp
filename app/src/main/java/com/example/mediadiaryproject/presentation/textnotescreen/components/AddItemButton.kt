@@ -98,18 +98,20 @@ private fun SigmoidLine(backgroundColor: Color, modifier: Modifier) {
                         size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
                     )
 
-                    // Drawing the background under the left line
-                    for (y in yOffset.toInt() + lineWidth.toInt()..size.height.toInt() step 1) {
-                        drawRect(
-                            color = backgroundColor,
-                            topLeft = Offset(
-                                xOffset,
-                                y.toFloat(),
-                            ),
-                            size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
+                    val rectTopY = yOffset + lineWidth
+                    val rectHeight = size.height - rectTopY
 
-                        )
-                    }
+
+                    drawRect(
+                        color = backgroundColor,
+                        topLeft = Offset(
+                            xOffset,
+                            rectTopY,
+                        ),
+                        size = androidx.compose.ui.geometry.Size(lineWidth, rectHeight)
+
+                    )
+
                 }
 
                 // Drawing the right sigmoid
@@ -125,19 +127,19 @@ private fun SigmoidLine(backgroundColor: Color, modifier: Modifier) {
                         size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
                     )
 
-                    // Drawing the background under the right line
-                    for (y in yOffset.toInt() + lineWidth.toInt()..size.height.toInt() step 1) {
-                        drawRect(
-                            color = backgroundColor,
-                            topLeft = Offset(
-                                xOffset + lineWidth,
-                                y.toFloat(),
-                            ),
-                            size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
+                    val rectTopY = yOffset + lineWidth
+                    val rectHeight = size.height - rectTopY
 
-                        )
-                    }
 
+                    drawRect(
+                        color = backgroundColor,
+                        topLeft = Offset(
+                            xOffset + lineWidth,
+                            rectTopY,
+                        ),
+                        size = androidx.compose.ui.geometry.Size(lineWidth, rectHeight)
+
+                    )
                 }
 
             }
