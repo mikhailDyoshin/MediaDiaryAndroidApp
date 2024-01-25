@@ -47,7 +47,7 @@ fun AddItemButton(backgroundColor: Color = Color.White, modifier: Modifier, onCl
 @Composable
 private fun RoundButton(modifier: Modifier, onClick: () -> Unit) {
 
-    val buttonSize = 82.dp
+    val buttonSize = 81.dp
 
     Column(modifier = modifier) {
         IconButton(
@@ -87,11 +87,13 @@ private fun SigmoidLine(backgroundColor: Color, modifier: Modifier) {
 
                 val lineWidth = 10f
 
+                val horizontalShift = 125f
+
                 // Drawing the left sigmoid
                 for (x in startX.toInt()..endX.toInt() step step.toInt()) {
                     val xOffsetLeft = x.toFloat() - startX
                     val yOffsetLeft =
-                        sigmoid(-(xOffsetLeft - startX) - 120f, scale, magnitude) - magnitude
+                        sigmoid(-(xOffsetLeft - startX) - horizontalShift, scale, magnitude) - magnitude
 
 
                     drawRect(
@@ -117,7 +119,7 @@ private fun SigmoidLine(backgroundColor: Color, modifier: Modifier) {
                     )
 
                     val xOffsetRight = x.toFloat()
-                    val yOffsetRight = sigmoid(x.toFloat() - startX - 120f, scale, magnitude) - magnitude
+                    val yOffsetRight = sigmoid(x.toFloat() - startX - horizontalShift, scale, magnitude) - magnitude
                     drawRect(
                         color = Color.Black,
                         topLeft = Offset(

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,6 +17,7 @@ import com.example.mediadiaryproject.presentation.textnotescreen.components.Text
 import com.example.mediadiaryproject.presentation.textnotescreen.state.TextNoteState
 import com.ramcosta.composedestinations.annotation.Destination
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun TextNotesScreen(
@@ -23,35 +26,38 @@ fun TextNotesScreen(
     editNote: (noteId: Int) -> Unit,
     addNewNote: () -> Unit,
 ) {
-    Column() {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .weight(6f)
-                .padding(horizontal = 10.dp, vertical = 10.dp)
+    Scaffold(bottomBar = {
+        AddItemButton(modifier = Modifier, onClick = { addNewNote() })
+    }) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .weight(6f)
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
 //            .background(color = Color.White)
-        ) {
-            notes.forEach { note ->
-                TextNoteItem(
-                    note = note,
-                    deleteNote = { noteToDelete ->
-                        deleteNote(noteToDelete)
-                    },
-                    navigateToEditScreen = { id ->
-                        editNote(id)
-                    }
-                )
+            ) {
+                notes.forEach { note ->
+                    TextNoteItem(
+                        note = note,
+                        deleteNote = { noteToDelete ->
+                            deleteNote(noteToDelete)
+                        },
+                        navigateToEditScreen = { id ->
+                            editNote(id)
+                        }
+                    )
+
+                }
+
 
             }
 
 
         }
 
-        AddItemButton(modifier = Modifier
-            .fillMaxHeight()
-            .weight(1f), onClick = { addNewNote() })
     }
 
 
