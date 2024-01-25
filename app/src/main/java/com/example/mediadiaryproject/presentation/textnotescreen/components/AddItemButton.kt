@@ -25,7 +25,7 @@ import kotlin.math.exp
 @Composable
 fun AddItemButton(backgroundColor: Color = Color.White, modifier: Modifier, onClick: () -> Unit) {
     Column(modifier = modifier) {
-        ConstraintLayout(modifier = Modifier.height(100.dp)) {
+        ConstraintLayout(modifier = Modifier.height(115.dp)) {
 
             val (addButton, line) = createRefs()
 
@@ -46,15 +46,18 @@ fun AddItemButton(backgroundColor: Color = Color.White, modifier: Modifier, onCl
 
 @Composable
 private fun RoundButton(modifier: Modifier, onClick: () -> Unit) {
+
+    val buttonSize = 82.dp
+
     Column(modifier = modifier) {
         IconButton(
             onClick = { onClick() },
             modifier = Modifier
                 .background(
                     color = Color.Gray,
-                    shape = RoundedCornerShape(size = 40.dp)
+                    shape = RoundedCornerShape(size = buttonSize)
                 )
-                .size(70.dp)
+                .size(buttonSize)
         ) {
             Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add-button icon")
         }
@@ -86,62 +89,59 @@ private fun SigmoidLine(backgroundColor: Color, modifier: Modifier) {
 
                 // Drawing the left sigmoid
                 for (x in startX.toInt()..endX.toInt() step step.toInt()) {
-                    val xOffset = x.toFloat() - startX
-                    val yOffset =
-                        sigmoid(-x.toFloat() + 2 * startX - 120f, scale, magnitude) - magnitude
+                    val xOffsetLeft = x.toFloat() - startX
+                    val yOffsetLeft =
+                        sigmoid(-(xOffsetLeft - startX) - 120f, scale, magnitude) - magnitude
+
+
                     drawRect(
                         color = Color.Black,
                         topLeft = Offset(
-                            xOffset,
-                            yOffset
+                            xOffsetLeft,
+                            yOffsetLeft
                         ),
                         size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
                     )
 
-                    val rectTopY = yOffset + lineWidth
-                    val rectHeight = size.height - rectTopY
+                    val rectTopYLeft = yOffsetLeft + lineWidth
+                    val rectHeightLeft = size.height - rectTopYLeft
+                    
+                    drawRect(
+                        color = backgroundColor,
+                        topLeft = Offset(
+                            xOffsetLeft,
+                            rectTopYLeft,
+                        ),
+                        size = androidx.compose.ui.geometry.Size(lineWidth, rectHeightLeft)
+
+                    )
+
+                    val xOffsetRight = x.toFloat()
+                    val yOffsetRight = sigmoid(x.toFloat() - startX - 120f, scale, magnitude) - magnitude
+                    drawRect(
+                        color = Color.Black,
+                        topLeft = Offset(
+                            xOffsetRight,
+                            yOffsetRight,
+                        ),
+                        size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
+                    )
+
+                    val rectTopYRight = yOffsetRight + lineWidth
+                    val rectHeightRight = size.height - rectTopYRight
 
 
                     drawRect(
                         color = backgroundColor,
                         topLeft = Offset(
-                            xOffset,
-                            rectTopY,
+                            xOffsetRight + lineWidth,
+                            rectTopYRight,
                         ),
-                        size = androidx.compose.ui.geometry.Size(lineWidth, rectHeight)
+                        size = androidx.compose.ui.geometry.Size(lineWidth, rectHeightRight)
 
                     )
 
                 }
-
-                // Drawing the right sigmoid
-                for (x in startX.toInt()..endX.toInt() step step.toInt()) {
-                    val xOffset = x.toFloat()
-                    val yOffset = sigmoid(x.toFloat() - startX - 120f, scale, magnitude) - magnitude
-                    drawRect(
-                        color = Color.Black,
-                        topLeft = Offset(
-                            xOffset,
-                            yOffset,
-                        ),
-                        size = androidx.compose.ui.geometry.Size(lineWidth, lineWidth)
-                    )
-
-                    val rectTopY = yOffset + lineWidth
-                    val rectHeight = size.height - rectTopY
-
-
-                    drawRect(
-                        color = backgroundColor,
-                        topLeft = Offset(
-                            xOffset + lineWidth,
-                            rectTopY,
-                        ),
-                        size = androidx.compose.ui.geometry.Size(lineWidth, rectHeight)
-
-                    )
-                }
-
             }
         }
     }
