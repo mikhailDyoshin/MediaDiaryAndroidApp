@@ -3,13 +3,11 @@ package com.example.mediadiaryproject.presentation.camerascreen.components
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Color
-//import android.os.Environment
-//import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +24,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.graphics.Color
+
 //import java.io.File
 
 @SuppressLint("RestrictedApi")
@@ -47,29 +50,41 @@ fun CameraContent(
 
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Transparent),
+        containerColor = Color.Transparent,
+        contentColor = Color.Transparent,
         topBar = {
-            Row() {
-                Button(onClick = { toggleCamera() }) {
-                    Text("Toggle camera")
-                }
-                Button(onClick = { navigateToPhotos() }) {
-                    Text("Photos")
-                }
-                Button(onClick = { navigateToVideos() }) {
-                    Text("Videos")
-                }
-            }
+//            Row() {
+//                Button(onClick = { toggleCamera() }) {
+//                    Text("Toggle camera")
+//                }
+//                Button(onClick = { navigateToPhotos() }) {
+//                    Text("Photos")
+//                }
+//                Button(onClick = { navigateToVideos() }) {
+//                    Text("Videos")
+//                }
+//            }
+
+            TopAppBar(
+                modifier = Modifier.background(color = Color.Transparent),
+                title = { CameraTopBar(navigateToPhotos = {}, navigateToVideos = {}) },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = Color.Transparent
+                )
+            )
 
         },
         bottomBar = {
-            Row() {
-                Button(onClick = { capturePhoto(context) }) {
-                    Text("Photo")
-                }
-                Button(onClick = { recordVideo(context) }) {
-                    Text("Video")
-                }
+            CameraBottomBar(
+                videoMode = false,
+                capturePhoto = { /*TODO*/ },
+                recordVideo = { /*TODO*/ },
+                toggleCamera = { /*TODO*/ }) {
+
             }
         },
     ) { paddingValues: PaddingValues ->
@@ -85,7 +100,7 @@ fun CameraContent(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT,
                         )
-                        setBackgroundColor(Color.BLACK)
+                        setBackgroundColor(0)
                         implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                         scaleType = PreviewView.ScaleType.FILL_START
                     }.also { previewView ->

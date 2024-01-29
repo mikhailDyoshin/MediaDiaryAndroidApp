@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -46,12 +47,9 @@ fun CameraBottomBar(
                     lastCapturedPhoto = lastCapturedPhoto,
                     displayPhoto = { displayLastPhoto() }
                 )
-            Button(onClick = { if (videoMode) recordVideo() else capturePhoto() }) {
-                Text(text = "Capture")
-            }
-            Button(onClick = { toggleCamera() }) {
-                Text(text = "Toggle camera")
-            }
+            CaptureButton(capture = { if (videoMode) recordVideo() else capturePhoto() })
+
+            SwitchCameraButton(switchCamera = { toggleCamera() })
         }
     }
 
