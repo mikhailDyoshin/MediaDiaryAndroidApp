@@ -95,54 +95,12 @@ fun CameraContent(
                 }
             )
 
-            if (lastCapturedPhoto != null) {
-                LastPhotoPreview(
-                    modifier = Modifier.align(alignment = Alignment.BottomStart),
-                    lastCapturedPhoto = lastCapturedPhoto
-                )
-            }
+//            if (lastCapturedPhoto != null) {
+//                LastPhotoPreview(
+//                    modifier = Modifier.align(alignment = Alignment.BottomStart),
+//                    lastCapturedPhoto = lastCapturedPhoto
+//                )
+//            }
         }
     }
 }
-
-
-
-
-
-
-
-//private fun logFilesInDir(directory: File) {
-//    // Get a list of files in the directory
-//    val files: Array<out File>? = directory.listFiles()
-//
-//// Check if there are any files
-//    if (files != null) {
-//        // Iterate through the files and do something with each file
-//
-//        if (files.isEmpty()) {
-//            Log.d("Recorded video file", "There are no files")
-//        } else {
-//            for (file in files) {
-//                // Perform actions with each file
-//                Log.d(
-//                    "Recorded video file",
-//                    "File Name: ${file.name}, Path: ${file.absolutePath}"
-//                )
-//            }
-//        }
-//
-//    } else {
-//        // The directory is empty or doesn't exist
-//        Log.d("Recorded video file","No files found in the directory.")
-//    }
-//}
-//
-//private fun provideFileToSaveVideo(context: Context): File {
-//
-//    val nowTimestamp: Long = System.currentTimeMillis()
-//
-//    return File(
-//        context.getExternalFilesDir(Environment.DIRECTORY_DCIM),
-//        nowTimestamp.toString()
-//    )
-//}
