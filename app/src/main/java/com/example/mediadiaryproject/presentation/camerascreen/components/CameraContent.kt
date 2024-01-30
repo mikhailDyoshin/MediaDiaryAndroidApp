@@ -49,22 +49,6 @@ fun CameraContent(
     val context: Context = LocalContext.current
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
-
-    CameraTopBar(
-        navigateToPhotos = {},
-        navigateToVideos = {},
-        modifier = Modifier
-    )
-
-    CameraBottomBar(
-        videoMode = false,
-        capturePhoto = { /*TODO*/ },
-        recordVideo = { /*TODO*/ },
-        toggleCamera = { /*TODO*/ },
-        displayLastPhoto = { /*TODO*/ },
-        modifier = Modifier
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,6 +74,7 @@ fun CameraContent(
         )
 
         CameraTopBar(
+            closeCamera = {},
             navigateToPhotos = {},
             navigateToVideos = {},
             modifier = Modifier.align(Alignment.TopCenter)
