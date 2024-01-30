@@ -28,6 +28,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 
 //import java.io.File
 
@@ -48,74 +50,60 @@ fun CameraContent(
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
 
+    CameraTopBar(
+        navigateToPhotos = {},
+        navigateToVideos = {},
+        modifier = Modifier
+    )
 
-    Scaffold(
+    CameraBottomBar(
+        videoMode = false,
+        capturePhoto = { /*TODO*/ },
+        recordVideo = { /*TODO*/ },
+        toggleCamera = { /*TODO*/ },
+        displayLastPhoto = { /*TODO*/ },
+        modifier = Modifier
+    )
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Transparent),
-        containerColor = Color.Transparent,
-        contentColor = Color.Transparent,
-        topBar = {
-//            Row() {
-//                Button(onClick = { toggleCamera() }) {
-//                    Text("Toggle camera")
-//                }
-//                Button(onClick = { navigateToPhotos() }) {
-//                    Text("Photos")
-//                }
-//                Button(onClick = { navigateToVideos() }) {
-//                    Text("Videos")
-//                }
-//            }
-
-            TopAppBar(
-                modifier = Modifier.background(color = Color.Transparent),
-                title = { CameraTopBar(navigateToPhotos = {}, navigateToVideos = {}) },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent,
-                    titleContentColor = Color.Transparent
-                )
-            )
-
-        },
-        bottomBar = {
-            CameraBottomBar(
-                videoMode = false,
-                capturePhoto = { /*TODO*/ },
-                recordVideo = { /*TODO*/ },
-                toggleCamera = { /*TODO*/ }) {
-
-            }
-        },
-    ) { paddingValues: PaddingValues ->
-
-        Box(modifier = Modifier.fillMaxSize()) {
-            AndroidView(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                factory = { context ->
-                    PreviewView(context).apply {
-                        layoutParams = LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                        )
-                        setBackgroundColor(0)
-                        implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                        scaleType = PreviewView.ScaleType.FILL_START
-                    }.also { previewView ->
-                        previewView.controller = cameraController
-                        cameraController.bindToLifecycle(lifecycleOwner)
-                    }
+    ) {
+        AndroidView(
+            modifier = Modifier
+                .padding(0.dp),
+            factory = { context ->
+                PreviewView(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    setBackgroundColor(0)
+                    implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+                    scaleType = PreviewView.ScaleType.FILL_CENTER
+                }.also { previewView ->
+                    previewView.controller = cameraController
+                    cameraController.bindToLifecycle(lifecycleOwner)
                 }
-            )
+            }
 
-//            if (lastCapturedPhoto != null) {
-//                LastPhotoPreview(
-//                    modifier = Modifier.align(alignment = Alignment.BottomStart),
-//                    lastCapturedPhoto = lastCapturedPhoto
-//                )
-//            }
-        }
+        )
+
+        CameraTopBar(
+            navigateToPhotos = {},
+            navigateToVideos = {},
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
+
+        CameraBottomBar(
+            videoMode = false,
+            capturePhoto = { /*TODO*/ },
+            recordVideo = { /*TODO*/ },
+            toggleCamera = { /*TODO*/ },
+            displayLastPhoto = { /*TODO*/ },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+
     }
+
 }

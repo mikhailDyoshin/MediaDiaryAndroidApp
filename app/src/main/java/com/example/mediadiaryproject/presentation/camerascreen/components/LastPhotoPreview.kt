@@ -36,15 +36,15 @@ fun LastPhotoPreview(
     displayPhoto: () -> Unit,
 ) {
 
-    val cornerSize = 20.dp
+    val cornerSize = 65.dp
 
     val capturedPhoto: ImageBitmap? =
         remember(lastCapturedPhoto.hashCode()) { lastCapturedPhoto?.asImageBitmap() }
 
     Column(
         modifier = modifier
-            .size(100.dp)
-            .padding(16.dp)
+            .size(65.dp)
+            .padding()
             .clickable { displayPhoto() }
             .background(color = Color.Gray, shape = RoundedCornerShape(size = cornerSize)),
     ) {

@@ -15,3 +15,5 @@ val ContainerColor = Color(0xffd8e6ff)
 
 val EditButtonColor = Color(0xFFB6B8BE)
 val DeleteButtonColor = Color(0xFF8D0A00)
+
+val HalfTransparent = Color(0.506f, 0.502f, 0.502f, 0.4f)

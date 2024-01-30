@@ -15,10 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun CameraTopBar(
     navigateToPhotos: () -> Unit,
-    navigateToVideos: () -> Unit
+    navigateToVideos: () -> Unit,
+    modifier: Modifier
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().background(color = Color.White),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -34,5 +35,11 @@ fun CameraTopBar(
 @Preview
 @Composable
 fun CameraTopBarPreview() {
-    CameraTopBar(navigateToVideos = {}, navigateToPhotos = {})
+    CameraTopBar(
+        navigateToVideos = {},
+        navigateToPhotos = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.White)
+    )
 }

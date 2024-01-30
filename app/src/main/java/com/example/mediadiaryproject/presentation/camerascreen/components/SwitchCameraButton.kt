@@ -18,14 +18,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mediadiaryproject.R
+import com.example.mediadiaryproject.ui.theme.HalfTransparent
 
 @Composable
 fun SwitchCameraButton(switchCamera: () -> Unit) {
     Column() {
         Box(
             modifier = Modifier
-                .size(60.dp)
-                .background(color = Color(1f, 1f, 1f, 0.2f), shape = CircleShape)
+                .size(65.dp)
+                .background(color = HalfTransparent, shape = CircleShape)
                 .clickable(onClick = switchCamera)
                 .padding(10.dp),
             contentAlignment = Alignment.Center
