@@ -23,6 +23,7 @@ import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScree
 @SuppressLint("RestrictedApi")
 @Composable
 fun CameraContent(
+    closeCamera: () -> Unit,
     navigateToVideos: () -> Unit,
     navigateToPhotos: () -> Unit,
     toggleCamera: () -> Unit,
@@ -62,7 +63,7 @@ fun CameraContent(
 
         if (!cameraScreenState.recording) {
             CameraTopBar(
-                closeCamera = {},
+                closeCamera = { closeCamera() },
                 navigateToPhotos = { navigateToPhotos() },
                 navigateToVideos = { navigateToVideos() },
                 modifier = Modifier.align(Alignment.TopCenter)

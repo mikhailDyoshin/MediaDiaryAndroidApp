@@ -47,6 +47,7 @@ fun CameraWrapper(
 
     if (hasCameraPermission && hasAudioRecordPermission) {
         CameraScreen(
+            closeCamera = { navigator.navigateUp() },
             navigateToPhotos = { navigator.navigate(PhotosScreenDestination(dayId = dayId)) },
             navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination(dayId = dayId)) },
             cameraState = cameraState,

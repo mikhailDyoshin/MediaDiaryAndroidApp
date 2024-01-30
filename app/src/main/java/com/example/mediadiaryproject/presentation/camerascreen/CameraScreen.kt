@@ -3,14 +3,13 @@ package com.example.mediadiaryproject.presentation.camerascreen
 import android.content.Context
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import com.example.mediadiaryproject.presentation.camerascreen.components.CameraContent
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
 
 @Composable
 fun CameraScreen(
+    closeCamera: () -> Unit,
     navigateToPhotos: () -> Unit,
     navigateToVideos: () -> Unit,
     cameraState: CameraScreenState,
@@ -19,9 +18,10 @@ fun CameraScreen(
     toggleCamera: () -> Unit,
     recordVideo: (context: Context) -> Unit,
     cameraController: LifecycleCameraController,
-    ) {
+) {
 
     CameraContent(
+        closeCamera = { closeCamera() },
         navigateToPhotos = { navigateToPhotos() },
         navigateToVideos = { navigateToVideos() },
         capturePhoto = { context -> capturePhoto(context) },
