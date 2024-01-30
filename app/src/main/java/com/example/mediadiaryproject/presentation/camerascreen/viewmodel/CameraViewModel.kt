@@ -143,6 +143,8 @@ class CameraViewModel @Inject constructor(
             recording?.stop()
             recording = null
 
+            _state.value = _state.value.copy(recording = false)
+
             return
         }
 
@@ -161,6 +163,7 @@ class CameraViewModel @Inject constructor(
                 // for ActivityCompat#requestPermissions for more details.
                 return
             }
+            _state.value = _state.value.copy(recording = true)
             recording = _cameraController.value.startRecording(
                 FileOutputOptions.Builder(fileToStoreVideo!!).build(),
                 AudioConfig.create(true),
@@ -219,7 +222,9 @@ class CameraViewModel @Inject constructor(
     }
 
     fun changeMode(videoModeOn: Boolean) {
-        _state.value = _state.value.copy(videoMode = videoModeOn)
+        if (recording == null) {
+            _state.value = _state.value.copy(videoMode = videoModeOn)
+        }
     }
 
     private fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {

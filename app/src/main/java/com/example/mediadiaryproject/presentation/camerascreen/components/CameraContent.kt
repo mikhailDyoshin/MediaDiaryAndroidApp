@@ -85,9 +85,9 @@ fun CameraContent(
         CameraBottomBar(
             videoMode = cameraScreenState.videoMode,
             lastCapturedPhoto = cameraScreenState.capturedImage,
-            capturePhoto = { /*TODO*/ },
+            capturePhoto = { capturePhoto(context) },
             changeMode = { value -> changeMode(value) },
-            recordVideo = { /*TODO*/ },
+            recordVideo = { recordVideo(context) },
             toggleCamera = { /*TODO*/ },
             displayLastPhoto = { /*TODO*/ },
             modifier = Modifier.align(Alignment.BottomCenter)
