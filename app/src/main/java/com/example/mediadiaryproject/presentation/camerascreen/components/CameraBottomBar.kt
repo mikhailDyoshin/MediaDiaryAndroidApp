@@ -2,7 +2,6 @@ package com.example.mediadiaryproject.presentation.camerascreen.components
 
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,12 +19,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mediadiaryproject.R
+import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 import com.example.mediadiaryproject.ui.theme.HalfTransparent
 
 @Composable
 fun CameraBottomBar(
-    videoMode: Boolean,
-    lastCapturedPhoto: Bitmap? = null,
+    cameraScreenState: CameraScreenState,
     changeMode: (videoModeOn: Boolean) -> Unit,
     capturePhoto: () -> Unit,
     recordVideo: () -> Unit,
@@ -34,33 +33,40 @@ fun CameraBottomBar(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
 
+    val videoMode = cameraScreenState.videoMode
+    val lastCapturedPhoto = cameraScreenState.capturedImage
+    val recording = cameraScreenState.recording
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(
-                onClick = { changeMode(false) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (videoMode) Color.Transparent else HalfTransparent,
-                    contentColor = Color.White
-                )
+        if (!recording) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text("Photo")
-            }
-            Button(
-                onClick = { changeMode(true) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (videoMode) HalfTransparent else Color.Transparent,
-                    contentColor = Color.White
-                )
-            ) {
-                Text("Video")
+                Button(
+                    onClick = { changeMode(false) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (videoMode) Color.Transparent else HalfTransparent,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Photo")
+                }
+                Button(
+                    onClick = { changeMode(true) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (videoMode) HalfTransparent else Color.Transparent,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Video")
+                }
             }
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -68,13 +74,22 @@ fun CameraBottomBar(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            LastPhotoPreview(
-                lastCapturedPhoto = lastCapturedPhoto,
-                displayPhoto = { displayLastPhoto() }
-            )
-            CaptureButton(capture = { if (videoMode) recordVideo() else capturePhoto() })
+            if (!recording) {
+                LastPhotoPreview(
+                    lastCapturedPhoto = lastCapturedPhoto,
+                    displayPhoto = { displayLastPhoto() }
+                )
+            }
 
-            SwitchCameraButton(switchCamera = { toggleCamera() })
+            CaptureButton(
+                capture = { if (videoMode) recordVideo() else capturePhoto() },
+                recording = recording,
+                videoMode = videoMode,
+            )
+            if (!recording) {
+                SwitchCameraButton(switchCamera = { toggleCamera() })
+
+            }
         }
     }
 
@@ -90,8 +105,33 @@ fun CameraBottomBarVideoModePreview() {
     val image = BitmapFactory.decodeResource(context.resources, imageId)
 
     CameraBottomBar(
-        videoMode = true,
-        lastCapturedPhoto = image,
+        cameraScreenState = CameraScreenState(
+            capturedImage = image,
+            videoMode = true,
+            recording = false
+        ),
+        changeMode = {},
+        capturePhoto = {},
+        recordVideo = {},
+        toggleCamera = {},
+        displayLastPhoto = {})
+}
+
+@Preview
+@Composable
+fun CameraBottomBarVideoModeRecordingPreview() {
+
+    val context = LocalContext.current
+
+    val imageId = R.drawable.placeholder_image
+    val image = BitmapFactory.decodeResource(context.resources, imageId)
+
+    CameraBottomBar(
+        cameraScreenState = CameraScreenState(
+            capturedImage = image,
+            videoMode = true,
+            recording = true
+        ),
         changeMode = {},
         capturePhoto = {},
         recordVideo = {},
@@ -109,8 +149,12 @@ fun CameraBottomBarPhotoModePreview() {
     val image = BitmapFactory.decodeResource(context.resources, imageId)
 
     CameraBottomBar(
-        videoMode = false,
-        lastCapturedPhoto = image,
+        cameraScreenState = CameraScreenState(
+            capturedImage = image,
+            videoMode = false,
+            recording = false
+        ),
+
         changeMode = {},
         capturePhoto = {},
         recordVideo = {},

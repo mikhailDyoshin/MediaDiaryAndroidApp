@@ -2,20 +2,13 @@ package com.example.mediadiaryproject.presentation.camerascreen.components
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,19 +16,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 
-//import java.io.File
 
 @SuppressLint("RestrictedApi")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraContent(
     navigateToVideos: () -> Unit,
@@ -75,20 +60,22 @@ fun CameraContent(
 
         )
 
-        CameraTopBar(
-            closeCamera = {},
-            navigateToPhotos = {},
-            navigateToVideos = {},
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
+        if (!cameraScreenState.recording) {
+            CameraTopBar(
+                closeCamera = {},
+                navigateToPhotos = { navigateToPhotos() },
+                navigateToVideos = { navigateToVideos() },
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
 
         CameraBottomBar(
-            videoMode = cameraScreenState.videoMode,
-            lastCapturedPhoto = cameraScreenState.capturedImage,
+            cameraScreenState = cameraScreenState,
             capturePhoto = { capturePhoto(context) },
             changeMode = { value -> changeMode(value) },
             recordVideo = { recordVideo(context) },
-            toggleCamera = { /*TODO*/ },
+            toggleCamera = { toggleCamera() },
             displayLastPhoto = { /*TODO*/ },
             modifier = Modifier.align(Alignment.BottomCenter)
         )

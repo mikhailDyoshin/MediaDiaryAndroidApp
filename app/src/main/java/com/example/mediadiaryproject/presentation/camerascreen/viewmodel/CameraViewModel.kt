@@ -107,15 +107,18 @@ class CameraViewModel @Inject constructor(
     }
 
     fun toggleCamera() {
-        if (_cameraController.value.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
-            && _cameraController.value.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
-        ) {
-            _cameraController.value.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-        } else if (_cameraController.value.cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
-            && _cameraController.value.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)
-        ) {
-            _cameraController.value.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+        if (recording == null) {
+            if (_cameraController.value.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
+                && _cameraController.value.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
+            ) {
+                _cameraController.value.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            } else if (_cameraController.value.cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA
+                && _cameraController.value.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)
+            ) {
+                _cameraController.value.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            }
         }
+
     }
 
     @SuppressLint("MissingPermission")

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mediadiaryproject.ui.theme.HalfTransparent
 
 @Composable
-fun CaptureButton(capture: () -> Unit) {
+fun CaptureButton(capture: () -> Unit, recording: Boolean, videoMode: Boolean) {
     Canvas(
         modifier = Modifier
             .size(65.dp)
@@ -28,6 +30,10 @@ fun CaptureButton(capture: () -> Unit) {
         val outerCircleCenter = center
         val innerCircleCenter = center
 
+        val innerCircleColor = if (videoMode) Color.Red else Color.White
+
+        val stopButtonCornerRadius = 5.dp
+
         // Draw outer circle
         drawCircle(
             color = Color.White,
@@ -36,17 +42,45 @@ fun CaptureButton(capture: () -> Unit) {
             style = Stroke(20f) // Set the stroke width for the outer circle
         )
 
-        // Draw inner circle
-        drawCircle(
-            color = Color.White,
-            radius = innerCircleRadius,
-            center = innerCircleCenter
-        )
+
+
+        if (recording) {
+            // Draw stop button
+            drawRoundRect(
+                color = Color.Black,
+                topLeft = center - Offset(size.width / 4, size.height / 4),
+                size = size / 2f,
+                cornerRadius = CornerRadius(
+                    stopButtonCornerRadius.toPx(),
+                    stopButtonCornerRadius.toPx()
+                )
+            )
+        } else {
+            // Draw inner circle
+            drawCircle(
+                color = innerCircleColor,
+                radius = innerCircleRadius,
+                center = innerCircleCenter
+            )
+        }
+
     }
 }
 
 @Preview
 @Composable
-fun CaptureButtonPreview() {
-    CaptureButton(capture = {})
+fun CaptureButtonPhotoModePreview() {
+    CaptureButton(capture = {}, recording = false, videoMode = false)
+}
+
+@Preview
+@Composable
+fun CaptureButtonVideoModePreview() {
+    CaptureButton(capture = {}, recording = false, videoMode = true)
+}
+
+@Preview
+@Composable
+fun CaptureButtonRecordingPreview() {
+    CaptureButton(capture = {}, recording = true, videoMode = true)
 }
