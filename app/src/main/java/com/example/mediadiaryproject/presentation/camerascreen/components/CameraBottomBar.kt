@@ -26,6 +26,7 @@ import com.example.mediadiaryproject.ui.theme.HalfTransparent
 fun CameraBottomBar(
     videoMode: Boolean,
     lastCapturedPhoto: Bitmap? = null,
+    changeMode: (videoModeOn: Boolean) -> Unit,
     capturePhoto: () -> Unit,
     recordVideo: () -> Unit,
     toggleCamera: () -> Unit,
@@ -42,7 +43,7 @@ fun CameraBottomBar(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                onClick = { capturePhoto() },
+                onClick = { changeMode(false) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (videoMode) Color.Transparent else HalfTransparent,
                     contentColor = Color.White
@@ -51,7 +52,7 @@ fun CameraBottomBar(
                 Text("Photo")
             }
             Button(
-                onClick = { recordVideo() },
+                onClick = { changeMode(true) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (videoMode) HalfTransparent else Color.Transparent,
                     contentColor = Color.White
@@ -91,6 +92,7 @@ fun CameraBottomBarVideoModePreview() {
     CameraBottomBar(
         videoMode = true,
         lastCapturedPhoto = image,
+        changeMode = {},
         capturePhoto = {},
         recordVideo = {},
         toggleCamera = {},
@@ -109,6 +111,7 @@ fun CameraBottomBarPhotoModePreview() {
     CameraBottomBar(
         videoMode = false,
         lastCapturedPhoto = image,
+        changeMode = {},
         capturePhoto = {},
         recordVideo = {},
         toggleCamera = {},

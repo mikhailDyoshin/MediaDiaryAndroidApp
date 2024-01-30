@@ -73,15 +73,17 @@ class CameraViewModel @Inject constructor(
 
     private fun storePhotoInInternalStorage(bitmap: Bitmap, dayId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val file = provideFileToSaveMediaUseCase.execute(media = MediaModel(
-                dayId = dayId,
-                mediaType = MediaType.PHOTO,
-                date = "",
-                time = "",
-                title = "My photo",
-                description = "",
-                pathToFile = ""
-            ))
+            val file = provideFileToSaveMediaUseCase.execute(
+                media = MediaModel(
+                    dayId = dayId,
+                    mediaType = MediaType.PHOTO,
+                    date = "",
+                    time = "",
+                    title = "My photo",
+                    description = "",
+                    pathToFile = ""
+                )
+            )
 
             try {
                 // Create a FileOutputStream to write the bitmap data to the file
@@ -214,6 +216,10 @@ class CameraViewModel @Inject constructor(
                     Log.e("CameraContent", "Error capturing image", exception)
                 }
             })
+    }
+
+    fun changeMode(videoModeOn: Boolean) {
+        _state.value = _state.value.copy(videoMode = videoModeOn)
     }
 
     private fun Bitmap.rotateBitmap(rotationDegrees: Int): Bitmap {

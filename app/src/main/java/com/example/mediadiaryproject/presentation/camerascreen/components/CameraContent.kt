@@ -30,6 +30,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 
 //import java.io.File
 
@@ -40,9 +41,10 @@ fun CameraContent(
     navigateToVideos: () -> Unit,
     navigateToPhotos: () -> Unit,
     toggleCamera: () -> Unit,
+    changeMode: (videoModeOn: Boolean) -> Unit,
     recordVideo: (context: Context) -> Unit,
     capturePhoto: (context: Context) -> Unit,
-    lastCapturedPhoto: Bitmap? = null,
+    cameraScreenState: CameraScreenState,
     cameraController: LifecycleCameraController,
 ) {
 
@@ -81,8 +83,10 @@ fun CameraContent(
         )
 
         CameraBottomBar(
-            videoMode = false,
+            videoMode = cameraScreenState.videoMode,
+            lastCapturedPhoto = cameraScreenState.capturedImage,
             capturePhoto = { /*TODO*/ },
+            changeMode = { value -> changeMode(value) },
             recordVideo = { /*TODO*/ },
             toggleCamera = { /*TODO*/ },
             displayLastPhoto = { /*TODO*/ },

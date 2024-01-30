@@ -51,6 +51,7 @@ fun CameraWrapper(
             navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination(dayId = dayId)) },
             cameraState = cameraState,
             capturePhoto = { context -> viewModel.capturePhoto(context, dayId) },
+            changeMode = { value -> viewModel.changeMode(value) },
             toggleCamera = { viewModel.toggleCamera() },
             recordVideo = { context -> scope.launch {
                 val job = viewModel.updateFileToStoreVideo(dayId)
