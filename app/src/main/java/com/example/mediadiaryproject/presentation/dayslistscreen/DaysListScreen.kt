@@ -3,6 +3,7 @@ package com.example.mediadiaryproject.presentation.dayslistscreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,6 @@ import com.example.mediadiaryproject.ui.theme.AppBackgroundColor
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @MediaDiaryNavGraph(start = true)
@@ -72,7 +72,9 @@ fun DaysListScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                DaysList(days, innerPadding)
+                DaysList(
+                    days,
+                    navigateToDay = { dayId -> navigator.navigate(DayScreenWrapperDestination(dayId = dayId)) })
 
                 if (viewModel.showCalendarState) {
                     Calendar(
@@ -112,7 +114,10 @@ private fun CollectionTitle(title: String) {
 }
 
 @Composable
-private fun DaysList(days: List<DayState>, padding: PaddingValues) {
+private fun DaysList(
+    days: List<DayState>,
+    navigateToDay: (dayId: Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -120,18 +125,18 @@ private fun DaysList(days: List<DayState>, padding: PaddingValues) {
             .padding(vertical = 10.dp, horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        for (day in days) {
-            DayItem(date = day.date)
+        days.forEach { day ->
+            DayItem(date = day.date, navigateToDay = { navigateToDay(day.id) })
         }
     }
 
 }
 
 @Composable
-private fun DayItem(date: String) {
+private fun DayItem(date: String, navigateToDay: () -> Unit) {
     val cornerSize = 20.dp
 
-    Column(modifier = Modifier.padding(vertical = 5.dp)) {
+    Column(modifier = Modifier.padding(vertical = 5.dp).clickable { navigateToDay() }) {
         Column(
             modifier = Modifier.shadow(15.dp, shape = RoundedCornerShape(cornerSize), clip = true),
         ) {
@@ -148,7 +153,6 @@ private fun DayItem(date: String) {
     }
 
 
-
 }
 
 @Preview(showSystemUi = true)
@@ -161,13 +165,13 @@ fun DaysListPreview() {
         DayState(id = 7, date = "30 January, 2024"),
         DayState(id = 8, date = "31 January, 2024"),
     )
-    DaysList(days = listOfDays, padding = PaddingValues(all = 0.dp))
+    DaysList(days = listOfDays, navigateToDay = {})
 }
 
 
 @Preview
 @Composable
 fun DayItemPreview() {
-    DayItem(date = "31 January, 2024")
+    DayItem(date = "31 January, 2024", navigateToDay = {})
 }
 
