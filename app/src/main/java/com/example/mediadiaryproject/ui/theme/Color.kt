@@ -17,3 +17,5 @@ val EditButtonColor = Color(0xFFB6B8BE)
 val DeleteButtonColor = Color(0xFF8D0A00)
 
 val HalfTransparent = Color(0.506f, 0.502f, 0.502f, 0.4f)
+
+val AppBackgroundColor = Color(0xFFFACECA)
