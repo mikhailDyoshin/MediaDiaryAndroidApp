@@ -37,7 +37,7 @@ fun ContentItem(date: CalendarState.Date, onClickListener: (CalendarState.Date) 
 
     Card(
         modifier = Modifier
-            .padding(all = 4.dp)
+            .padding(all = 2.dp)
             .clickable { // making the element clickable, by adding 'clickable' modifier
                 onClickListener(date)
             }
@@ -49,7 +49,7 @@ fun ContentItem(date: CalendarState.Date, onClickListener: (CalendarState.Date) 
         Column(
             modifier = Modifier
                 .height(54.dp)
-                .width(45.dp)
+                .width(48.dp)
                 .padding(all = 8.dp)
         ) {
             Text(
@@ -57,7 +57,8 @@ fun ContentItem(date: CalendarState.Date, onClickListener: (CalendarState.Date) 
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
             )
             Text(
                 text = date.date.dayOfMonth.toString(),

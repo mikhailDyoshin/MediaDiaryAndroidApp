@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,11 +56,6 @@ fun DaysListScreen(
 
     Scaffold(
         topBar = { CollectionTitle(collectionTitle) },
-//        bottomBar = {
-//            Button(onClick = { viewModel.showCalendar() }) {
-//                Text(text = "Add")
-//            }
-//        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -99,12 +93,8 @@ fun DaysListScreen(
                         Text("+")
                     }
                 }
-
-
             }
         }
-
-
     }
 }
 
@@ -136,7 +126,9 @@ private fun DaysList(
 private fun DayItem(date: String, navigateToDay: () -> Unit) {
     val cornerSize = 20.dp
 
-    Column(modifier = Modifier.padding(vertical = 5.dp).clickable { navigateToDay() }) {
+    Column(modifier = Modifier
+        .padding(vertical = 5.dp)
+        .clickable { navigateToDay() }) {
         Column(
             modifier = Modifier.shadow(15.dp, shape = RoundedCornerShape(cornerSize), clip = true),
         ) {
