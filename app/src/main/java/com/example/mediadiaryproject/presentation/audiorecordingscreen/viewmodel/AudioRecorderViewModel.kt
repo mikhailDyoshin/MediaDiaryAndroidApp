@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.common.Constants
+import com.example.mediadiaryproject.common.Constants.NUMBER_OF_COLUMNS_IN_WAVEFORM
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.usecase.ProvideFileToSaveMediaUseCase
@@ -34,7 +35,7 @@ class AudioRecorderViewModel @Inject constructor(
     private val _state = mutableStateOf(AudioRecorderScreenState())
     val state: State<AudioRecorderScreenState> = _state
 
-    private val _amplitudesListState: MutableState<List<Double>> =
+    private val _amplitudesListState: MutableState<List<Int>> =
         mutableStateOf(mutableListOf())
 
     val amplitudesListState = _amplitudesListState
@@ -47,9 +48,15 @@ class AudioRecorderViewModel @Inject constructor(
 
     private var countDownTimerSlow: CountDownTimer? = null
 
+    init {
+        resetListOfAmplitudes()
+    }
+
     @RequiresApi(Build.VERSION_CODES.S)
     fun startRecording(dayId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
+
+            resetListOfAmplitudes()
 
             val file = provideFileToSaveMediaUseCase.execute(
                 media = MediaModel(
@@ -96,8 +103,8 @@ class AudioRecorderViewModel @Inject constructor(
 
             override fun onTick(millisUntilFinished: Long) {
                 val currentAmplitude = recorder.getMaxAmpValue() ?: 0
-                _amplitudesListState.value =
-                    getGaussDistrib(currentAmplitude, Constants.NUMBER_OF_POINTS)
+                _amplitudesListState.value = updateListOfAmplitudes(currentAmplitude)
+//                    getGaussDistrib(currentAmplitude, Constants.NUMBER_OF_POINTS)
             }
 
             override fun onFinish() {
@@ -124,6 +131,21 @@ class AudioRecorderViewModel @Inject constructor(
         val power = -powerNumerator / powerDenominator
 
         return (amplitude * 5 / sqrt(2 * Constants.PI)) * Constants.EXP.toFloat().pow(power)
+    }
+
+    private fun updateListOfAmplitudes(amplitude: Int): List<Int> {
+        val shiftedList = mutableListOf<Int>()
+
+        // Copy elements from index 1 to the end
+        shiftedList.addAll(_amplitudesListState.value.subList(1, _amplitudesListState.value.size))
+
+        // Append the inputNumber to the end
+        shiftedList.add(amplitude)
+        return shiftedList
+    }
+
+    private fun resetListOfAmplitudes() {
+        _amplitudesListState.value = List(NUMBER_OF_COLUMNS_IN_WAVEFORM) { 0 }
     }
 
 }

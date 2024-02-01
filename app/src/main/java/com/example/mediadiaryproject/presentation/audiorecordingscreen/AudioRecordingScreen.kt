@@ -17,7 +17,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mediadiaryproject.presentation.audiorecordingscreen.components.AudioWaveform
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -26,7 +28,7 @@ fun AudioRecordingScreen(
     dayId: Int,
     recording: Boolean,
     recordingSaved: Boolean,
-    amplitudeList: List<Double>,
+    amplitudeList: List<Int>,
     startRecording: () -> Unit,
     stopRecording: () -> Unit,
     navigateToAudios: () -> Unit,
@@ -61,8 +63,9 @@ fun AudioRecordingScreen(
             Text(text = "Stop")
         }
 
-        AudioSignalForm(signal = amplitudeList)
+//        AudioSignalForm(signal = amplitudeList)
 
+        AudioWaveform(amplitudes = amplitudeList)
         Button(onClick = {
             navigateToAudios()
         }) {
@@ -70,6 +73,7 @@ fun AudioRecordingScreen(
         }
     }
 }
+
 @Composable
 private fun AudioSignalForm(signal: List<Double>) {
     androidx.compose.foundation.Canvas(
@@ -107,4 +111,18 @@ private fun AudioSignalForm(signal: List<Double>) {
 
         }
     )
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun AudioRecordingScreenPreview() {
+    AudioRecordingScreen(
+        dayId = 1,
+        recording = true,
+        recordingSaved = false,
+        amplitudeList = listOf(100, 200, 300, 5000, 100),
+        startRecording = { /*TODO*/ },
+        stopRecording = { /*TODO*/ },
+        navigateToAudios = {})
 }
