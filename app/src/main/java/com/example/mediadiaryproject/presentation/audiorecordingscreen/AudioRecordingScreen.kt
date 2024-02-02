@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -40,18 +41,25 @@ fun AudioRecordingScreen(
         ).show()
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
-        AudioRecorderTopBar(
-            navigateToRecords = { navigateToAudios() },
-            closeRecorder = { navigateBack() })
+        Row(modifier = Modifier.padding(top = 20.dp)) {
+            AudioRecorderTopBar(
+                navigateToRecords = { navigateToAudios() },
+                closeRecorder = { navigateBack() })
+        }
+
 
         AudioWaveform(amplitudes = amplitudeList)
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 150.dp),
+                .padding(bottom = 25.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             StartStopButton(
@@ -70,6 +78,20 @@ fun AudioRecordingScreenPreview() {
         recording = true,
         recordingSaved = false,
         amplitudeList = listOf(100, 200, 300, 5000, 100),
+        startRecording = { /*TODO*/ },
+        stopRecording = { /*TODO*/ },
+        navigateToAudios = {},
+        navigateBack = {},
+    )
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun AudioRecordingScreenIdlePreview() {
+    AudioRecordingScreen(
+        recording = false,
+        recordingSaved = false,
+        amplitudeList = listOf(0, 0, 0, 0, 0),
         startRecording = { /*TODO*/ },
         stopRecording = { /*TODO*/ },
         navigateToAudios = {},

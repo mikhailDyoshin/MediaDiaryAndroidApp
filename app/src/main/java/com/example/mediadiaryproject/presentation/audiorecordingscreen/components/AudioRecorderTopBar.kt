@@ -18,7 +18,7 @@ import com.example.mediadiaryproject.R
 fun AudioRecorderTopBar(navigateToRecords: () -> Unit, closeRecorder: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical =  10.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
     ) {
         IconButton(onClick = { closeRecorder() }, modifier = Modifier.size(30.dp)) {
             Icon(
