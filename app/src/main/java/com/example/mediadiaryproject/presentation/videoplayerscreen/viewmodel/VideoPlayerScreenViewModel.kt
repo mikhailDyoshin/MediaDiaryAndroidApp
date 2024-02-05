@@ -8,10 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import com.example.mediadiaryproject.common.MediaType
-import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.domain.usecase.GetMediaByIdUseCase
-import com.example.mediadiaryproject.presentation.videoplayerscreen.state.VideoFileState
 import com.example.mediadiaryproject.presentation.videoplayerscreen.state.VideoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
