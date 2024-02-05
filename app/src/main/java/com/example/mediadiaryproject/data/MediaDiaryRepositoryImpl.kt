@@ -111,7 +111,8 @@ class MediaDiaryRepositoryImpl @Inject constructor(
             return@withContext result
         }
 
-    @OptIn(UnstableApi::class) @RequiresApi(Build.VERSION_CODES.S)
+    @OptIn(UnstableApi::class)
+    @RequiresApi(Build.VERSION_CODES.S)
     override suspend fun provideFileToSaveMedia(media: MediaModel): File {
 
         val newMedia = MediaStorageModel(
@@ -128,7 +129,8 @@ class MediaDiaryRepositoryImpl @Inject constructor(
             media = newMedia
         ).toInt()
 
-        val providedFile = provideFileForMedia(mediaType = media.mediaType, mediaId = createdMediaId)
+        val providedFile =
+            provideFileForMedia(mediaType = media.mediaType, mediaId = createdMediaId)
 
         newMedia.id = createdMediaId
         newMedia.pathTofile = providedFile.path
@@ -308,5 +310,19 @@ class MediaDiaryRepositoryImpl @Inject constructor(
                 collectionId = collection.id
             )
         dayDao.delete(day = dayToDelete)
+    }
+
+    override suspend fun getMediaById(mediaId: Int): MediaModel {
+        val mediaFromStorage = mediaDao.getMediaById(mediaId)
+        return MediaModel(
+            id = mediaFromStorage.id,
+            dayId = mediaFromStorage.dayId,
+            mediaType = mediaFromStorage.mediaType,
+            date = mediaFromStorage.date,
+            time = mediaFromStorage.time,
+            title = mediaFromStorage.title,
+            description = mediaFromStorage.description,
+            pathToFile = mediaFromStorage.pathTofile,
+        )
     }
 }

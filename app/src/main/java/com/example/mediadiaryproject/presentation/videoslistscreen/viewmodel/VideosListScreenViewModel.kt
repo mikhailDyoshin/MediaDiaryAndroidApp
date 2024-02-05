@@ -32,8 +32,8 @@ class VideosListScreenViewModel @Inject constructor(
                         VideoFileState(
                             videoId = videoFileModel.id,
                             fileName = videoFileModel.title,
-                            mediaItem = MediaItem.fromUri(videoFileModel.pathToFile.toUri())
-                        )
+
+                            )
                     }
         }
 

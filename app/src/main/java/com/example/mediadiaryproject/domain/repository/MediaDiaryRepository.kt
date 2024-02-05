@@ -42,4 +42,6 @@ interface MediaDiaryRepository {
 
 //    fun updateDay(day: DayModel)
 
+    suspend fun getMediaById(mediaId: Int): MediaModel
+
 }
