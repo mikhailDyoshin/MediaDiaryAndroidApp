@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.presentation.camerascreen.viewmodel.CameraViewModel
 import com.example.mediadiaryproject.presentation.destinations.PhotosScreenDestination
-import com.example.mediadiaryproject.presentation.destinations.VideoPlayerScreenDestination
+import com.example.mediadiaryproject.presentation.destinations.VideosListScreenDestination
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -49,7 +49,7 @@ fun CameraWrapper(
         CameraScreen(
             closeCamera = { navigator.navigateUp() },
             navigateToPhotos = { navigator.navigate(PhotosScreenDestination(dayId = dayId)) },
-            navigateToVideos = { navigator.navigate(VideoPlayerScreenDestination(dayId = dayId)) },
+            navigateToVideos = { navigator.navigate(VideosListScreenDestination(dayId = dayId)) },
             cameraState = cameraState,
             capturePhoto = { context -> viewModel.capturePhoto(context, dayId) },
             changeMode = { value -> viewModel.changeMode(value) },

@@ -22,14 +22,12 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun VideoPlayerScreen(
     navigator: DestinationsNavigator,
     viewModel: VideoPlayerScreenViewModel = hiltViewModel(),
-    dayId: Int,
+    videoId: Int,
 ) {
 
     LaunchedEffect(true) {
-        viewModel.getVideosList(dayId = dayId)
+        viewModel.playVideo(videoId = videoId)
     }
-
-    val listOfFiles = viewModel.state.value
 
     Column {
         AndroidView(factory = { context ->
@@ -37,18 +35,5 @@ fun VideoPlayerScreen(
                 it.player = viewModel.player
             }
         }, modifier = Modifier.height(200.dp))
-        Column {
-            for (file in listOfFiles) {
-                Text(file.fileName, modifier = Modifier.clickable { viewModel.playVideo(file.mediaItem) })
-            }
-        }
-        Button(
-            onClick = {
-                // Navigates back to Home screen
-                navigator.popBackStack()
-            }
-        ) {
-            Text(text = "Navigate back")
-        }
     }
 }

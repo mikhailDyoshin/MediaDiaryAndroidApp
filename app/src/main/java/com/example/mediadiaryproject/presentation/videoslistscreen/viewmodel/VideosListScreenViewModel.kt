@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel
+package com.example.mediadiaryproject.presentation.videoslistscreen.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -16,35 +16,27 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class VideoPlayerScreenViewModel @Inject constructor(
-    val player: Player,
+
+class VideosListScreenViewModel @Inject constructor(
+    private val getListOfAllVideosUseCase: GetListOfMediaByDayAndTypeUseCase,
 ) : ViewModel() {
 
     private val _state: MutableState<List<VideoFileState>> = mutableStateOf(listOf())
     val state = _state
 
-    init {
-        player.prepare()
-    }
+    fun getVideosList(dayId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value =
+                getListOfAllVideosUseCase.execute(mediaType = MediaType.VIDEO, dayId = dayId)
+                    .map { videoFileModel ->
+                        VideoFileState(
+                            videoId = videoFileModel.id,
+                            fileName = videoFileModel.title,
+                            mediaItem = MediaItem.fromUri(videoFileModel.pathToFile.toUri())
+                        )
+                    }
+        }
 
-    override fun onCleared() {
-        super.onCleared()
-        player.release()
-    }
-
-    fun playVideo(videoId: Int) {
-
-        val mediaItem = getVideoItem(videoId)
-
-        player.addMediaItem(mediaItem)
-
-        player.prepare()
-
-        player.play()
-    }
-
-    private fun getVideoItem(videoId: Int): MediaItem {
-        TODO()
     }
 
 }
