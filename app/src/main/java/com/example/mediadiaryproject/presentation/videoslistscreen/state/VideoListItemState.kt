@@ -1,3 +1,5 @@
 package com.example.mediadiaryproject.presentation.videoslistscreen.state
 
-data class VideoListItemState(val videoId: Int, val videoFileName: String)
+import android.graphics.Bitmap
+
+data class VideoListItemState(val videoId: Int, val videoFileName: String, val videoFrame: Bitmap?)

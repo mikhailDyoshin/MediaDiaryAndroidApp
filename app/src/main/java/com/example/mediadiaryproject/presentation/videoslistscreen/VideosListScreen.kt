@@ -26,7 +26,8 @@ fun VideosListScreen(
     val listOfFileNames = viewModel.state.value.map {
         VideoListItemState(
             videoId = it.videoId,
-            videoFileName = it.fileName
+            videoFileName = it.fileName,
+            videoFrame = it.preview
         )
     }
 
@@ -50,15 +51,20 @@ fun VideosListScreenPreview() {
         videos = listOf(
             VideoListItemState(
                 videoId = 0,
-                videoFileName = "Video 1"
+                videoFileName = "Video 1",
+                videoFrame = null
             ),
             VideoListItemState(
                 videoId = 1,
-                videoFileName = "Video 2"
+                videoFileName = "Video 2",
+                videoFrame = null
+
             ),
             VideoListItemState(
                 videoId = 2,
-                videoFileName = "Video 3"
+                videoFileName = "Video 3",
+                videoFrame = null
+
             )
         ), playVideo = {})
 }

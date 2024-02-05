@@ -39,15 +39,11 @@ class VideoPlayerScreenViewModel @Inject constructor(
         val mediaItem = _state.value?.mediaItem
 
         if (mediaItem != null) {
-            Log.d("Video file", "Video is found")
-
             player.addMediaItem(mediaItem)
 
             player.prepare()
 
             player.play()
-        } else {
-            Log.d("Video file", "Video was not found")
         }
 
     }
@@ -63,7 +59,6 @@ class VideoPlayerScreenViewModel @Inject constructor(
                 date = videoFileModel.date,
                 time = videoFileModel.time,
             )
-            Log.d("Video file", "${videoFileModel.id}")
         }
     }
 
