@@ -34,7 +34,7 @@ fun VideoItem(video: VideoFileState, playVideo: (id: Int) -> Unit) {
     val cornerSize = 20.dp
 
     Column(modifier = Modifier
-        .padding(vertical = 5.dp)
+        .padding(top = 10.dp)
         .clickable { playVideo(video.videoId) }) {
         Row(modifier = Modifier.shadow(5.dp, shape = RoundedCornerShape(cornerSize), clip = true)) {
             Row(
