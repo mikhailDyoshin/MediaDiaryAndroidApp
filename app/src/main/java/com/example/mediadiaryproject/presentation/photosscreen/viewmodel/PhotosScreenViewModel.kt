@@ -38,7 +38,8 @@ class PhotosScreenViewModel @Inject constructor(
             _state.value = getListOfAllPhotos.execute(mediaType = MediaType.PHOTO, dayId = dayId)
                 .map { photoFileModel ->
                     PhotoState(
-                        fileName = photoFileModel.title,
+                        title = photoFileModel.title,
+                        description = photoFileModel.description,
                         image = loadImageFromInternalStorage(
                             pathToFile = photoFileModel.id.toString(),
                             mediaType = MediaType.PHOTO

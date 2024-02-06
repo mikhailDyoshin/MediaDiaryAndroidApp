@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mediadiaryproject.R
+import com.example.mediadiaryproject.presentation.photosscreen.components.PhotoItem
+import com.example.mediadiaryproject.presentation.photosscreen.components.PhotosListScreen
 import com.example.mediadiaryproject.presentation.photosscreen.viewmodel.PhotosScreenViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -36,25 +38,5 @@ fun PhotosScreen(
 
     val listOfPhotos = viewModel.state.value
 
-    Column {
-        Column {
-            for (file in listOfPhotos) {
-                val bitmap = file.image
-                Column {
-                    if (bitmap != null) {
-                        Image(
-                            bitmap = bitmap.asImageBitmap(),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(100.dp)
-                                .width(100.dp)
-                        )
-                    }
-                    Text(file.fileName)
-                }
-
-            }
-        }
-
-    }
+    PhotosListScreen(listOfPhotos)
 }
