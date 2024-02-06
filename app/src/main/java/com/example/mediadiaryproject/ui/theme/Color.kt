@@ -27,3 +27,5 @@ val ProgressBarActiveTrackColor = Color(0xFFFA6800)
 val ProgressBarBackgroundColor = Color(0xFF292624)
 
 val AudioItemBackGroundColor = Color(0xFF4D4949)
+
+val AudioListBackgroundColor = Color(0xFF383838)

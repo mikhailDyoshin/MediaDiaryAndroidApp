@@ -3,6 +3,7 @@ package com.example.mediadiaryproject.presentation.audiosplayscreen.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -33,7 +34,7 @@ fun ProgressBar(
         inactiveTrackColor = ProgressBarInactiveTrackColor
     )
 
-    val cornerSize = 12.dp
+    val cornerSize = 15.dp
 
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Column(
@@ -42,7 +43,7 @@ fun ProgressBar(
             .background(
                 color = ProgressBarBackgroundColor,
                 shape = RoundedCornerShape(size = cornerSize)
-            )
+            ).padding(horizontal = 8.dp)
     ) {
         Slider(
             value = currentPosition,
@@ -58,7 +59,7 @@ fun ProgressBar(
 @Composable
 fun ProgressBarPreview() {
     ProgressBar(
-        currentPosition = 0.5f,
+        currentPosition = 0f,
         seekTo = {},
         modifier = Modifier.background(color = Color.White)
     )

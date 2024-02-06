@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,46 +29,52 @@ fun AudioItem(
     seekTo: (position: Float) -> Unit
 ) {
 
+    val cornerSize = 15.dp
+
     Column(
         modifier = Modifier
-            .padding(vertical = 10.dp, horizontal = 10.dp)
+            .padding(top = 10.dp)
     ) {
         Column(
-            modifier = Modifier
-                .background(
-                    color = AudioItemBackGroundColor,
-                    shape = RoundedCornerShape(size = 15.dp)
-                )
-                .padding(10.dp)
+            modifier = Modifier.shadow(18.dp, shape = RoundedCornerShape(cornerSize), clip = true)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 10.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = AudioItemBackGroundColor,
+                        shape = RoundedCornerShape(size = cornerSize)
+                    )
+                    .padding(10.dp)
             ) {
-                PlayPauseButton(
-                    audio = audio,
-                    play = { audio -> playAudio(audio) },
-                    pause = { pauseAudio() })
-                Text(
-                    audio.fileName,
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ) {
+                    PlayPauseButton(
+                        audio = audio,
+                        play = { audio -> playAudio(audio) },
+                        pause = { pauseAudio() })
+                    Text(
+                        audio.fileName,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                if (audio.underFocus) {
+                    ProgressBar(currentPosition, seekTo = { position -> seekTo(position) })
+                }
+
             }
-
-
-            if (audio.underFocus) {
-                ProgressBar(currentPosition, seekTo = { position -> seekTo(position) })
-            }
-
-
         }
+
     }
 
 
