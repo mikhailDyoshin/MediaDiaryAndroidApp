@@ -1,8 +1,11 @@
 package com.example.mediadiaryproject.presentation.audiosplayscreen.components
 
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
 
 @Composable
@@ -14,19 +17,51 @@ fun PlayPauseButton(
 
     val isPlaying = audio.isPlaying
 
-    val buttonText = if (isPlaying) {
-        "Pause"
+    val buttonIcon = if (isPlaying) {
+        R.drawable.pause_icon
     } else {
-        "Play"
+        R.drawable.play_icon
     }
 
-    Button(onClick = {
+    IconButton(onClick = {
         if (isPlaying) {
             pause(audio)
         } else {
             play(audio)
         }
     }) {
-        Text(text = buttonText)
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "play/pause-icon"
+        )
     }
+}
+
+
+@Preview
+@Composable
+fun PlayPauseButtonPlayingPreview() {
+    PlayPauseButton(audio = AudioFileState(
+        fileName = "My audio long long long long title",
+        mediaItem = null,
+        underFocus = true,
+        isPlaying = true
+    ),
+        play = {},
+        pause = {}
+    )
+}
+
+@Preview
+@Composable
+fun PlayPauseButtonIdlePreview() {
+    PlayPauseButton(audio = AudioFileState(
+        fileName = "My audio long long long long title",
+        mediaItem = null,
+        underFocus = true,
+        isPlaying = false
+    ),
+        play = {},
+        pause = {}
+    )
 }

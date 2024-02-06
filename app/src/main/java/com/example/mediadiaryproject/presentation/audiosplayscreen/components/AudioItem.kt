@@ -75,13 +75,47 @@ fun AudioItem(
 
 @Preview
 @Composable
-fun AudioItemPreview() {
+fun AudioItemPlayingPreview() {
     AudioItem(
         audio = AudioFileState(
             fileName = "My audio long long long long title",
             mediaItem = null,
             underFocus = true,
             isPlaying = true
+        ),
+        playAudio = {},
+        pauseAudio = { /*TODO*/ },
+        currentPosition = 0.4f,
+        seekTo = {}
+    )
+}
+
+@Preview
+@Composable
+fun AudioItemPlayingIdlePreview() {
+    AudioItem(
+        audio = AudioFileState(
+            fileName = "My audio long long long long title",
+            mediaItem = null,
+            underFocus = true,
+            isPlaying = false
+        ),
+        playAudio = {},
+        pauseAudio = { /*TODO*/ },
+        currentPosition = 0.4f,
+        seekTo = {}
+    )
+}
+
+@Preview
+@Composable
+fun AudioItemPlayingUnfocusedPreview() {
+    AudioItem(
+        audio = AudioFileState(
+            fileName = "My audio long long long long title",
+            mediaItem = null,
+            underFocus = false,
+            isPlaying = false
         ),
         playAudio = {},
         pauseAudio = { /*TODO*/ },
