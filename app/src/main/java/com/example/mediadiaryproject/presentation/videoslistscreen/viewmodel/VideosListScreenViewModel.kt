@@ -6,14 +6,12 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalDensity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.media3.common.MediaItem
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
-import com.example.mediadiaryproject.presentation.videoplayerscreen.state.VideoFileState
+import com.example.mediadiaryproject.presentation.videoslistscreen.state.VideoFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +37,8 @@ class VideosListScreenViewModel @Inject constructor(
                     .map { videoFileModel ->
                         VideoFileState(
                             videoId = videoFileModel.id,
-                            fileName = videoFileModel.title,
+                            title = videoFileModel.title,
+                            description = videoFileModel.description,
                             preview = retrieveFirstFrame(uri = videoFileModel.pathToFile.toUri())
                         )
                     }
