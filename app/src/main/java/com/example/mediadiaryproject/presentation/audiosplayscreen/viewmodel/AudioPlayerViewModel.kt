@@ -103,7 +103,7 @@ class AudioPlayerViewModel @Inject constructor(
 
         changeAudioUnderFocusStatus(currentAudioPlayed.value.mediaItem)
 
-        player.setMediaItem(currentAudioPlayed.value.mediaItem)
+        currentAudioPlayed.value.mediaItem?.let { player.setMediaItem(it) }
 
         player.prepare()
 
@@ -149,7 +149,7 @@ class AudioPlayerViewModel @Inject constructor(
 
     }
 
-    private fun changeAudioUnderFocusStatus(mediaItem: MediaItem) {
+    private fun changeAudioUnderFocusStatus(mediaItem: MediaItem?) {
         val newList = _state.value.map { audioItem ->
             audioItem.copy(underFocus = audioItem.mediaItem == mediaItem)
 
@@ -158,7 +158,7 @@ class AudioPlayerViewModel @Inject constructor(
         _state.value = newList
     }
 
-    private fun changeAudioPlayingStatus(mediaItem: MediaItem, isPlaying: Boolean) {
+    private fun changeAudioPlayingStatus(mediaItem: MediaItem?, isPlaying: Boolean) {
         val newList = _state.value.map { audioItem ->
             audioItem.copy(isPlaying = audioItem.mediaItem == mediaItem && isPlaying)
 

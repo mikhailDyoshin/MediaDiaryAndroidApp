@@ -18,7 +18,6 @@ fun AudiosList(
                 audio,
                 playAudio = { audioItem -> playAudio(audioItem) },
                 pauseAudio = { pauseAudio() },
-                isPlaying = audio.underFocus,
                 currentPosition = currentPosition,
                 seekTo = { position -> seekTo(position) }
             )

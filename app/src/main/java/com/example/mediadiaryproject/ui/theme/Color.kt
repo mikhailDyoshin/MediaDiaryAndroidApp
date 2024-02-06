@@ -19,3 +19,11 @@ val DeleteButtonColor = Color(0xFF8D0A00)
 val HalfTransparent = Color(0.506f, 0.502f, 0.502f, 0.4f)
 
 val AppBackgroundColor = Color(0xFFFACECA)
+
+val ProgressBarInactiveTrackColor = Color(0xFFFFB700)
+
+val ProgressBarActiveTrackColor = Color(0xFFFA6800)
+
+val ProgressBarBackgroundColor = Color(0xFF292624)
+
+val AudioItemBackGroundColor = Color(0xFF4D4949)
