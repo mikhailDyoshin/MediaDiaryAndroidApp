@@ -10,6 +10,8 @@ object Constants {
 
     const val NUMBER_OF_POINTS = 30
 
+    const val NEW_PHOTO_SIZE = 300
+
     const val EXPECTED_VAL = NUMBER_OF_POINTS/2
 
     const val EXP = 2.71828

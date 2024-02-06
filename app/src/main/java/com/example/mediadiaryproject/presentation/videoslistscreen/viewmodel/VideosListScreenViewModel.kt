@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mediadiaryproject.common.Constants.NEW_PHOTO_SIZE
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
 import com.example.mediadiaryproject.presentation.videoslistscreen.state.VideoFileState
@@ -39,7 +40,7 @@ class VideosListScreenViewModel @Inject constructor(
                             videoId = videoFileModel.id,
                             title = videoFileModel.title,
                             description = videoFileModel.description,
-                            preview = retrieveFirstFrame(uri = videoFileModel.pathToFile.toUri())
+                            preview = resizeBitmap(retrieveFirstFrame(uri = videoFileModel.pathToFile.toUri()))
                         )
                     }
         }
@@ -49,6 +50,18 @@ class VideosListScreenViewModel @Inject constructor(
     private fun retrieveFirstFrame(uri: Uri): Bitmap? {
         retriever.setDataSource(context, uri)
         return retriever.getFrameAtTime(0)
+    }
+
+    private fun resizeBitmap(originalBitmap: Bitmap?): Bitmap? {
+
+        val newWidth = NEW_PHOTO_SIZE
+        val newHeight = NEW_PHOTO_SIZE
+
+        if (originalBitmap != null) {
+            return Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, false)
+        }
+
+        return null
     }
 
 }
