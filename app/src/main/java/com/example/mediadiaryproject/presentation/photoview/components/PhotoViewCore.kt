@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.presentation.photoview.components
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -14,29 +15,39 @@ import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 
 @Composable
-fun PhotoViewCore(photoState: PhotoViewState, showMenu: Boolean) {
+fun PhotoViewCore(
+    photoState: PhotoViewState?,
+    showMenu: Boolean,
+    toggleMenu: () -> Unit,
+    closeView: () -> Unit
+) {
     Box() {
 
-        Image(
-            bitmap = photoState.image.asImageBitmap(),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-        )
-        if (showMenu) {
-            PhotoViewTopBar(modifier = Modifier.align(
-                Alignment.TopCenter
-            ),
-                closeView = {}
-            )
-
-            PhotoViewInfo(
-                title = photoState.title,
-                description = photoState.description,
-                modifier = Modifier.align(
-                    Alignment.BottomCenter
+        if (photoState != null) {
+            if (photoState.image != null) {
+                Image(
+                    bitmap = photoState.image.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { toggleMenu() }
                 )
-            )
+            }
+            if (showMenu) {
+                PhotoViewTopBar(modifier = Modifier.align(
+                    Alignment.TopCenter
+                ),
+                    closeView = { closeView() }
+                )
+
+                PhotoViewInfo(
+                    title = photoState.title,
+                    description = photoState.description,
+                    modifier = Modifier.align(
+                        Alignment.BottomCenter
+                    )
+                )
+            }
         }
 
     }
@@ -52,7 +63,9 @@ fun PhotoViewCorePreview() {
 
     PhotoViewCore(
         photoState = PhotoViewState(title = "", description = "", image = image),
-        showMenu = false
+        showMenu = false,
+        toggleMenu = {},
+        closeView = {}
     )
 }
 
@@ -70,6 +83,8 @@ fun PhotoViewCoreWithMenuPreview() {
             description = "It's a lonely sad cat on a cold street",
             image = image
         ),
-        showMenu = true
+        showMenu = true,
+        toggleMenu = {},
+        closeView = {}
     )
 }
