@@ -29,7 +29,7 @@ import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.photosscreen.state.PhotoState
 
 @Composable
-fun PhotoItem(photo: PhotoState) {
+fun PhotoItem(photo: PhotoState, openPhoto: (id: Int) -> Unit) {
 
     val image = photo.image
 
@@ -37,7 +37,7 @@ fun PhotoItem(photo: PhotoState) {
 
     Column(modifier = Modifier
         .padding(top = 10.dp)
-        .clickable { }) {
+        .clickable { openPhoto(photo.id) }) {
         Row(modifier = Modifier.shadow(5.dp, shape = RoundedCornerShape(cornerSize), clip = true)) {
             Row(
                 modifier = Modifier
@@ -88,9 +88,11 @@ fun PhotoItemPreview() {
 
     PhotoItem(
         photo = PhotoState(
+            id = 0,
             title = "My photo",
             description = "This is a photo of my...",
             image = image
-        )
+        ),
+        openPhoto = {}
     )
 }

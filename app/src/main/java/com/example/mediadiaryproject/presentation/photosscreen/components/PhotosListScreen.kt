@@ -13,13 +13,13 @@ import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.photosscreen.state.PhotoState
 
 @Composable
-fun PhotosListScreen(listOfPhotos: List<PhotoState>) {
+fun PhotosListScreen(listOfPhotos: List<PhotoState>, openPhoto: (id: Int) -> Unit) {
 
     Column(modifier = Modifier
         .padding(horizontal = 10.dp)
         .fillMaxHeight()) {
         listOfPhotos.forEach { photo ->
-            PhotoItem(photo = photo)
+            PhotoItem(photo = photo, openPhoto = {id -> openPhoto(id)})
         }
     }
 
@@ -36,16 +36,19 @@ fun PhotosListScreenPreview() {
 
     val listOfPhotos = listOf(
         PhotoState(
+            id = 0,
             title = "My photo 1",
             description = "This is a photo of my...",
             image = image
         ),
         PhotoState(
+            id = 1,
             title = "My photo long long long title",
             description = "This is a photo of my...",
             image = image
         ),
         PhotoState(
+            id = 2,
             title = "My photo 3",
             description = "This is a photo of my...",
             image = image
@@ -54,5 +57,5 @@ fun PhotosListScreenPreview() {
 
     )
 
-    PhotosListScreen(listOfPhotos = listOfPhotos)
+    PhotosListScreen(listOfPhotos = listOfPhotos, openPhoto = {})
 }

@@ -38,10 +38,11 @@ class PhotosScreenViewModel @Inject constructor(
             _state.value = getListOfAllPhotos.execute(mediaType = MediaType.PHOTO, dayId = dayId)
                 .map { photoFileModel ->
                     PhotoState(
+                        id = photoFileModel.id,
                         title = photoFileModel.title,
                         description = photoFileModel.description,
                         image = loadImageFromInternalStorage(
-                            pathToFile = photoFileModel.id.toString(),
+                            imageId = photoFileModel.id.toString(),
                             mediaType = MediaType.PHOTO
                         )
                     )
@@ -50,11 +51,11 @@ class PhotosScreenViewModel @Inject constructor(
 
     }
 
-    private fun loadImageFromInternalStorage(pathToFile: String, mediaType: MediaType): Bitmap? {
+    private fun loadImageFromInternalStorage(imageId: String, mediaType: MediaType): Bitmap? {
 
         val directory = mediaType.directory
 
-        val file = File(context.getExternalFilesDir(directory), pathToFile)
+        val file = File(context.getExternalFilesDir(directory), imageId)
 
         return if (file.exists()) {
             BitmapFactory.decodeFile(file.absolutePath)
