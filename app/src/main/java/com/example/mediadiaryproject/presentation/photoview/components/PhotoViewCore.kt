@@ -13,15 +13,15 @@ import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 
 @Composable
-fun PhotoViewCore(photoState: PhotoViewState) {
+fun PhotoViewCore(photoState: PhotoViewState, showMenu: Boolean) {
     Box() {
 
-            Image(
-                bitmap = photoState.image.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-            )
+        Image(
+            bitmap = photoState.image.asImageBitmap(),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+        )
 
     }
 }
@@ -34,5 +34,8 @@ fun PhotoViewCorePreview() {
     val imageId = R.drawable.placeholder_image
     val image = BitmapFactory.decodeResource(context.resources, imageId)
 
-    PhotoViewCore(photoState = PhotoViewState(title = "", description = "", image = image))
+    PhotoViewCore(
+        photoState = PhotoViewState(title = "", description = "", image = image),
+        showMenu = false
+    )
 }
