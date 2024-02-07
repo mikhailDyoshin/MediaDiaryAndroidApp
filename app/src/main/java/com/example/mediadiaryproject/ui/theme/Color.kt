@@ -29,3 +29,5 @@ val ProgressBarBackgroundColor = Color(0xFF292624)
 val AudioItemBackGroundColor = Color(0xFF4D4949)
 
 val AudioListBackgroundColor = Color(0xFF383838)
+
+val PhotoViewMenuBackground = Color(0.145f, 0.145f, 0.145f, 0.4f)

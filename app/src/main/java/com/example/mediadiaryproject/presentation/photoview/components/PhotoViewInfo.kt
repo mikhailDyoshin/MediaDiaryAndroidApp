@@ -22,9 +22,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mediadiaryproject.ui.theme.HalfTransparent
+import com.example.mediadiaryproject.ui.theme.PhotoViewMenuBackground
 
 @Composable
-fun PhotoViewInfo(title: String, description: String) {
+fun PhotoViewInfo(title: String, description: String, modifier: Modifier = Modifier) {
 
     var offset by remember { mutableFloatStateOf(0f) }
 
@@ -32,22 +33,25 @@ fun PhotoViewInfo(title: String, description: String) {
     val textColor = Color.White
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(150.dp)
-            .background(color = HalfTransparent)
+            .background(color = PhotoViewMenuBackground)
             .padding(vertical = 5.dp, horizontal = 10.dp)
     ) {
         Text(
             text = title,
             color = textColor,
-            fontSize = 20.sp,
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = description, color = textColor, modifier = Modifier.scrollable(
+            text = description,
+            color = textColor,
+            fontSize = 16.sp,
+            modifier = Modifier.scrollable(
                 orientation = Orientation.Vertical,
                 // Scrollable state: describes how to consume
                 // scrolling delta and update offset
