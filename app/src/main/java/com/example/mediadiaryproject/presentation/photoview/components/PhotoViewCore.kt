@@ -24,6 +24,12 @@ fun PhotoViewCore(photoState: PhotoViewState, showMenu: Boolean) {
                 .fillMaxSize()
         )
         if (showMenu) {
+            PhotoViewTopBar(modifier = Modifier.align(
+                Alignment.TopCenter
+            ),
+                closeView = {}
+            )
+
             PhotoViewInfo(
                 title = photoState.title,
                 description = photoState.description,
