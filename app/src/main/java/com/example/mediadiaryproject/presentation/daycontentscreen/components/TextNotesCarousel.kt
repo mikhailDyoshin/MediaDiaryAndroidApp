@@ -22,12 +22,12 @@ fun TextNoteCarouselPreview() {
     val data = listOf(
         TextNoteCardState(
             id = 0,
-            title = "Weather is about to change",
+            title = "Weather",
             text = "Weather is very good"
         ),
         TextNoteCardState(
             id = 1,
-            title = "Weather is about to change",
+            title = "Weather",
             text = "Weather is very good"
         ),
         TextNoteCardState(

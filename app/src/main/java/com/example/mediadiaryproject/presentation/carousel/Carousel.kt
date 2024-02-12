@@ -1,5 +1,6 @@
 package com.example.mediadiaryproject.presentation.carousel
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,36 +83,31 @@ fun <T> Carousel(
                     .weight(1f)
             ) { page ->
                 val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-                val shadowElevation = if (page == pagerState.currentPage) 4.dp else 0.dp
-                Column(
-                    modifier = Modifier.shadow(
-                        shadowElevation,
-                        shape = RoundedCornerShape(10.dp),
-                        clip = true
-                    )
-                ) {
 
-                    Card(shape = RoundedCornerShape(10.dp), modifier = Modifier
-                        .clickable {
-                            if (page == pagerState.currentPage) {
-                                onFocusedItemClick(data[page])
+                Column {
+                    Card(shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(width = 1.dp, color = Color.Black),
+                        modifier = Modifier
+                            .clickable {
+                                if (page == pagerState.currentPage) {
+                                    onFocusedItemClick(data[page])
+                                }
                             }
-                        }
-                        .graphicsLayer {
-                            lerp(
-                                start = 0.75f,
-                                stop = 1f,
-                                fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                            ).also { scale ->
-                                scaleX = scale
-                                scaleY = scale
-                            }
-                            alpha = lerp(
-                                start = 0.5f,
-                                stop = 1f,
-                                fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                            )
-                        }) {
+                            .graphicsLayer {
+                                lerp(
+                                    start = 0.75f,
+                                    stop = 1f,
+                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                                ).also { scale ->
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
+                                alpha = lerp(
+                                    start = 0.5f,
+                                    stop = 1f,
+                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                                )
+                            }) {
                         cardContent(data[page])
                     }
                 }
@@ -182,8 +177,7 @@ fun CarouselPreview() {
     Carousel(
         data = data,
         onFocusedItemClick = {},
-        cardContent = {
-            dataUnit ->
+        cardContent = { dataUnit ->
             TextNoteCard(state = dataUnit)
         }
     )
