@@ -42,7 +42,11 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun <T> Carousel(data: List<T>, cardContent: @Composable (data: T) -> Unit) {
+fun <T> Carousel(
+    data: List<T>,
+    cardContent: @Composable (data: T) -> Unit,
+    onFocusedItemClick: (data: T) -> Unit
+) {
 
 
     val pagerState = rememberPagerState(initialPage = (data.size / 2))
@@ -89,6 +93,11 @@ fun <T> Carousel(data: List<T>, cardContent: @Composable (data: T) -> Unit) {
                 ) {
 
                     Card(shape = RoundedCornerShape(10.dp), modifier = Modifier
+                        .clickable {
+                            if (page == pagerState.currentPage) {
+                                onFocusedItemClick(data[page])
+                            }
+                        }
                         .graphicsLayer {
                             lerp(
                                 start = 0.75f,
@@ -170,8 +179,13 @@ fun CarouselPreview() {
         ),
     )
 
-    Carousel(data) { dataUnit ->
-        TextNoteCard(state = dataUnit)
-    }
+    Carousel(
+        data = data,
+        onFocusedItemClick = {},
+        cardContent = {
+            dataUnit ->
+            TextNoteCard(state = dataUnit)
+        }
+    )
 
 }
