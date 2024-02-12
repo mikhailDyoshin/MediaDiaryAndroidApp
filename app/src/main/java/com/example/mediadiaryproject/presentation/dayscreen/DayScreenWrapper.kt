@@ -5,6 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.mediadiaryproject.presentation.destinations.AudioRecorderWrapperDestination
 import com.example.mediadiaryproject.presentation.destinations.CameraWrapperDestination
+import com.example.mediadiaryproject.presentation.destinations.DayContentScreenDestination
 import com.example.mediadiaryproject.presentation.destinations.TextNoteEditScreenWrapperDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -29,7 +30,7 @@ fun DayScreenWrapper(
             navigateToCameraScreen = {
                 navigator.navigate(CameraWrapperDestination(dayId = dayId))
             },
-            navigateToDayContent = {}
-            )
+            navigateToDayContent = { navigator.navigate(DayContentScreenDestination(dayId = dayId)) }
+        )
     }
 }

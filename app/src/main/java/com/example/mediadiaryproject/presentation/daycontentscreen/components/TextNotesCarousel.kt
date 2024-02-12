@@ -6,10 +6,13 @@ import com.example.mediadiaryproject.presentation.carousel.Carousel
 import com.example.mediadiaryproject.presentation.daycontentscreen.state.TextNoteCardState
 
 @Composable
-fun TextNotesCarousel(data: List<TextNoteCardState>) {
-    Carousel(data) { dataUnit ->
-        TextNoteCard(state = dataUnit)
-    }
+fun TextNotesCarousel(data: List<TextNoteCardState>, onFocusedItemClick: (id: Int) -> Unit) {
+    Carousel(
+        data, onFocusedItemClick = { onFocusedItemClick(it.id) },
+        cardContent = { dataUnit ->
+            TextNoteCard(state = dataUnit)
+        }
+    )
 }
 
 @Preview
@@ -34,5 +37,5 @@ fun TextNoteCarouselPreview() {
         ),
     )
 
-    TextNotesCarousel(data)
+    TextNotesCarousel(data, onFocusedItemClick = {})
 }
