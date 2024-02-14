@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import com.example.mediadiaryproject.presentation.camerascreen.state.CameraScreenState
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
@@ -36,7 +35,6 @@ import javax.inject.Inject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.FileOutputStream
 import java.io.IOException
@@ -73,7 +71,7 @@ class CameraViewModel @Inject constructor(
 
     private fun storePhotoInInternalStorage(bitmap: Bitmap, dayId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val file = provideFileToSaveMediaUseCase.execute(
+            val fileModel = provideFileToSaveMediaUseCase.execute(
                 media = MediaModel(
                     dayId = dayId,
                     mediaType = MediaType.PHOTO,
@@ -87,10 +85,10 @@ class CameraViewModel @Inject constructor(
 
             try {
                 // Create a FileOutputStream to write the bitmap data to the file
-                FileOutputStream(file).use { fos ->
+                FileOutputStream(fileModel.file).use { fos ->
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
                 }
-                file.absolutePath
+                fileModel.file.absolutePath
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -136,7 +134,7 @@ class CameraViewModel @Inject constructor(
                         description = "",
                         pathToFile = ""
                     )
-                )
+                ).file
             }
         }
     }

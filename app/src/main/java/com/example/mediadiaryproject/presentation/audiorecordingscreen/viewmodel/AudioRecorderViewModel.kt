@@ -58,7 +58,7 @@ class AudioRecorderViewModel @Inject constructor(
 
             resetListOfAmplitudes()
 
-            val file = provideFileToSaveMediaUseCase.execute(
+            val fileModel = provideFileToSaveMediaUseCase.execute(
                 media = MediaModel(
                     dayId = dayId,
                     mediaType = MediaType.AUDIO,
@@ -72,7 +72,7 @@ class AudioRecorderViewModel @Inject constructor(
 
             _state.value = AudioRecorderScreenState(recording = true)
 
-            recorder.start(file)
+            recorder.start(fileModel.file)
 
             assignListOfMaxAmpValues()
         }

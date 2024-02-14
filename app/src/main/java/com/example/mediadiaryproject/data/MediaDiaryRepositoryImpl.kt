@@ -10,7 +10,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
-import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.data.storage.dao.DayDao
@@ -21,6 +20,7 @@ import com.example.mediadiaryproject.data.storage.model.MediaStorageModel
 import com.example.mediadiaryproject.data.storage.model.TextNoteStorageModel
 import com.example.mediadiaryproject.domain.models.CollectionModel
 import com.example.mediadiaryproject.domain.models.DayModel
+import com.example.mediadiaryproject.domain.models.FileModel
 import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.models.TextNoteModel
 import com.example.mediadiaryproject.domain.repository.MediaDiaryRepository
@@ -113,7 +113,7 @@ class MediaDiaryRepositoryImpl @Inject constructor(
 
     @OptIn(UnstableApi::class)
     @RequiresApi(Build.VERSION_CODES.S)
-    override suspend fun provideFileToSaveMedia(media: MediaModel): File {
+    override suspend fun provideFileToSaveMedia(media: MediaModel): FileModel {
 
         val newMedia = MediaStorageModel(
             dayId = media.dayId,
@@ -132,18 +132,19 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         val providedFile =
             provideFileForMedia(mediaType = media.mediaType, mediaId = createdMediaId)
 
+        // Use an id to update a path to saved media-file
         newMedia.id = createdMediaId
         newMedia.pathTofile = providedFile.path
 
         mediaDao.update(media = newMedia)
 
-        Log.d("Saved Media", "Media path(in the unsaved model): ${newMedia.pathTofile}")
+//        Log.d("Saved Media", "Media path(in the unsaved model): ${newMedia.pathTofile}")
+//
+//        val savedPath = mediaDao.getMediaById(createdMediaId).pathTofile
+//
+//        Log.d("Saved Media", "Media path(in the saved model): $savedPath")
 
-        val savedPath = mediaDao.getMediaById(createdMediaId).pathTofile
-
-        Log.d("Saved Media", "Media path(in the saved model): $savedPath")
-
-        return providedFile
+        return FileModel(id = createdMediaId, file = providedFile)
 
     }
 
