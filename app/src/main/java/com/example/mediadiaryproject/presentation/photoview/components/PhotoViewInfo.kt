@@ -5,10 +5,14 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -16,21 +20,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mediadiaryproject.ui.theme.HalfTransparent
 import com.example.mediadiaryproject.ui.theme.PhotoViewMenuBackground
+import com.example.mediadiaryproject.ui.theme.meriendaFontFamily
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoViewInfo(title: String, description: String, modifier: Modifier = Modifier) {
+fun PhotoViewInfo(
+    editMode: Boolean,
+    title: String,
+    description: String,
+    updateTitle: (value: String) -> Unit,
+    updateDescription: (value: String) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     var offset by remember { mutableFloatStateOf(0f) }
 
 
     val textColor = Color.White
+
+    val textDecoration = if (editMode) TextDecoration.Underline else TextDecoration.None
 
     Column(
         modifier = modifier
@@ -39,27 +54,96 @@ fun PhotoViewInfo(title: String, description: String, modifier: Modifier = Modif
             .background(color = PhotoViewMenuBackground)
             .padding(vertical = 5.dp, horizontal = 10.dp)
     ) {
-        Text(
-            text = title,
-            color = textColor,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+        // Title
+        BasicTextField(
+            value = title,
+            onValueChange = { value -> updateTitle(value) },
+            readOnly = !editMode,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 5.dp),
+            singleLine = true,
+            textStyle = TextStyle(
+                color = textColor,
+                fontSize = 24.sp,
+                fontFamily = meriendaFontFamily,
+                textDecoration = textDecoration
+            ),
+            decorationBox = { innerTextField ->
+                TitleDecorationBox(innerTextField, editMode)
+            },
+            cursorBrush = SolidColor(Color.White)
         )
-        Text(
-            text = description,
-            color = textColor,
-            fontSize = 16.sp,
-            modifier = Modifier.scrollable(
-                orientation = Orientation.Vertical,
-                // Scrollable state: describes how to consume
-                // scrolling delta and update offset
-                state = rememberScrollableState { delta ->
-                    offset += delta
-                    delta
-                })
+        // Description
+        BasicTextField(
+            value = description,
+            onValueChange = { value -> updateDescription(value) },
+            readOnly = !editMode,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .scrollable(
+                    orientation = Orientation.Vertical,
+                    // Scrollable state: describes how to consume
+                    // scrolling delta and update offset
+                    state = rememberScrollableState { delta ->
+                        offset += delta
+                        delta
+                    }),
+            singleLine = false,
+            textStyle = TextStyle(
+                color = textColor,
+                fontSize = 16.sp,
+                fontFamily = meriendaFontFamily,
+                textDecoration = textDecoration
+            ),
+            decorationBox = { innerTextField ->
+                DescriptionDecorationBox(innerTextField, editMode)
+            },
+            cursorBrush = SolidColor(Color.White)
         )
+
+    }
+
+}
+
+@Composable
+private fun TitleDecorationBox(innerTextField: @Composable () -> Unit, editMode: Boolean) {
+
+    val backgroundColor = if (editMode) {
+        Color.Black
+    } else {
+        PhotoViewMenuBackground
+    }
+
+    Row(
+        Modifier
+            .background(backgroundColor, RoundedCornerShape(15.dp))
+            .padding(top = 2.dp, bottom = 8.dp, start = 12.dp, end = 10.dp)
+    ) {
+
+        innerTextField()
+    }
+
+
+}
+
+@Composable
+private fun DescriptionDecorationBox(innerTextField: @Composable () -> Unit, editMode: Boolean) {
+
+    val backgroundColor = if (editMode) {
+        Color.Black
+    } else {
+        PhotoViewMenuBackground
+    }
+
+    Row(
+        Modifier
+            .background(backgroundColor, RoundedCornerShape(15.dp))
+            .padding(top = 0.dp, bottom = 8.dp, start = 12.dp, end = 10.dp)
+    ) {
+
+        innerTextField()
     }
 
 }
@@ -67,13 +151,32 @@ fun PhotoViewInfo(title: String, description: String, modifier: Modifier = Modif
 @Preview
 @Composable
 fun PhotoViewInfoPreview() {
-    PhotoViewInfo(title = "My photo", description = "Some description")
+    PhotoViewInfo(
+        editMode = false,
+        title = "My photo",
+        description = "Some description",
+        updateTitle = {},
+        updateDescription = {}
+    )
+}
+
+@Preview
+@Composable
+fun PhotoViewInfoEditModePreview() {
+    PhotoViewInfo(
+        editMode = true,
+        title = "My photo",
+        description = "Some description",
+        updateTitle = {},
+        updateDescription = {}
+    )
 }
 
 @Preview
 @Composable
 fun PhotoViewInfoLotsOfTextPreview() {
     PhotoViewInfo(
+        editMode = false,
         title = "My photo title very long long long long long long",
         description = "Long\n" +
                 "Long\n" +
@@ -82,6 +185,8 @@ fun PhotoViewInfoLotsOfTextPreview() {
                 "Long\n" +
                 "Long\n" +
                 "Long\n" +
-                "Description"
+                "Description",
+        updateTitle = {},
+        updateDescription = {}
     )
 }
