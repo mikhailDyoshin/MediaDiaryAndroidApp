@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import com.example.mediadiaryproject.ui.theme.PhotoViewMenuBackground
 import com.example.mediadiaryproject.ui.theme.meriendaFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoViewInfo(
     editMode: Boolean,
@@ -58,6 +56,7 @@ fun PhotoViewInfo(
         BasicTextField(
             value = title,
             onValueChange = { value -> updateTitle(value) },
+            enabled = editMode,
             readOnly = !editMode,
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,10 +73,12 @@ fun PhotoViewInfo(
             },
             cursorBrush = SolidColor(Color.White)
         )
+
         // Description
         BasicTextField(
             value = description,
             onValueChange = { value -> updateDescription(value) },
+            enabled = editMode,
             readOnly = !editMode,
             modifier = Modifier
                 .fillMaxWidth()
