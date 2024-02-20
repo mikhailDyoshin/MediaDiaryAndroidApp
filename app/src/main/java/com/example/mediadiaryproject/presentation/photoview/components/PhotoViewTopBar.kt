@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -19,7 +18,13 @@ import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.ui.theme.HalfTransparent
 
 @Composable
-fun PhotoViewTopBar(modifier: Modifier = Modifier, closeView: () -> Unit) {
+fun PhotoViewTopBar(
+    modifier: Modifier = Modifier,
+    closeView: () -> Unit,
+    editMode: Boolean,
+    turnOnEditMode: () -> Unit,
+    saveInfo: () -> Unit
+) {
     Row(
         modifier = modifier
             .background(
@@ -39,8 +44,33 @@ fun PhotoViewTopBar(modifier: Modifier = Modifier, closeView: () -> Unit) {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.close_icon),
-                contentDescription = "photos"
+                contentDescription = "close icon"
             )
+        }
+        IconButton(
+            onClick = {
+                if (editMode) {
+                    saveInfo()
+                } else {
+                    turnOnEditMode()
+                }
+            },
+            modifier = Modifier
+                .padding(end = 20.dp)
+                .size(30.dp)
+        ) {
+            if (editMode) {
+                Icon(
+                    painter = painterResource(id = R.drawable.save_icon),
+                    contentDescription = "edit icon"
+                )
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.edit_icon),
+                    contentDescription = "edit icon"
+                )
+            }
+
         }
     }
 }
@@ -48,5 +78,10 @@ fun PhotoViewTopBar(modifier: Modifier = Modifier, closeView: () -> Unit) {
 @Preview
 @Composable
 fun PhotoViewTopBarPreview() {
-    PhotoViewTopBar(closeView = {})
+    PhotoViewTopBar(
+        closeView = {},
+        editMode = true,
+        turnOnEditMode = {},
+        saveInfo = {}
+    )
 }

@@ -50,7 +50,7 @@ fun PhotoViewInfo(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .height(200.dp)
             .background(color = PhotoViewMenuBackground)
             .padding(vertical = 5.dp, horizontal = 10.dp)
     ) {

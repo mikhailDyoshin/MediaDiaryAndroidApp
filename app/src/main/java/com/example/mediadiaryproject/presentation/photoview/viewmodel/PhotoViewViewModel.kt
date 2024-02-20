@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,9 @@ class PhotoViewViewModel @Inject constructor(
     private val _menuState: MutableState<Boolean> = mutableStateOf(true)
     val menuState = _menuState
 
+    private val _editModeState: MutableState<Boolean> = mutableStateOf(false)
+    val editModeState = _editModeState
+
     fun getPhoto(photoId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val photoFileModel = getPhotoUseCase.execute(mediaId = photoId)
@@ -47,6 +51,25 @@ class PhotoViewViewModel @Inject constructor(
 
     fun toggleMenu() {
         _menuState.value = !_menuState.value
+    }
+
+    fun turnOnEditMode() {
+        _editModeState.value = true
+    }
+
+    fun saveInfo() {
+        _editModeState.value = false
+        Log.d("Save info log", "Title: ${_state.value?.title};\nDescription: ${_state.value?.description}")
+    }
+
+    fun updateTitle(title: String) {
+        val newState = _state.value?.copy(title = title)
+        _state.value = newState
+    }
+
+    fun updateDescription(description: String) {
+       val newState =  _state.value?.copy(description = description)
+        _state.value = newState
     }
 
     private fun loadImageFromInternalStorage(imageId: String, mediaType: MediaType): Bitmap? {

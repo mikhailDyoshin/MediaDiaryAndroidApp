@@ -18,8 +18,13 @@ import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 fun PhotoViewCore(
     photoState: PhotoViewState?,
     showMenu: Boolean,
+    editMode: Boolean,
     toggleMenu: () -> Unit,
-    closeView: () -> Unit
+    closeView: () -> Unit,
+    turnOnEditMode: () -> Unit,
+    saveInfo: () -> Unit,
+    updateTitle: (title: String) -> Unit,
+    updateDescription: (description: String) -> Unit,
 ) {
     Box() {
 
@@ -34,15 +39,22 @@ fun PhotoViewCore(
                 )
             }
             if (showMenu) {
-                PhotoViewTopBar(modifier = Modifier.align(
-                    Alignment.TopCenter
-                ),
-                    closeView = { closeView() }
+                PhotoViewTopBar(
+                    modifier = Modifier.align(
+                        Alignment.TopCenter
+                    ),
+                    closeView = { closeView() },
+                    editMode = editMode,
+                    turnOnEditMode = { turnOnEditMode() },
+                    saveInfo = { saveInfo() }
                 )
 
                 PhotoViewInfo(
+                    editMode = editMode,
                     title = photoState.title,
                     description = photoState.description,
+                    updateTitle = { title -> updateTitle(title) },
+                    updateDescription = { description -> updateDescription(description) },
                     modifier = Modifier.align(
                         Alignment.BottomCenter
                     )
@@ -62,10 +74,15 @@ fun PhotoViewCorePreview() {
     val image = BitmapFactory.decodeResource(context.resources, imageId)
 
     PhotoViewCore(
+        editMode = false,
         photoState = PhotoViewState(title = "", description = "", image = image),
         showMenu = false,
         toggleMenu = {},
-        closeView = {}
+        closeView = {},
+        updateTitle = {},
+        updateDescription = {},
+        turnOnEditMode = {},
+        saveInfo = {}
     )
 }
 
@@ -78,6 +95,7 @@ fun PhotoViewCoreWithMenuPreview() {
     val image = BitmapFactory.decodeResource(context.resources, imageId)
 
     PhotoViewCore(
+        editMode = false,
         photoState = PhotoViewState(
             title = "My sad cat",
             description = "It's a lonely sad cat on a cold street",
@@ -85,6 +103,35 @@ fun PhotoViewCoreWithMenuPreview() {
         ),
         showMenu = true,
         toggleMenu = {},
-        closeView = {}
+        closeView = {},
+        updateTitle = {},
+        updateDescription = {},
+        turnOnEditMode = {},
+        saveInfo = {}
+    )
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun PhotoViewCoreWithMenuEditModePreview() {
+    val context = LocalContext.current
+
+    val imageId = R.drawable.placeholder_image
+    val image = BitmapFactory.decodeResource(context.resources, imageId)
+
+    PhotoViewCore(
+        editMode = true,
+        photoState = PhotoViewState(
+            title = "My sad cat",
+            description = "It's a lonely sad cat on a cold street",
+            image = image
+        ),
+        showMenu = true,
+        toggleMenu = {},
+        closeView = {},
+        updateTitle = {},
+        updateDescription = {},
+        turnOnEditMode = {},
+        saveInfo = {}
     )
 }

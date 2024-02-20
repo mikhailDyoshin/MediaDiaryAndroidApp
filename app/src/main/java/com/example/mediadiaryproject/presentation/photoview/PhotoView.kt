@@ -23,8 +23,13 @@ fun PhotoView(
     PhotoViewCore(
         photoState = viewModel.state.value,
         showMenu = viewModel.menuState.value,
+        editMode = viewModel.editModeState.value,
         toggleMenu = { viewModel.toggleMenu() },
-        closeView = { navigator.navigateUp() }
-        )
+        closeView = { navigator.navigateUp() },
+        updateTitle = { title -> viewModel.updateTitle(title) },
+        updateDescription = { description -> viewModel.updateDescription(description) },
+        turnOnEditMode = { viewModel.turnOnEditMode() },
+        saveInfo = { viewModel.saveInfo() }
+    )
 
 }
