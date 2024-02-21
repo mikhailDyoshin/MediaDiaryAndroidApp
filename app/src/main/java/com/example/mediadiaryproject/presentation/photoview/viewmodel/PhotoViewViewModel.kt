@@ -35,6 +35,9 @@ class PhotoViewViewModel @Inject constructor(
     private val _editModeState: MutableState<Boolean> = mutableStateOf(false)
     val editModeState = _editModeState
 
+    private val _warningWindowState: MutableState<Boolean> = mutableStateOf(false)
+    val warningWindowState = _warningWindowState
+
     fun getPhoto(photoId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val photoFileModel = getPhotoUseCase.execute(mediaId = photoId)
@@ -60,6 +63,14 @@ class PhotoViewViewModel @Inject constructor(
     fun saveInfo() {
         _editModeState.value = false
         Log.d("Save info log", "Title: ${_state.value?.title};\nDescription: ${_state.value?.description}")
+    }
+
+    fun displayWarningWindow() {
+        _warningWindowState.value = true
+    }
+
+    fun closeWarningWindow() {
+        _warningWindowState.value = false
     }
 
     fun updateTitle(title: String) {

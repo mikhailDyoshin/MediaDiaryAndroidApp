@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.mediadiaryproject.ui.theme.HalfTransparent
 
 @Composable
@@ -28,79 +30,84 @@ fun WarningWindow(
     message: String,
     onDiscard: () -> Unit,
     onSave: () -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
+    Surface(
+        modifier = modifier
             .fillMaxSize()
-            .background(color = HalfTransparent)
+            .zIndex(99f),
+        color = HalfTransparent
     ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp)
-        ) {
+        Box {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(size = 15.dp)
-                    )
-                    .padding(start = 10.dp, end = 10.dp, top = 8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp)
             ) {
-                Text(text = message)
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 5.dp, start = 10.dp, end = 10.dp),
+                        .fillMaxWidth(0.9f)
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(size = 15.dp)
+                        )
+                        .padding(start = 10.dp, end = 10.dp, top = 8.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = { onCancel() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                            contentColor = Color.Black
-                        )
-                    ) {
-                        Text(text = "Cancel")
-                    }
-                    Divider(
+                    Text(text = message)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .height(20.dp)
-                            .width(2.dp)
-                    )
-                    Button(
-                        onClick = { onDiscard() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                            contentColor = Color.Black
-                        )
+                            .fillMaxWidth()
+                            .padding(top = 5.dp, start = 10.dp, end = 10.dp),
                     ) {
-                        Text(text = "Discard")
-                    }
-                    Divider(
-                        modifier = Modifier
-                            .height(20.dp)
-                            .width(2.dp)
-                    )
-                    Button(
-                        onClick = { onSave() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                            contentColor = Color.Black
+                        Button(
+                            onClick = { onCancel() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text(text = "Cancel")
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .height(20.dp)
+                                .width(2.dp)
                         )
-                    ) {
-                        Text(text = "Save")
+                        Button(
+                            onClick = { onDiscard() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text(text = "Discard")
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .height(20.dp)
+                                .width(2.dp)
+                        )
+                        Button(
+                            onClick = { onSave() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text(text = "Save")
+                        }
                     }
                 }
             }
-        }
 
+        }
     }
+
 }
 
 @Preview(showSystemUi = true)

@@ -2,21 +2,23 @@ package com.example.mediadiaryproject.presentation.photoview.components
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mediadiaryproject.presentation.warningwindow.WarningWindow
 
 @Composable
 fun PhotoViewWarningWindow(
-    message: String,
     onDiscard: () -> Unit,
     onSave: () -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     WarningWindow(
-        message = message,
+        message = "Save your changes or discard them?",
         onDiscard = { onDiscard() },
         onSave = { onSave() },
-        onCancel = { onCancel() }
+        onCancel = { onCancel() },
+        modifier = modifier
     )
 
 }
@@ -25,7 +27,6 @@ fun PhotoViewWarningWindow(
 @Composable
 fun PhotoViewWarningWindowPreview() {
     PhotoViewWarningWindow(
-        message = "Save your changes or discard them?",
         onSave = {},
         onCancel = {},
         onDiscard = {}

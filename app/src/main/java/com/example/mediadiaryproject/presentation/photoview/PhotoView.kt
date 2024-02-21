@@ -1,5 +1,7 @@
 package com.example.mediadiaryproject.presentation.photoview
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,10 +22,19 @@ fun PhotoView(
         viewModel.getPhoto(photoId = photoId)
     }
 
+    val editModeOn = viewModel.editModeState.value
+
+    BackHandler(enabled = true, onBack = {
+        navigateUpLogic(navigator = navigator, editModeState = editModeOn) {
+            viewModel.displayWarningWindow()
+        }
+    })
+
     PhotoViewCore(
         photoState = viewModel.state.value,
+        warningWindowDisplayed = viewModel.warningWindowState.value,
         showMenu = viewModel.menuState.value,
-        editMode = viewModel.editModeState.value,
+        editMode = editModeOn,
         toggleMenu = { viewModel.toggleMenu() },
         closeView = { navigator.navigateUp() },
         updateTitle = { title -> viewModel.updateTitle(title) },
@@ -32,4 +43,17 @@ fun PhotoView(
         saveInfo = { viewModel.saveInfo() }
     )
 
+}
+
+private fun navigateUpLogic(
+    navigator: DestinationsNavigator,
+    editModeState: Boolean,
+    callback: () -> Unit
+) {
+    if (editModeState) {
+        callback()
+        Log.d("Warning window", "Warning window is displayed")
+    } else {
+        navigator.navigateUp()
+    }
 }

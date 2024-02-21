@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.zIndex
 import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 
 @Composable
 fun PhotoViewCore(
     photoState: PhotoViewState?,
+    warningWindowDisplayed: Boolean,
     showMenu: Boolean,
     editMode: Boolean,
     toggleMenu: () -> Unit,
@@ -27,6 +29,16 @@ fun PhotoViewCore(
     updateDescription: (description: String) -> Unit,
 ) {
     Box() {
+
+        if (warningWindowDisplayed) {
+            PhotoViewWarningWindow(
+                onDiscard = { /*TODO*/ },
+                onSave = { /*TODO*/ },
+                onCancel = { /*TODO*/ },
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+
 
         if (photoState != null) {
             if (photoState.image != null) {
@@ -75,6 +87,7 @@ fun PhotoViewCorePreview() {
 
     PhotoViewCore(
         editMode = false,
+        warningWindowDisplayed = false,
         photoState = PhotoViewState(title = "", description = "", image = image),
         showMenu = false,
         toggleMenu = {},
@@ -96,6 +109,7 @@ fun PhotoViewCoreWithMenuPreview() {
 
     PhotoViewCore(
         editMode = false,
+        warningWindowDisplayed = false,
         photoState = PhotoViewState(
             title = "My sad cat",
             description = "It's a lonely sad cat on a cold street",
@@ -121,6 +135,33 @@ fun PhotoViewCoreWithMenuEditModePreview() {
 
     PhotoViewCore(
         editMode = true,
+        warningWindowDisplayed = false,
+        photoState = PhotoViewState(
+            title = "My sad cat",
+            description = "It's a lonely sad cat on a cold street",
+            image = image
+        ),
+        showMenu = true,
+        toggleMenu = {},
+        closeView = {},
+        updateTitle = {},
+        updateDescription = {},
+        turnOnEditMode = {},
+        saveInfo = {}
+    )
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun PhotoViewCoreWithWarningWindowPreview() {
+    val context = LocalContext.current
+
+    val imageId = R.drawable.placeholder_image
+    val image = BitmapFactory.decodeResource(context.resources, imageId)
+
+    PhotoViewCore(
+        editMode = true,
+        warningWindowDisplayed = true,
         photoState = PhotoViewState(
             title = "My sad cat",
             description = "It's a lonely sad cat on a cold street",
