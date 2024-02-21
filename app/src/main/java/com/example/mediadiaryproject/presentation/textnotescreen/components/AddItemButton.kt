@@ -24,7 +24,7 @@ import kotlin.math.exp
 
 @Composable
 fun AddItemButton(backgroundColor: Color = Color.White, modifier: Modifier, onClick: () -> Unit) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
         ConstraintLayout(modifier = Modifier.height(115.dp)) {
 
             val (addButton, line) = createRefs()
@@ -47,7 +47,7 @@ fun AddItemButton(backgroundColor: Color = Color.White, modifier: Modifier, onCl
 @Composable
 private fun RoundButton(modifier: Modifier, onClick: () -> Unit) {
 
-    val buttonSize = 81.dp
+    val buttonSize = 80.dp
 
     Column(modifier = modifier) {
         IconButton(
@@ -93,7 +93,7 @@ private fun SigmoidLine(backgroundColor: Color, modifier: Modifier) {
                 for (x in startX.toInt()..endX.toInt() step step.toInt()) {
                     val xOffsetLeft = x.toFloat() - startX
                     val yOffsetLeft =
-                        sigmoid(-(xOffsetLeft - startX) - horizontalShift, scale, magnitude) - magnitude
+                        sigmoid(-(xOffsetLeft - startX) - horizontalShift - 8f, scale, magnitude) - magnitude
 
 
                     drawRect(
