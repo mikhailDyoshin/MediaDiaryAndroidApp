@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.zIndex
 import com.example.mediadiaryproject.R
 import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 
@@ -27,14 +26,17 @@ fun PhotoViewCore(
     saveInfo: () -> Unit,
     updateTitle: (title: String) -> Unit,
     updateDescription: (description: String) -> Unit,
+    onCancel: () -> Unit,
+    onDiscard: () -> Unit,
+    onSave: () -> Unit,
 ) {
     Box() {
 
         if (warningWindowDisplayed) {
             PhotoViewWarningWindow(
-                onDiscard = { /*TODO*/ },
-                onSave = { /*TODO*/ },
-                onCancel = { /*TODO*/ },
+                onDiscard = { onDiscard() },
+                onSave = { onSave() },
+                onCancel = { onCancel() },
                 modifier = Modifier.align(Alignment.Center)
             )
         }
@@ -95,7 +97,10 @@ fun PhotoViewCorePreview() {
         updateTitle = {},
         updateDescription = {},
         turnOnEditMode = {},
-        saveInfo = {}
+        saveInfo = {},
+        onCancel = {},
+        onDiscard = {},
+        onSave = {},
     )
 }
 
@@ -121,7 +126,10 @@ fun PhotoViewCoreWithMenuPreview() {
         updateTitle = {},
         updateDescription = {},
         turnOnEditMode = {},
-        saveInfo = {}
+        saveInfo = {},
+        onCancel = {},
+        onDiscard = {},
+        onSave = {},
     )
 }
 
@@ -147,7 +155,10 @@ fun PhotoViewCoreWithMenuEditModePreview() {
         updateTitle = {},
         updateDescription = {},
         turnOnEditMode = {},
-        saveInfo = {}
+        saveInfo = {},
+        onCancel = {},
+        onDiscard = {},
+        onSave = {},
     )
 }
 
@@ -173,6 +184,9 @@ fun PhotoViewCoreWithWarningWindowPreview() {
         updateTitle = {},
         updateDescription = {},
         turnOnEditMode = {},
-        saveInfo = {}
+        saveInfo = {},
+        onCancel = {},
+        onDiscard = {},
+        onSave = {},
     )
 }

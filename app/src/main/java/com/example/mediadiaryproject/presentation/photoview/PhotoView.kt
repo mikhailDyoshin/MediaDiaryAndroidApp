@@ -36,11 +36,25 @@ fun PhotoView(
         showMenu = viewModel.menuState.value,
         editMode = editModeOn,
         toggleMenu = { viewModel.toggleMenu() },
-        closeView = { navigator.navigateUp() },
+        closeView = {
+            navigateUpLogic(navigator = navigator, editModeState = editModeOn) {
+                viewModel.displayWarningWindow()
+            }
+        },
         updateTitle = { title -> viewModel.updateTitle(title) },
         updateDescription = { description -> viewModel.updateDescription(description) },
         turnOnEditMode = { viewModel.turnOnEditMode() },
-        saveInfo = { viewModel.saveInfo() }
+        saveInfo = { viewModel.saveInfo() },
+        onCancel = { viewModel.closeWarningWindow() },
+        onDiscard = {
+            viewModel.closeWarningWindow()
+            navigator.navigateUp()
+        },
+        onSave = {
+            viewModel.saveInfo()
+            viewModel.closeWarningWindow()
+            navigator.navigateUp()
+        }
     )
 
 }
