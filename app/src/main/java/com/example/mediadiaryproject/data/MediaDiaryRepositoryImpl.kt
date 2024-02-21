@@ -215,6 +215,20 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         textNoteDao.insert(textNote = textNoteForStorage)
     }
 
+    override suspend fun updateMediaData(media: MediaModel) {
+        val newMediaData = MediaStorageModel(
+            dayId = media.dayId,
+            mediaType = media.mediaType,
+            date = media.date,
+            time = media.time,
+            title = media.title,
+            description = media.description,
+            pathTofile = media.pathToFile
+        )
+
+        mediaDao.update(media = newMediaData)
+    }
+
     override fun getTextNotesByDay(dayId: Int): List<TextNoteModel> {
         return textNoteDao.getTextNotesByDay(dayId = dayId).map { textNote ->
             TextNoteModel(
