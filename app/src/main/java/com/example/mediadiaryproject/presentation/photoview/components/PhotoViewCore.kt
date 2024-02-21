@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mediadiaryproject.R
+import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 
 @Composable
@@ -79,18 +80,38 @@ fun PhotoViewCore(
     }
 }
 
-@Preview(showSystemUi = true)
 @Composable
-fun PhotoViewCorePreview() {
+private fun providePhotoViewState(title: String = "", description: String = ""): PhotoViewState {
+
     val context = LocalContext.current
 
     val imageId = R.drawable.placeholder_image
     val image = BitmapFactory.decodeResource(context.resources, imageId)
 
+    return PhotoViewState(
+        id = 0,
+        dayId = 0,
+        mediaType = MediaType.PHOTO,
+        date = "",
+        time = "",
+        title = title,
+        description = description,
+        pathToFile = "",
+        image = image
+    )
+
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun PhotoViewCorePreview() {
+
+    val photoState = providePhotoViewState()
+
     PhotoViewCore(
         editMode = false,
         warningWindowDisplayed = false,
-        photoState = PhotoViewState(title = "", description = "", image = image),
+        photoState = photoState,
         showMenu = false,
         toggleMenu = {},
         closeView = {},
@@ -107,19 +128,16 @@ fun PhotoViewCorePreview() {
 @Preview(showSystemUi = true)
 @Composable
 fun PhotoViewCoreWithMenuPreview() {
-    val context = LocalContext.current
 
-    val imageId = R.drawable.placeholder_image
-    val image = BitmapFactory.decodeResource(context.resources, imageId)
+    val photoState = providePhotoViewState(
+        title = "My sad cat",
+        description = "It's a lonely sad cat on a cold street"
+    )
 
     PhotoViewCore(
         editMode = false,
         warningWindowDisplayed = false,
-        photoState = PhotoViewState(
-            title = "My sad cat",
-            description = "It's a lonely sad cat on a cold street",
-            image = image
-        ),
+        photoState = photoState,
         showMenu = true,
         toggleMenu = {},
         closeView = {},
@@ -136,19 +154,15 @@ fun PhotoViewCoreWithMenuPreview() {
 @Preview(showSystemUi = true)
 @Composable
 fun PhotoViewCoreWithMenuEditModePreview() {
-    val context = LocalContext.current
-
-    val imageId = R.drawable.placeholder_image
-    val image = BitmapFactory.decodeResource(context.resources, imageId)
+    val photoState = providePhotoViewState(
+        title = "My sad cat",
+        description = "It's a lonely sad cat on a cold street"
+    )
 
     PhotoViewCore(
         editMode = true,
         warningWindowDisplayed = false,
-        photoState = PhotoViewState(
-            title = "My sad cat",
-            description = "It's a lonely sad cat on a cold street",
-            image = image
-        ),
+        photoState = photoState,
         showMenu = true,
         toggleMenu = {},
         closeView = {},
@@ -165,19 +179,15 @@ fun PhotoViewCoreWithMenuEditModePreview() {
 @Preview(showSystemUi = true)
 @Composable
 fun PhotoViewCoreWithWarningWindowPreview() {
-    val context = LocalContext.current
-
-    val imageId = R.drawable.placeholder_image
-    val image = BitmapFactory.decodeResource(context.resources, imageId)
+    val photoState = providePhotoViewState(
+        title = "My sad cat",
+        description = "It's a lonely sad cat on a cold street"
+    )
 
     PhotoViewCore(
         editMode = true,
         warningWindowDisplayed = true,
-        photoState = PhotoViewState(
-            title = "My sad cat",
-            description = "It's a lonely sad cat on a cold street",
-            image = image
-        ),
+        photoState = photoState,
         showMenu = true,
         toggleMenu = {},
         closeView = {},

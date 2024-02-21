@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.media3.common.util.UnstableApi
@@ -215,18 +216,24 @@ class MediaDiaryRepositoryImpl @Inject constructor(
         textNoteDao.insert(textNote = textNoteForStorage)
     }
 
-    override suspend fun updateMediaData(media: MediaModel) {
+    override fun updateMediaData(mediaData: MediaModel) {
         val newMediaData = MediaStorageModel(
-            dayId = media.dayId,
-            mediaType = media.mediaType,
-            date = media.date,
-            time = media.time,
-            title = media.title,
-            description = media.description,
-            pathTofile = media.pathToFile
+            id = mediaData.id,
+            dayId = mediaData.dayId,
+            mediaType = mediaData.mediaType,
+            date = mediaData.date,
+            time = mediaData.time,
+            title = mediaData.title,
+            description = mediaData.description,
+            pathTofile = mediaData.pathToFile
         )
 
         mediaDao.update(media = newMediaData)
+
+        Log.d(
+            "Save info log",
+            "Title: ${newMediaData.title};\nDescription: ${newMediaData.description}"
+        )
     }
 
     override fun getTextNotesByDay(dayId: Int): List<TextNoteModel> {

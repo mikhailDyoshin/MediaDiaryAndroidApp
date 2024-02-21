@@ -10,7 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.usecase.GetMediaByIdUseCase
+import com.example.mediadiaryproject.domain.usecase.UpdateMediaDataUseCase
 import com.example.mediadiaryproject.presentation.photoview.state.PhotoViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PhotoViewViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val getPhotoUseCase: GetMediaByIdUseCase
+    private val getPhotoUseCase: GetMediaByIdUseCase,
+    private val updateMediaData: UpdateMediaDataUseCase,
 ) : ViewModel() {
 
     private val _state: MutableState<PhotoViewState?> = mutableStateOf(null)
@@ -42,8 +45,14 @@ class PhotoViewViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val photoFileModel = getPhotoUseCase.execute(mediaId = photoId)
             _state.value = PhotoViewState(
+                id = photoFileModel.id,
+                dayId = photoFileModel.dayId,
+                mediaType = photoFileModel.mediaType,
+                date = photoFileModel.date,
+                time = photoFileModel.time,
                 title = photoFileModel.title,
                 description = photoFileModel.description,
+                pathToFile = photoFileModel.pathToFile,
                 image = loadImageFromInternalStorage(
                     imageId = photoFileModel.id.toString(),
                     mediaType = MediaType.PHOTO
@@ -61,8 +70,35 @@ class PhotoViewViewModel @Inject constructor(
     }
 
     fun saveInfo() {
-        _editModeState.value = false
-        Log.d("Save info log", "Title: ${_state.value?.title};\nDescription: ${_state.value?.description}")
+        viewModelScope.launch(Dispatchers.IO) {
+            _editModeState.value = false
+            val updatedValue = _state.value
+
+            if (updatedValue != null) {
+                val newMediaData = MediaModel(
+                    id = updatedValue.id,
+                    dayId = updatedValue.dayId,
+                    mediaType = updatedValue.mediaType,
+                    date = updatedValue.date,
+                    time = updatedValue.time,
+                    title = updatedValue.title,
+                    description = updatedValue.description,
+                    pathToFile = updatedValue.pathToFile
+                )
+                updateMediaData.execute(mediaData = newMediaData)
+                Log.d(
+                    "Save info log",
+                    "Title: ${newMediaData.title};\nDescription: ${newMediaData.description}"
+                )
+            } else {
+                Log.d(
+                    "Save info log",
+                    "Data is null"
+                )
+            }
+
+
+        }
     }
 
     fun displayWarningWindow() {
@@ -79,7 +115,7 @@ class PhotoViewViewModel @Inject constructor(
     }
 
     fun updateDescription(description: String) {
-       val newState =  _state.value?.copy(description = description)
+        val newState = _state.value?.copy(description = description)
         _state.value = newState
     }
 

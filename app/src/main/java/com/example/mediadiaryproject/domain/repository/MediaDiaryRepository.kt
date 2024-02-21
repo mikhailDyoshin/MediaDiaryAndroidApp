@@ -22,7 +22,7 @@ interface MediaDiaryRepository {
 
     suspend fun saveTextNote(textNote: TextNoteModel)
 
-    suspend fun updateMediaData(media: MediaModel)
+    fun updateMediaData(mediaData: MediaModel)
 
     fun getTextNotesByDay(dayId: Int): List<TextNoteModel>
 
