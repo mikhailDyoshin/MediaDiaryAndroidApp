@@ -35,6 +35,9 @@ fun VideoInfo(
     description: String,
     updateTitle: (value: String) -> Unit,
     updateDescription: (value: String) -> Unit,
+    closeMenu: () -> Unit,
+    turnOnEditMode: () -> Unit,
+    saveInfo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -53,7 +56,11 @@ fun VideoInfo(
             .padding(vertical = 5.dp, horizontal = 10.dp)
     ) {
 
-        VideoInfoTopBar(closeView = {}, editMode = editMode, turnOnEditMode = {}, saveInfo = {})
+        VideoInfoTopBar(
+            closeMenu = { closeMenu() },
+            editMode = editMode,
+            turnOnEditMode = { turnOnEditMode() },
+            saveInfo = { saveInfo() })
 
         // Title
         BasicTextField(
@@ -159,7 +166,10 @@ fun VideoInfoPreview() {
         title = "My photo",
         description = "Some description",
         updateTitle = {},
-        updateDescription = {}
+        updateDescription = {},
+        closeMenu = {},
+        saveInfo = {},
+        turnOnEditMode = {},
     )
 }
 
@@ -171,7 +181,10 @@ fun VideoInfoEditModePreview() {
         title = "My photo",
         description = "Some description",
         updateTitle = {},
-        updateDescription = {}
+        updateDescription = {},
+        closeMenu = {},
+        saveInfo = {},
+        turnOnEditMode = {},
     )
 }
 
@@ -190,6 +203,9 @@ fun VideoInfoLotsOfTextPreview() {
                 "Long\n" +
                 "Description",
         updateTitle = {},
-        updateDescription = {}
+        updateDescription = {},
+        closeMenu = {},
+        saveInfo = {},
+        turnOnEditMode = {},
     )
 }

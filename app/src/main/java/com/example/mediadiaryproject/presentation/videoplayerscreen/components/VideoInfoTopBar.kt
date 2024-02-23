@@ -16,12 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mediadiaryproject.R
-import com.example.mediadiaryproject.ui.theme.HalfTransparent
 
 @Composable
 fun VideoInfoTopBar(
     modifier: Modifier = Modifier,
-    closeView: () -> Unit,
+    closeMenu: () -> Unit,
     editMode: Boolean,
     turnOnEditMode: () -> Unit,
     saveInfo: () -> Unit
@@ -37,7 +36,7 @@ fun VideoInfoTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
-            onClick = { closeView() },
+            onClick = { closeMenu() },
             modifier = Modifier
                 .padding(start = 20.dp)
                 .size(30.dp)
@@ -79,7 +78,7 @@ fun VideoInfoTopBar(
 @Composable
 fun PhotoViewTopBarPreview() {
     VideoInfoTopBar(
-        closeView = {},
+        closeMenu = {},
         editMode = true,
         turnOnEditMode = {},
         saveInfo = {}
