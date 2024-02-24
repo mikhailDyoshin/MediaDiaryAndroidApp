@@ -4,9 +4,11 @@ import androidx.media3.common.MediaItem
 
 data class VideoState(
     val id: Int,
+    val dayId: Int,
     val description: String,
     val title: String,
     val mediaItem: MediaItem,
     val date: String,
-    val time: String
+    val time: String,
+    val pathToFile: String,
 )

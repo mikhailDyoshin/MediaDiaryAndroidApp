@@ -8,7 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import com.example.mediadiaryproject.common.MediaType
+import com.example.mediadiaryproject.domain.models.MediaModel
 import com.example.mediadiaryproject.domain.usecase.GetMediaByIdUseCase
+import com.example.mediadiaryproject.domain.usecase.UpdateMediaDataUseCase
 import com.example.mediadiaryproject.presentation.videoplayerscreen.state.VideoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoPlayerScreenViewModel @Inject constructor(
     val player: Player,
-    private val getVideoUseCase: GetMediaByIdUseCase
+    private val getVideoUseCase: GetMediaByIdUseCase,
+    private val updateMediaData: UpdateMediaDataUseCase,
 ) : ViewModel() {
 
     private val _state: MutableState<VideoState?> = mutableStateOf(null)
@@ -82,8 +86,30 @@ class VideoPlayerScreenViewModel @Inject constructor(
     }
 
     fun saveEditedInfo() {
-        turnOffEditMode()
-        Log.d("Video Info", "Info saved:)")
+        viewModelScope.launch(Dispatchers.IO) {
+            turnOffEditMode()
+
+            val newMediaData = _state.value
+
+            if (newMediaData != null) {
+                updateMediaData.execute(
+                    mediaData = MediaModel(
+                        id = newMediaData.id,
+                        dayId = newMediaData.dayId,
+                        mediaType = MediaType.VIDEO,
+                        date = newMediaData.date,
+                        time = newMediaData.time,
+                        title = _titleState.value,
+                        description = _descriptionState.value,
+                        pathToFile = newMediaData.pathToFile
+                    )
+                )
+            }
+            Log.d("Video Info", "Info saved:)")
+
+        }
+
+
     }
 
     fun playVideo() {
@@ -105,11 +131,13 @@ class VideoPlayerScreenViewModel @Inject constructor(
             val videoFileModel = getVideoUseCase.execute(mediaId = videoId)
             _state.value = VideoState(
                 id = videoFileModel.id,
+                dayId = videoFileModel.dayId,
                 title = videoFileModel.title,
                 description = videoFileModel.description,
                 mediaItem = MediaItem.fromUri(videoFileModel.pathToFile.toUri()),
                 date = videoFileModel.date,
                 time = videoFileModel.time,
+                pathToFile = videoFileModel.pathToFile
             )
 
             _titleState.value = videoFileModel.title
