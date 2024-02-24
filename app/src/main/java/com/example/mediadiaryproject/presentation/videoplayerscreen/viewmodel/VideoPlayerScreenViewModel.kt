@@ -1,5 +1,6 @@
 package com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
@@ -30,6 +31,16 @@ class VideoPlayerScreenViewModel @Inject constructor(
     private val _infoState: MutableState<Boolean> = mutableStateOf(false)
     val infoState = _infoState
 
+    private val _editMode: MutableState<Boolean> = mutableStateOf(false)
+    val editMode = _editMode
+
+    private val _titleState: MutableState<String> = mutableStateOf("")
+    val titleState = _titleState
+
+    private val _descriptionState: MutableState<String> = mutableStateOf("")
+    val descriptionState = _descriptionState
+
+
     init {
         player.prepare()
     }
@@ -52,6 +63,27 @@ class VideoPlayerScreenViewModel @Inject constructor(
     fun hideInfo() {
         _infoState.value = false
         toggleMenu()
+    }
+
+    fun updateTitle(title: String) {
+        _titleState.value = title
+    }
+
+    fun updateDescription(description: String) {
+        _descriptionState.value = description
+    }
+
+    fun turnOnEditMode() {
+        _editMode.value = true
+    }
+
+    private fun turnOffEditMode() {
+        _editMode.value = false
+    }
+
+    fun saveEditedInfo() {
+        turnOffEditMode()
+        Log.d("Video Info", "Info saved:)")
     }
 
     fun playVideo() {
@@ -79,6 +111,9 @@ class VideoPlayerScreenViewModel @Inject constructor(
                 date = videoFileModel.date,
                 time = videoFileModel.time,
             )
+
+            _titleState.value = videoFileModel.title
+            _descriptionState.value = videoFileModel.description
         }
     }
 

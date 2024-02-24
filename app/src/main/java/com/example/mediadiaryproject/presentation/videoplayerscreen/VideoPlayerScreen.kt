@@ -49,14 +49,14 @@ fun VideoPlayerScreen(
         }
         if (viewModel.infoState.value) {
             VideoInfo(
-                editMode = false,
-                title = viewModel.state.value?.title ?: "",
-                description = viewModel.state.value?.description ?: "",
-                updateTitle = { /*TODO*/ },
-                updateDescription = { /*TODO*/ },
+                editMode = viewModel.editMode.value,
+                title = viewModel.titleState.value,
+                description = viewModel.descriptionState.value,
+                updateTitle = { title -> viewModel.updateTitle(title) },
+                updateDescription = { description -> viewModel.updateDescription(description) },
                 closeMenu = { viewModel.hideInfo() },
-                turnOnEditMode = { /*TODO*/ },
-                saveInfo = { /*TODO*/ })
+                turnOnEditMode = { viewModel.turnOnEditMode() },
+                saveInfo = { viewModel.saveEditedInfo() })
         }
         AndroidView(
             factory = { context ->
