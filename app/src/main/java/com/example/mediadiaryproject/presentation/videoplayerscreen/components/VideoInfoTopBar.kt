@@ -43,7 +43,8 @@ fun VideoInfoTopBar(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.close_icon),
-                contentDescription = "close icon"
+                contentDescription = "close icon",
+                tint = Color.White
             )
         }
         IconButton(
@@ -61,12 +62,14 @@ fun VideoInfoTopBar(
             if (editMode) {
                 Icon(
                     painter = painterResource(id = R.drawable.save_icon),
-                    contentDescription = "edit icon"
+                    contentDescription = "edit icon",
+                    tint = Color.White
                 )
             } else {
                 Icon(
                     painter = painterResource(id = R.drawable.edit_icon),
-                    contentDescription = "edit icon"
+                    contentDescription = "edit icon",
+                    tint = Color.White
                 )
             }
 
@@ -74,9 +77,21 @@ fun VideoInfoTopBar(
     }
 }
 
+
 @Preview
 @Composable
 fun PhotoViewTopBarPreview() {
+    VideoInfoTopBar(
+        closeMenu = {},
+        editMode = false,
+        turnOnEditMode = {},
+        saveInfo = {}
+    )
+}
+
+@Preview
+@Composable
+fun PhotoViewTopBarEditModePreview() {
     VideoInfoTopBar(
         closeMenu = {},
         editMode = true,

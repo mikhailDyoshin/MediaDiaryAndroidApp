@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.ui.PlayerView
+import com.example.mediadiaryproject.presentation.videoplayerscreen.components.VideoInfo
 import com.example.mediadiaryproject.presentation.videoplayerscreen.components.VideoPlayerTopBar
 import com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel.VideoPlayerScreenViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -42,9 +43,20 @@ fun VideoPlayerScreen(
         if (viewModel.menuState.value) {
             VideoPlayerTopBar(
                 navigateBack = { navigator.navigateUp() },
-                showInfo = {},
+                showInfo = { viewModel.displayInfo() },
                 modifier = Modifier.align(Alignment.TopCenter)
             )
+        }
+        if (viewModel.infoState.value) {
+            VideoInfo(
+                editMode = false,
+                title = viewModel.state.value?.title ?: "",
+                description = viewModel.state.value?.description ?: "",
+                updateTitle = { /*TODO*/ },
+                updateDescription = { /*TODO*/ },
+                closeMenu = { viewModel.hideInfo() },
+                turnOnEditMode = { /*TODO*/ },
+                saveInfo = { /*TODO*/ })
         }
         AndroidView(
             factory = { context ->

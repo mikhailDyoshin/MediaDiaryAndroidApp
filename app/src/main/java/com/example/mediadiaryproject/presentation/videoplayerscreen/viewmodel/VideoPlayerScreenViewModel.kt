@@ -1,6 +1,5 @@
 package com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
@@ -28,6 +27,9 @@ class VideoPlayerScreenViewModel @Inject constructor(
     private val _menuState: MutableState<Boolean> = mutableStateOf(true)
     val menuState = _menuState
 
+    private val _infoState: MutableState<Boolean> = mutableStateOf(false)
+    val infoState = _infoState
+
     init {
         player.prepare()
     }
@@ -39,6 +41,17 @@ class VideoPlayerScreenViewModel @Inject constructor(
 
     fun toggleMenu() {
         _menuState.value = !_menuState.value
+    }
+
+    fun displayInfo() {
+        player.pause()
+        toggleMenu()
+        _infoState.value = true
+    }
+
+    fun hideInfo() {
+        _infoState.value = false
+        toggleMenu()
     }
 
     fun playVideo() {

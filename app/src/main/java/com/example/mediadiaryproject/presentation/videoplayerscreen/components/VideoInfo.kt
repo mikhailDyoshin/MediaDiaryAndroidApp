@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.mediadiaryproject.ui.theme.PhotoViewMenuBackground
 import com.example.mediadiaryproject.ui.theme.meriendaFontFamily
 
@@ -49,72 +51,81 @@ fun VideoInfo(
 
     val textDecoration = if (editMode) TextDecoration.Underline else TextDecoration.None
 
-    Column(
+    Surface(
         modifier = modifier
             .fillMaxSize()
-            .background(color = PhotoViewMenuBackground)
-            .padding(vertical = 5.dp, horizontal = 10.dp)
+            .zIndex(99f),
+        color = Color.Transparent
     ) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = PhotoViewMenuBackground)
+                .padding(vertical = 5.dp, horizontal = 10.dp)
+        ) {
 
-        VideoInfoTopBar(
-            closeMenu = { closeMenu() },
-            editMode = editMode,
-            turnOnEditMode = { turnOnEditMode() },
-            saveInfo = { saveInfo() })
+            VideoInfoTopBar(
+                closeMenu = { closeMenu() },
+                editMode = editMode,
+                turnOnEditMode = { turnOnEditMode() },
+                saveInfo = { saveInfo() })
 
-        // Title
-        BasicTextField(
-            value = title,
-            onValueChange = { value -> updateTitle(value) },
-            enabled = editMode,
-            readOnly = !editMode,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 5.dp),
-            singleLine = true,
-            textStyle = TextStyle(
-                color = textColor,
-                fontSize = 24.sp,
-                fontFamily = meriendaFontFamily,
-                textDecoration = textDecoration
-            ),
-            decorationBox = { innerTextField ->
-                TitleDecorationBox(innerTextField, editMode)
-            },
-            cursorBrush = SolidColor(Color.White)
-        )
+            // Title
+            BasicTextField(
+                value = title,
+                onValueChange = { value -> updateTitle(value) },
+                enabled = editMode,
+                readOnly = !editMode,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 5.dp),
+                singleLine = true,
+                textStyle = TextStyle(
+                    color = textColor,
+                    fontSize = 24.sp,
+                    fontFamily = meriendaFontFamily,
+                    textDecoration = textDecoration
+                ),
+                decorationBox = { innerTextField ->
+                    TitleDecorationBox(innerTextField, editMode)
+                },
+                cursorBrush = SolidColor(Color.White)
+            )
 
-        // Description
-        BasicTextField(
-            value = description,
-            onValueChange = { value -> updateDescription(value) },
-            enabled = editMode,
-            readOnly = !editMode,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .scrollable(
-                    orientation = Orientation.Vertical,
-                    // Scrollable state: describes how to consume
-                    // scrolling delta and update offset
-                    state = rememberScrollableState { delta ->
-                        offset += delta
-                        delta
-                    }),
-            singleLine = false,
-            textStyle = TextStyle(
-                color = textColor,
-                fontSize = 16.sp,
-                fontFamily = meriendaFontFamily,
-                textDecoration = textDecoration
-            ),
-            decorationBox = { innerTextField ->
-                DescriptionDecorationBox(innerTextField, editMode)
-            },
-            cursorBrush = SolidColor(Color.White)
-        )
+            // Description
+            BasicTextField(
+                value = description,
+                onValueChange = { value -> updateDescription(value) },
+                enabled = editMode,
+                readOnly = !editMode,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .scrollable(
+                        orientation = Orientation.Vertical,
+                        // Scrollable state: describes how to consume
+                        // scrolling delta and update offset
+                        state = rememberScrollableState { delta ->
+                            offset += delta
+                            delta
+                        }),
+                singleLine = false,
+                textStyle = TextStyle(
+                    color = textColor,
+                    fontSize = 16.sp,
+                    fontFamily = meriendaFontFamily,
+                    textDecoration = textDecoration
+                ),
+                decorationBox = { innerTextField ->
+                    DescriptionDecorationBox(innerTextField, editMode)
+                },
+                cursorBrush = SolidColor(Color.White)
+            )
 
+        }
     }
+
+
 }
 
 @Composable
