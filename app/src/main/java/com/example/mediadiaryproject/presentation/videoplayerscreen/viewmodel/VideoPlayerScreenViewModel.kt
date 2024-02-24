@@ -25,6 +25,9 @@ class VideoPlayerScreenViewModel @Inject constructor(
     private val _state: MutableState<VideoState?> = mutableStateOf(null)
     val state = _state
 
+    private val _menuState: MutableState<Boolean> = mutableStateOf(true)
+    val menuState = _menuState
+
     init {
         player.prepare()
     }
@@ -32,6 +35,10 @@ class VideoPlayerScreenViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         player.release()
+    }
+
+    fun toggleMenu() {
+        _menuState.value = !_menuState.value
     }
 
     fun playVideo() {

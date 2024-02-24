@@ -2,20 +2,18 @@ package com.example.mediadiaryproject.presentation.videoplayerscreen
 
 
 import android.util.Log
-import android.view.MotionEvent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.ui.PlayerView
+import com.example.mediadiaryproject.presentation.videoplayerscreen.components.VideoPlayerTopBar
 import com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel.VideoPlayerScreenViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,11 +39,21 @@ fun VideoPlayerScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        if (viewModel.menuState.value) {
+            VideoPlayerTopBar(
+                navigateBack = { navigator.navigateUp() },
+                showInfo = {},
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
         AndroidView(
             factory = { context ->
                 PlayerView(context).also {
                     it.player = viewModel.player
-                    it.setOnClickListener { Log.d("Video player", "Clicked!") }
+                    it.setOnClickListener {
+                        viewModel.toggleMenu()
+                        Log.d("Video player", "Clicked!")
+                    }
                 }
             },
             modifier = Modifier
