@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.audiosplayscreen
+package com.example.mediadiaryproject.presentation.audioslistscreen
 
 import android.os.Build
 import androidx.annotation.OptIn
@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.util.UnstableApi
-import com.example.mediadiaryproject.presentation.audiosplayscreen.components.AudiosList
-import com.example.mediadiaryproject.presentation.audiosplayscreen.viewmodel.AudioPlayerViewModel
+import com.example.mediadiaryproject.presentation.audioslistscreen.components.AudiosList
+import com.example.mediadiaryproject.presentation.audioslistscreen.viewmodel.AudioPlayerViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RequiresApi(Build.VERSION_CODES.S)

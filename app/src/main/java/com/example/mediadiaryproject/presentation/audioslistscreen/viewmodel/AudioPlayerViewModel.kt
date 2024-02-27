@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.audiosplayscreen.viewmodel
+package com.example.mediadiaryproject.presentation.audioslistscreen.viewmodel
 
 import android.os.Build
 import android.os.CountDownTimer
@@ -15,7 +15,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.example.mediadiaryproject.common.MediaType
 import com.example.mediadiaryproject.domain.usecase.GetListOfMediaByDayAndTypeUseCase
-import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
+import com.example.mediadiaryproject.presentation.audioslistscreen.state.AudioFileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

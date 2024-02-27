@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.audiosplayscreen.components
+package com.example.mediadiaryproject.presentation.audioslistscreen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mediadiaryproject.presentation.audiosplayscreen.state.AudioFileState
+import com.example.mediadiaryproject.presentation.audioslistscreen.state.AudioFileState
 import com.example.mediadiaryproject.ui.theme.AudioItemBackGroundColor
 
 @Composable

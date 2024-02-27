@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.audiosplayscreen.audioplayer
+package com.example.mediadiaryproject.presentation.audioslistscreen.audioplayer
 
 import java.io.File
 

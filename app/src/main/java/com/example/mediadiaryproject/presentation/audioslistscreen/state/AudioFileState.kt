@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.audiosplayscreen.state
+package com.example.mediadiaryproject.presentation.audioslistscreen.state
 
 import androidx.media3.common.MediaItem
 

@@ -1,4 +1,4 @@
-package com.example.mediadiaryproject.presentation.audiosplayscreen.audioplayer
+package com.example.mediadiaryproject.presentation.audioslistscreen.audioplayer
 
 import android.content.Context
 import android.media.MediaPlayer
