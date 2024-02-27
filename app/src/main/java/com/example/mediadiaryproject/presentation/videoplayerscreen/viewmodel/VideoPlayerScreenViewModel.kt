@@ -44,6 +44,9 @@ class VideoPlayerScreenViewModel @Inject constructor(
     private val _descriptionState: MutableState<String> = mutableStateOf("")
     val descriptionState = _descriptionState
 
+    private val _warningWindowState: MutableState<Boolean> = mutableStateOf(false)
+    val warningWindowState = _warningWindowState
+
 
     init {
         player.prepare()
@@ -65,8 +68,12 @@ class VideoPlayerScreenViewModel @Inject constructor(
     }
 
     fun hideInfo() {
-        _infoState.value = false
-        toggleMenu()
+        if (_editMode.value) {
+            _warningWindowState.value = true
+        } else {
+            _infoState.value = false
+            toggleMenu()
+        }
     }
 
     fun updateTitle(title: String) {
@@ -81,7 +88,15 @@ class VideoPlayerScreenViewModel @Inject constructor(
         _editMode.value = true
     }
 
-    private fun turnOffEditMode() {
+    fun displayWarningWindow() {
+        _warningWindowState.value = true
+    }
+
+    fun closeWarningWindow() {
+        _warningWindowState.value = false
+    }
+
+    fun turnOffEditMode() {
         _editMode.value = false
     }
 

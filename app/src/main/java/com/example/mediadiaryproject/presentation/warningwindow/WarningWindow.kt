@@ -36,7 +36,7 @@ fun WarningWindow(
     Surface(
         modifier = modifier
             .fillMaxSize()
-            .zIndex(99f),
+            .zIndex(999f),
         color = HalfTransparent
     ) {
         Box {

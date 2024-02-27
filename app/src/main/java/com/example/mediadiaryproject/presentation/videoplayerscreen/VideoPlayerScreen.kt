@@ -2,6 +2,7 @@ package com.example.mediadiaryproject.presentation.videoplayerscreen
 
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.ui.PlayerView
 import com.example.mediadiaryproject.presentation.videoplayerscreen.components.VideoInfo
 import com.example.mediadiaryproject.presentation.videoplayerscreen.components.VideoPlayerTopBar
+import com.example.mediadiaryproject.presentation.videoplayerscreen.components.VideoPlayerWarningWindow
 import com.example.mediadiaryproject.presentation.videoplayerscreen.viewmodel.VideoPlayerScreenViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.annotation.Destination
@@ -36,11 +38,34 @@ fun VideoPlayerScreen(
         viewModel.playVideo()
     }
 
+    val editModeOn = viewModel.editMode.value
+
+    BackHandler(enabled = true, onBack = {
+        navigateUpLogic(navigator = navigator, editModeState = editModeOn) {
+            viewModel.displayWarningWindow()
+        }
+    })
+
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        if (viewModel.warningWindowState.value) {
+            VideoPlayerWarningWindow(
+                onDiscard = {
+                    viewModel.closeWarningWindow()
+                    viewModel.turnOffEditMode()
+                    viewModel.hideInfo()
+                },
+                onSave = {
+                    viewModel.closeWarningWindow()
+                    viewModel.saveEditedInfo()
+                },
+                onCancel = { viewModel.closeWarningWindow() })
+        }
+
         if (viewModel.menuState.value) {
+            // Video-player's top bar with back and info buttons
             VideoPlayerTopBar(
                 navigateBack = { navigator.navigateUp() },
                 showInfo = { viewModel.displayInfo() },
@@ -48,8 +73,9 @@ fun VideoPlayerScreen(
             )
         }
         if (viewModel.infoState.value) {
+            // Video's title with description
             VideoInfo(
-                editMode = viewModel.editMode.value,
+                editMode = editModeOn,
                 title = viewModel.titleState.value,
                 description = viewModel.descriptionState.value,
                 updateTitle = { title -> viewModel.updateTitle(title) },
@@ -58,6 +84,7 @@ fun VideoPlayerScreen(
                 turnOnEditMode = { viewModel.turnOnEditMode() },
                 saveInfo = { viewModel.saveEditedInfo() })
         }
+        // The video player
         AndroidView(
             factory = { context ->
                 PlayerView(context).also {
@@ -72,5 +99,18 @@ fun VideoPlayerScreen(
                 .fillMaxSize()
                 .background(color = Color.Black)
         )
+    }
+}
+
+private fun navigateUpLogic(
+    navigator: DestinationsNavigator,
+    editModeState: Boolean,
+    callback: () -> Unit
+) {
+    if (editModeState) {
+        callback()
+        Log.d("Warning window", "Warning window is displayed")
+    } else {
+        navigator.navigateUp()
     }
 }
